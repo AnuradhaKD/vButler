@@ -528,17 +528,6 @@ const App = (() => {
       ];
       el.innerHTML = `
         <aside class="hidden md:flex flex-col w-72 sticky top-16 h-[calc(100vh-4rem)] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
-          <div class="p-6 border-b border-slate-200 dark:border-slate-700">
-            <a href="dashboard.html" class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-slate-200 p-1.5">
-                <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
-              </div>
-              <div>
-                <div class="font-bold text-slate-900 dark:text-white text-sm">Destinity vButler</div>
-                <div class="text-xs text-slate-500 dark:text-slate-400">Browns Hotels & Resorts</div>
-              </div>
-            </a>
-          </div>
           <nav class="flex-1 overflow-y-auto p-4 space-y-1">
             ${items.map(item => `
             <a href="${item.href}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${active === item.id
