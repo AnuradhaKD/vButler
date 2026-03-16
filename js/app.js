@@ -483,16 +483,16 @@ const App = (() => {
       el.innerHTML = `
         <header class="z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
           <div class="px-4 h-16 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3 md:w-72 md:shrink-0 min-w-0">
-              <button onclick="App.sidebar.openMobile()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Open menu">
+            <div class="flex items-center gap-3 min-w-0 shrink-0 transition-all duration-250" id="header-brand-block">
+              <button onclick="App.sidebar.toggleMenu()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shrink-0" aria-label="Toggle menu">
                 <span class="material-symbols-outlined text-[22px]">menu</span>
               </button>
-              <a href="dashboard.html" class="flex items-center gap-2 shrink-0">
+              <a href="dashboard.html" class="flex items-center gap-2 shrink-0 sidebar-brand-logo${storage.get('vb:sidebarCollapsed') ? ' sidebar-brand-hidden' : ''}">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-slate-200 p-1">
                   <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
                 </div>
               </a>
-              <div class="min-w-0">
+              <div class="min-w-0 sidebar-brand-text${storage.get('vb:sidebarCollapsed') ? ' sidebar-brand-hidden' : ''}">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Destinity vButler</div>
                 <div class="text-xs font-semibold text-[#003c52] dark:text-teal-400 truncate max-w-[180px]">${propertyName}</div>
               </div>
@@ -551,6 +551,7 @@ const App = (() => {
     render(active = '') {
       const el = document.getElementById('app-sidebar');
       if (!el) return;
+      const isCollapsed = storage.get('vb:sidebarCollapsed') || false;
       const items = [
         { id: 'dashboard',      label: 'Dashboard',      icon: 'home',           href: 'dashboard.html' },
         { id: 'reservations',   label: 'My Reservations',icon: 'hotel',          href: 'reservations.html' },
@@ -568,20 +569,20 @@ const App = (() => {
         { id: 'notifications',  label: 'Notifications',  icon: 'notifications',  href: 'notifications.html' }
       ];
       el.innerHTML = `
-        <aside class="hidden md:flex flex-col w-72 h-full shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
-          <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+        <aside id="desktop-sidebar" data-active="${active}" class="hidden md:flex flex-col h-full shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 ${isCollapsed ? 'vb-sidebar-collapsed' : ''}">
+          <nav class="flex-1 overflow-y-auto p-2 space-y-1">
             ${items.map(item => `
-            <a href="${item.href}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${active === item.id
+            <a href="${item.href}" title="${item.label}" class="sidebar-nav-item flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors ${active === item.id
               ? 'bg-[#003c52]/10 text-[#003c52] dark:bg-teal-900/30 dark:text-teal-400'
               : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'}">
-              <span class="material-symbols-outlined text-xl">${item.icon}</span>
-              ${item.label}
+              <span class="material-symbols-outlined text-xl shrink-0">${item.icon}</span>
+              <span class="sidebar-label">${item.label}</span>
             </a>`).join('')}
           </nav>
-          <div class="p-4 border-t border-slate-200 dark:border-slate-700">
-            <button onclick="App.auth.logout()" class="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition">
-              <span class="material-symbols-outlined text-xl">logout</span>
-              Sign Out
+          <div class="p-2 border-t border-slate-200 dark:border-slate-700">
+            <button onclick="App.auth.logout()" title="Sign Out" class="sidebar-nav-item flex items-center gap-3 w-full px-3 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+              <span class="material-symbols-outlined text-xl shrink-0">logout</span>
+              <span class="sidebar-label">Sign Out</span>
             </button>
           </div>
         </aside>`;
@@ -636,6 +637,27 @@ const App = (() => {
             ${item.label}
           </a>`).join('');
       }
+    },
+
+    toggleMenu() {
+      if (window.innerWidth >= 768) {
+        sidebar.toggleDesktop();
+      } else {
+        sidebar.openMobile();
+      }
+    },
+
+    toggleDesktop() {
+      const isCollapsed = storage.get('vb:sidebarCollapsed') || false;
+      const next = !isCollapsed;
+      storage.set('vb:sidebarCollapsed', next);
+      const aside = document.getElementById('desktop-sidebar');
+      if (aside) aside.classList.toggle('vb-sidebar-collapsed', next);
+      // Sync header brand visibility
+      const brandLogo = document.querySelector('.sidebar-brand-logo');
+      const brandText = document.querySelector('.sidebar-brand-text');
+      if (brandLogo) brandLogo.classList.toggle('sidebar-brand-hidden', next);
+      if (brandText) brandText.classList.toggle('sidebar-brand-hidden', next);
     },
 
     openMobile() {
@@ -785,6 +807,18 @@ const App = (() => {
       body.vb-app > #app-header { flex-shrink: 0; }
       body.vb-app > .vb-layout  { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; }
       body.vb-app > .vb-layout > main { flex: 1 1 0; overflow-y: auto; min-height: 0; }
+
+      /* Desktop sidebar collapse */
+      #desktop-sidebar { width: 18rem; transition: width 0.25s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+      #desktop-sidebar.vb-sidebar-collapsed { width: 4rem; }
+      #desktop-sidebar .sidebar-label { transition: opacity 0.15s ease, max-width 0.25s cubic-bezier(0.4,0,0.2,1); max-width: 16rem; overflow: hidden; white-space: nowrap; }
+      #desktop-sidebar.vb-sidebar-collapsed .sidebar-label { opacity: 0; max-width: 0; }
+      #desktop-sidebar .sidebar-nav-item { transition: justify-content 0s, gap 0.25s; }
+      #desktop-sidebar.vb-sidebar-collapsed .sidebar-nav-item { justify-content: center !important; gap: 0 !important; }
+
+      /* Header brand hide/show when sidebar collapses */
+      .sidebar-brand-logo, .sidebar-brand-text { transition: opacity 0.2s ease, max-width 0.25s cubic-bezier(0.4,0,0.2,1); max-width: 16rem; overflow: hidden; }
+      .sidebar-brand-hidden { opacity: 0; max-width: 0 !important; pointer-events: none; }
     `;
     document.head.appendChild(s);
   }
