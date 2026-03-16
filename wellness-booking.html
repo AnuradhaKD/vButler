@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Wellness Booking | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <!-- Back -->
+      <a href="wellness.html" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 mb-6 transition">
+        <span class="material-symbols-outlined text-lg">arrow_back</span>
+        Back to Wellness
+      </a>
+
+      <!-- Loading -->
+      <div id="loading-state">
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6 animate-pulse">
+          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-3"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full mb-2"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden space-y-6">
+
+        <!-- Item details -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div class="relative h-40">
+            <img id="item-img" src="" alt="" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+          </div>
+          <div class="p-5">
+            <p id="item-type-label" class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1"></p>
+            <h1 id="item-name" class="text-xl font-bold text-slate-900 dark:text-white"></h1>
+            <p id="item-description" class="mt-2 text-sm text-slate-500 dark:text-slate-400 leading-relaxed"></p>
+            <div id="item-meta" class="mt-3 flex flex-wrap gap-4 text-sm"></div>
+          </div>
+        </div>
+
+        <!-- Price summary -->
+        <div id="price-summary" class="bg-[#003c52]/5 dark:bg-teal-900/20 border border-[#003c52]/20 dark:border-teal-800 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-700 dark:text-slate-300 text-sm">Price Summary</span>
+            <span id="price-display" class="font-bold text-[#003c52] dark:text-teal-400 text-lg"></span>
+          </div>
+          <p id="price-breakdown" class="text-xs text-slate-500 dark:text-slate-400 mt-1"></p>
+        </div>
+
+        <!-- Booking form -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-5">Booking Details</h2>
+          <form id="booking-form" class="space-y-5">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date</label>
+                <input type="date" id="field-date" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Time</label>
+                <select id="field-time" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                  <option value="">Select time</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Number of Guests</label>
+              <select id="field-guests" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                <option value="1">1 Guest</option>
+                <option value="2">2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+              </select>
+            </div>
+
+            <!-- Therapist preference (only for treatments with therapistPreference: true) -->
+            <div id="therapist-section" class="hidden">
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Therapist Preference</label>
+              <div class="flex gap-4">
+                ${['No Preference','Female','Male'].map((t,i) => `
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="therapistGender" value="${t}" ${i===0?'checked':''} class="accent-[#003c52]">
+                  <span class="text-sm text-slate-700 dark:text-slate-300">${t}</span>
+                </label>`).join('')}
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Special Requests <span class="font-normal text-slate-400">(optional)</span></label>
+              <textarea id="field-requests" rows="3" placeholder="Health conditions, preferences, allergies..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] resize-none placeholder-slate-400"></textarea>
+            </div>
+
+            <!-- Cancellation policy -->
+            <div id="cancellation-notice" class="flex items-start gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-sm text-amber-800 dark:text-amber-300">
+              <span class="material-symbols-outlined text-base mt-0.5 shrink-0">policy</span>
+              <span id="cancellation-text"></span>
+            </div>
+
+            <button type="submit" id="submit-btn" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3.5 font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2 text-base">
+              <span class="material-symbols-outlined">spa</span>
+              Confirm Booking
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Not found -->
+      <div id="notfound-state" class="hidden text-center py-20">
+        <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600">search_off</span>
+        <p class="mt-4 text-slate-500 dark:text-slate-400">Wellness item not found.</p>
+        <a href="wellness.html" class="mt-4 inline-block text-[#003c52] dark:text-teal-400 font-semibold hover:underline">Back to Wellness</a>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'wellness');
+    App.bottomNav.render('wellness');
+
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type'); // treatment | class | package
+    const id = params.get('id');
+
+    let wellnessItem = null;
+    let itemPrice = 0;
+    let currency = 'Rs.';
+
+    async function init() {
+      const reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      const propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!propData || !id || !type) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+
+      currency = propData.property.currencySymbol || 'Rs.';
+      const wellness = propData.wellness;
+
+      if (type === 'treatment') wellnessItem = wellness.treatments.find(t => t.id === id);
+      else if (type === 'class') wellnessItem = wellness.classes.find(c => c.id === id);
+      else if (type === 'package') wellnessItem = wellness.packages.find(p => p.id === id);
+
+      if (!wellnessItem) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+
+      document.getElementById('content-state').classList.remove('hidden');
+
+      // Fill item details
+      document.getElementById('item-img').src = wellnessItem.image || 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600';
+      document.getElementById('item-img').alt = wellnessItem.name;
+      document.getElementById('item-type-label').textContent = type === 'treatment' ? 'Spa Treatment' : type === 'class' ? 'Wellness Class' : 'Spa Package';
+      document.getElementById('item-name').textContent = wellnessItem.name;
+      document.getElementById('item-description').textContent = wellnessItem.description;
+
+      itemPrice = wellnessItem.price;
+
+      let metaHtml = '';
+      if (wellnessItem.duration) metaHtml += `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400"><span class="material-symbols-outlined text-sm">schedule</span>${wellnessItem.duration} ${typeof wellnessItem.duration === 'number' ? 'min' : ''}</span>`;
+      if (wellnessItem.maxParticipants) metaHtml += `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400"><span class="material-symbols-outlined text-sm">group</span>Max ${wellnessItem.maxParticipants}</span>`;
+      if (wellnessItem.savings) metaHtml += `<span class="flex items-center gap-1 text-green-600 dark:text-green-400 font-semibold"><span class="material-symbols-outlined text-sm">savings</span>Save ${App.helpers.formatCurrency(wellnessItem.savings, currency)}</span>`;
+      document.getElementById('item-meta').innerHTML = metaHtml;
+
+      // Price display
+      updatePriceDisplay();
+
+      // Time slots
+      const timeSelect = document.getElementById('field-time');
+      for (let h = 9; h <= 20; h++) {
+        for (const m of ['00','30']) {
+          if (h === 20 && m === '30') continue;
+          const t = `${String(h).padStart(2,'0')}:${m}`;
+          const opt = document.createElement('option');
+          opt.value = t; opt.textContent = t;
+          timeSelect.appendChild(opt);
+        }
+      }
+
+      document.getElementById('field-date').min = new Date().toISOString().split('T')[0];
+      document.getElementById('field-date').value = new Date().toISOString().split('T')[0];
+
+      // Therapist preference
+      if (type === 'treatment' && wellnessItem.therapistPreference) {
+        document.getElementById('therapist-section').classList.remove('hidden');
+      }
+
+      // Cancellation policy
+      const cancelText = wellnessItem.cancellationPolicy || 'Please cancel at least 4 hours before your booking time.';
+      document.getElementById('cancellation-text').textContent = cancelText;
+
+      // Update price on guest count change
+      document.getElementById('field-guests').addEventListener('change', updatePriceDisplay);
+
+      // Form submit
+      document.getElementById('booking-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!reservation) { App.toast.show('No active reservation.', 'error'); return; }
+
+        const date = document.getElementById('field-date').value;
+        const time = document.getElementById('field-time').value;
+        const guests = parseInt(document.getElementById('field-guests').value);
+        const requests = document.getElementById('field-requests').value.trim();
+        const therapist = document.querySelector('input[name="therapistGender"]:checked')?.value || null;
+
+        const total = itemPrice * guests;
+
+        const details = {
+          date, time,
+          guests: `${guests} guest${guests!==1?'s':''}`,
+          total: App.helpers.formatCurrency(total, currency)
+        };
+        if (therapist && therapist !== 'No Preference') details.therapistPreference = therapist;
+        if (type === 'class' && wellnessItem.schedule) details.schedule = wellnessItem.schedule.join(', ');
+
+        App.requests.add({
+          reservationId: reservation.id,
+          serviceName: wellnessItem.name,
+          serviceId: id,
+          category: type === 'treatment' ? 'Spa Treatment' : type === 'class' ? 'Wellness Class' : 'Spa Package',
+          details,
+          notes: requests
+        });
+
+        App.toast.show('Wellness booking confirmed!', 'success');
+        setTimeout(() => window.location.href = 'my-requests.html', 1200);
+      });
+    }
+
+    function updatePriceDisplay() {
+      const guests = parseInt(document.getElementById('field-guests').value) || 1;
+      const total = itemPrice * guests;
+      document.getElementById('price-display').textContent = App.helpers.formatCurrency(total, currency);
+      document.getElementById('price-breakdown').textContent = guests > 1
+        ? `${App.helpers.formatCurrency(itemPrice, currency)} × ${guests} guests`
+        : `Per person`;
+    }
+
+    init();
+  </script>
+</body>
+</html>

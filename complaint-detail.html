@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Complaint Detail | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <!-- Back -->
+      <a href="complaints.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 transition mb-6">
+        <span class="material-symbols-outlined text-base">arrow_back</span>
+        Back to Complaints
+      </a>
+
+      <!-- Loading -->
+      <div id="loading-state" class="space-y-4">
+        <div class="h-20 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+        <div class="h-48 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+        <div class="h-32 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden space-y-5">
+
+        <!-- Header card -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Reference Number</p>
+              <h1 id="ref-num" class="text-2xl font-mono font-bold text-[#003c52] dark:text-teal-400"></h1>
+            </div>
+            <div id="status-badge-container"></div>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
+            <span class="material-symbols-outlined text-sm">calendar_today</span>
+            <span id="submitted-time"></span>
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <h2 class="font-bold text-slate-900 dark:text-white mb-4">Complaint Details</h2>
+          <div class="space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <p class="text-xs font-bold uppercase text-slate-400 mb-1">Category</p>
+                <p id="det-category" class="text-sm font-semibold text-slate-900 dark:text-white"></p>
+              </div>
+              <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <p class="text-xs font-bold uppercase text-slate-400 mb-1">Issue Type</p>
+                <p id="det-subcategory" class="text-sm font-semibold text-slate-900 dark:text-white"></p>
+              </div>
+              <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <p class="text-xs font-bold uppercase text-slate-400 mb-1">Urgency</p>
+                <p id="det-urgency" class="text-sm font-semibold text-slate-900 dark:text-white capitalize"></p>
+              </div>
+              <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <p class="text-xs font-bold uppercase text-slate-400 mb-1">Location</p>
+                <p id="det-location" class="text-sm font-semibold text-slate-900 dark:text-white"></p>
+              </div>
+            </div>
+            <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+              <p class="text-xs font-bold uppercase text-slate-400 mb-2">Description</p>
+              <p id="det-description" class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resolution note (if resolved) -->
+        <div id="resolution-section" class="hidden bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-5">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="material-symbols-outlined text-green-600 dark:text-green-400" style="font-variation-settings:'FILL' 1">check_circle</span>
+            <h3 class="font-bold text-green-800 dark:text-green-300">Resolved</h3>
+          </div>
+          <p id="resolution-note" class="text-sm text-green-700 dark:text-green-400"></p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <h2 class="font-bold text-slate-900 dark:text-white mb-5">Status Timeline</h2>
+          <div id="timeline" class="relative pl-6 border-l-2 border-[#003c52]/20 dark:border-teal-900 space-y-6"></div>
+        </div>
+
+        <!-- Escalate -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <h2 class="font-bold text-slate-900 dark:text-white mb-2">Need Immediate Attention?</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">If your complaint requires urgent escalation, contact our Duty Manager directly.</p>
+          <a id="escalate-btn" href="#" target="_blank" class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white rounded-xl px-5 py-3 text-sm font-semibold transition w-fit">
+            <span class="material-symbols-outlined text-base">chat</span>
+            Escalate to Duty Manager via WhatsApp
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Not Found -->
+      <div id="notfound-state" class="hidden text-center py-16">
+        <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-3 block">search_off</span>
+        <p class="text-slate-600 dark:text-slate-400 font-semibold">Complaint not found</p>
+        <a href="complaints.html" class="mt-3 inline-block text-[#003c52] dark:text-teal-400 font-semibold hover:underline">View all complaints</a>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'complaints');
+    App.bottomNav.render('complaints');
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    const statusLabels = { open: 'Open', inprogress: 'In Progress', resolved: 'Resolved', closed: 'Closed' };
+    const urgencyColors = { high: 'text-red-600 dark:text-red-400', medium: 'text-amber-600 dark:text-amber-400', low: 'text-green-600 dark:text-green-400' };
+
+    (async () => {
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!id) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+
+      const complaint = App.complaints.getById(id);
+      if (!complaint) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+
+      document.getElementById('content-state').classList.remove('hidden');
+      document.title = `Destinity vButler — ${complaint.ref} | Browns Hotels & Resorts`;
+
+      document.getElementById('ref-num').textContent = complaint.ref;
+      document.getElementById('status-badge-container').innerHTML = App.helpers.statusBadge(complaint.status);
+      document.getElementById('submitted-time').textContent = `Submitted ${App.helpers.formatDateTime(complaint.createdAt)} (${App.helpers.timeAgo(complaint.createdAt)})`;
+
+      document.getElementById('det-category').textContent = complaint.category || '—';
+      document.getElementById('det-subcategory').textContent = complaint.subcategory || '—';
+      document.getElementById('det-urgency').innerHTML = `<span class="${urgencyColors[complaint.urgency] || ''}">${complaint.urgency || '—'}</span>`;
+      document.getElementById('det-location').textContent = complaint.location || 'Not specified';
+      document.getElementById('det-description').textContent = complaint.description || '';
+
+      // Resolution
+      if (complaint.status === 'resolved' && complaint.resolutionNote) {
+        document.getElementById('resolution-section').classList.remove('hidden');
+        document.getElementById('resolution-note').textContent = complaint.resolutionNote;
+      }
+
+      // Timeline
+      const timeline = complaint.timeline || [];
+      document.getElementById('timeline').innerHTML = timeline.map((t, i) => {
+        const isLast = i === timeline.length - 1;
+        return `
+          <div class="relative">
+            <div class="absolute -left-[29px] top-0.5 w-3 h-3 rounded-full ${isLast ? 'bg-[#003c52] dark:bg-teal-500' : 'bg-slate-300 dark:bg-slate-600'} border-2 border-white dark:border-slate-900"></div>
+            <div class="mb-0.5 flex items-center gap-2">
+              <span class="text-sm font-bold text-slate-900 dark:text-white">${t.label || statusLabels[t.status] || t.status}</span>
+              ${isLast ? App.helpers.statusBadge(t.status) : ''}
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-1">${App.helpers.formatDateTime(t.timestamp)}</p>
+            ${t.note ? `<p class="text-sm text-slate-600 dark:text-slate-400">${t.note}</p>` : ''}
+          </div>`;
+      }).join('');
+
+      // Escalate button
+      document.getElementById('escalate-btn').href = `https://wa.me/94701234005?text=Escalation%20request%20for%20complaint%20${complaint.ref}.`;
+
+      // Load property for WhatsApp number
+      const activeRes = App.reservations.getActive();
+      const propData = await App.data.loadProperty(activeRes?.propertyId || 'newburge-ella');
+      if (propData?.whatsappGroups?.dutyManager) {
+        const num = propData.whatsappGroups.dutyManager.replace(/\D/g,'');
+        document.getElementById('escalate-btn').href = `https://wa.me/${num}?text=Escalation%20request%20for%20complaint%20${complaint.ref}.`;
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Book Experience | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <div class="mb-6">
+        <a id="back-link" href="experience-detail.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 transition mb-4">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Back to Experience
+        </a>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white font-serif">Book Experience</h1>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-state" class="space-y-4">
+        <div class="h-32 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+        <div class="h-12 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+        <div class="h-12 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+      </div>
+
+      <!-- Form -->
+      <div id="content-state" class="hidden space-y-5">
+
+        <!-- Experience Summary -->
+        <div id="exp-summary" class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div class="flex gap-4 p-4">
+            <img id="sum-img" src="" alt="" class="w-20 h-20 rounded-lg object-cover shrink-0">
+            <div class="min-w-0">
+              <span id="sum-cat" class="text-xs font-semibold text-[#003c52] dark:text-teal-400"></span>
+              <h3 id="sum-name" class="font-bold text-slate-900 dark:text-white text-base leading-tight"></h3>
+              <div class="flex items-center gap-3 mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <span id="sum-duration" class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span></span>
+                <span id="sum-start" class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">alarm</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 space-y-4">
+          <h2 class="font-bold text-slate-900 dark:text-white">Booking Details</h2>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Select Date</label>
+            <select id="date-select" onchange="recalculate()" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              <option value="">Choose a date...</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Number of Guests</label>
+            <select id="guests-select" onchange="recalculate()" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </select>
+          </div>
+
+          <div id="addons-form" class="hidden">
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Add-Ons <span class="text-xs text-slate-400 font-normal">(optional)</span></label>
+            <div id="addons-list" class="space-y-2"></div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Special Requests <span class="text-xs text-slate-400 font-normal">(optional)</span></label>
+            <textarea id="special-requests" rows="3" placeholder="Dietary requirements, preferences, accessibility needs…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm resize-none"></textarea>
+          </div>
+        </div>
+
+        <!-- Price Summary -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <h2 class="font-bold text-slate-900 dark:text-white mb-4">Price Summary</h2>
+          <div id="price-breakdown" class="space-y-2 text-sm"></div>
+          <div class="border-t border-slate-200 dark:border-slate-700 mt-3 pt-3 flex justify-between items-center">
+            <span class="font-bold text-slate-900 dark:text-white">Total</span>
+            <span id="total-price" class="font-bold text-xl text-[#003c52] dark:text-teal-400">Rs. 0</span>
+          </div>
+        </div>
+
+        <!-- Cutoff notice -->
+        <div id="cutoff-notice" class="flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+          <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 mt-0.5 shrink-0">info</span>
+          <p id="cutoff-text" class="text-sm text-amber-800 dark:text-amber-300"></p>
+        </div>
+
+        <button onclick="confirmBooking()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-4 font-semibold hover:bg-[#004f6e] transition text-base">
+          Confirm Booking
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'experiences');
+    App.bottomNav.render('experiences');
+
+    const params = new URLSearchParams(window.location.search);
+    const expId = params.get('id');
+    let currentExp = null;
+    let activeRes = null;
+
+    document.getElementById('back-link').href = `experience-detail.html?id=${expId}`;
+
+    const dayMap = { Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6, Sun:0 };
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    function generateDates(availableDays) {
+      const dates = [];
+      const today = new Date();
+      for (let i = 1; i <= 14; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+        const dayName = dayNames[d.getDay()];
+        if (availableDays.includes(dayName)) {
+          const label = d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+          const value = d.toISOString().split('T')[0];
+          dates.push({ label, value });
+        }
+      }
+      return dates;
+    }
+
+    function recalculate() {
+      if (!currentExp) return;
+      const guests = parseInt(document.getElementById('guests-select').value) || 1;
+      const baseTotal = currentExp.price * guests;
+      let addonsTotal = 0;
+      const addonsChecked = [];
+      document.querySelectorAll('.addon-check:checked').forEach(cb => {
+        const price = parseInt(cb.dataset.price);
+        addonsTotal += price;
+        addonsChecked.push({ name: cb.dataset.name, price });
+      });
+
+      const breakdown = [];
+      breakdown.push(`<div class="flex justify-between text-slate-600 dark:text-slate-400"><span>Rs. ${currentExp.price.toLocaleString()} × ${guests} guest${guests>1?'s':''}</span><span>Rs. ${baseTotal.toLocaleString()}</span></div>`);
+      addonsChecked.forEach(a => {
+        breakdown.push(`<div class="flex justify-between text-slate-600 dark:text-slate-400"><span>${a.name}</span><span>+ Rs. ${a.price.toLocaleString()}</span></div>`);
+      });
+
+      document.getElementById('price-breakdown').innerHTML = breakdown.join('');
+      document.getElementById('total-price').textContent = `Rs. ${(baseTotal + addonsTotal).toLocaleString()}`;
+    }
+
+    async function confirmBooking() {
+      const date = document.getElementById('date-select').value;
+      const guests = document.getElementById('guests-select').value;
+      const specialReqs = document.getElementById('special-requests').value;
+
+      if (!date) { App.toast.show('Please select a date', 'warning'); return; }
+      if (!guests) { App.toast.show('Please select number of guests', 'warning'); return; }
+
+      const selectedAddons = [];
+      document.querySelectorAll('.addon-check:checked').forEach(cb => {
+        selectedAddons.push({ id: cb.value, name: cb.dataset.name, price: parseInt(cb.dataset.price) });
+      });
+
+      const details = {
+        experienceId: currentExp.id,
+        experienceName: currentExp.name,
+        date,
+        guests: parseInt(guests),
+        startTime: currentExp.startTime,
+        addOns: selectedAddons,
+        specialRequests: specialReqs,
+        totalAmount: currentExp.price * parseInt(guests) + selectedAddons.reduce((sum, a) => sum + a.price, 0)
+      };
+
+      App.requests.add({
+        reservationId: activeRes?.id,
+        serviceName: `Experience: ${currentExp.name}`,
+        serviceId: currentExp.id,
+        category: 'Experience',
+        details
+      });
+
+      App.toast.show('Experience booked successfully!', 'success');
+      setTimeout(() => { window.location.href = 'my-requests.html'; }, 1500);
+    }
+
+    (async () => {
+      if (!expId) { window.location.href = 'experiences.html'; return; }
+
+      activeRes = App.reservations.getActive();
+      const propData = await App.data.loadProperty(activeRes?.propertyId || 'newburge-ella');
+      const exp = propData?.experiences?.find(e => e.id === expId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+      if (!exp) { window.location.href = 'experiences.html'; return; }
+      currentExp = exp;
+
+      document.getElementById('content-state').classList.remove('hidden');
+      document.title = `Destinity vButler — Book ${exp.name} | Browns Hotels & Resorts`;
+
+      // Summary
+      document.getElementById('sum-img').src = exp.images?.[0] || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400';
+      document.getElementById('sum-img').alt = exp.name;
+      document.getElementById('sum-cat').textContent = exp.category;
+      document.getElementById('sum-name').textContent = exp.name;
+      document.getElementById('sum-duration').innerHTML = `<span class="material-symbols-outlined text-sm">schedule</span>${exp.duration}`;
+      document.getElementById('sum-start').innerHTML = `<span class="material-symbols-outlined text-sm">alarm</span>${exp.startTime} start`;
+
+      // Date options
+      const dates = generateDates(exp.availableDays);
+      const dateSelect = document.getElementById('date-select');
+      dates.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.value;
+        opt.textContent = d.label;
+        dateSelect.appendChild(opt);
+      });
+      if (dates.length === 0) {
+        const opt = document.createElement('option');
+        opt.textContent = 'No available dates in the next 14 days';
+        opt.disabled = true;
+        dateSelect.appendChild(opt);
+      }
+
+      // Guest options
+      const guestSelect = document.getElementById('guests-select');
+      for (let g = exp.minGuests; g <= exp.maxGuests; g++) {
+        const opt = document.createElement('option');
+        opt.value = g;
+        opt.textContent = `${g} Guest${g > 1 ? 's' : ''}`;
+        if (g === exp.minGuests) opt.selected = true;
+        guestSelect.appendChild(opt);
+      }
+
+      // Add-ons
+      if (exp.addOns && exp.addOns.length > 0) {
+        document.getElementById('addons-form').classList.remove('hidden');
+        document.getElementById('addons-list').innerHTML = exp.addOns.map(a => `
+          <label class="flex items-center justify-between bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" class="addon-check w-4 h-4 accent-[#003c52]" value="${a.id}" data-name="${a.name}" data-price="${a.price}" onchange="recalculate()">
+              <span class="text-sm font-medium text-slate-800 dark:text-white">${a.name}</span>
+            </div>
+            <span class="text-sm font-semibold text-[#003c52] dark:text-teal-400">+ Rs. ${a.price.toLocaleString()}</span>
+          </label>`).join('');
+      }
+
+      // Cutoff
+      document.getElementById('cutoff-text').textContent = `Please book at least ${exp.bookingCutoffHours} hours in advance. Experience starts at ${exp.startTime}.`;
+
+      recalculate();
+    })();
+  </script>
+</body>
+</html>

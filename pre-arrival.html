@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Pre-Arrival Checklist | Browns Hotels & Resorts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52', 'bg-light': '#f5f8f8', 'bg-dark': '#0f1e23' }
+        }
+      }
+    }
+  </script>
+  <style>.fill-icon { font-variation-settings: 'FILL' 1; }</style>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <script>
+    if (localStorage.getItem('vb:theme') === 'dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+
+  <div id="app-header"></div>
+  <div class="flex">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-3xl">
+
+      <!-- Back -->
+      <a href="reservations.html" class="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 transition mb-6 font-medium">
+        <span class="material-symbols-outlined text-base">arrow_back</span> Back to Reservations
+      </a>
+
+      <!-- Header -->
+      <div class="mb-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Prepare for your stay</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Pre-Arrival Checklist</h1>
+        <p id="res-subtitle" class="text-slate-500 dark:text-slate-400 text-sm mt-1"></p>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="mb-8">
+        <div class="flex justify-between mb-2">
+          <span class="text-xs font-semibold text-[#003c52] dark:text-teal-400" id="step-label">Step 1 of 5</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400" id="step-pct">20%</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+          <div id="progress-bar" class="bg-[#003c52] dark:bg-teal-500 h-2 rounded-full transition-all duration-500" style="width: 20%"></div>
+        </div>
+
+        <!-- Step indicators -->
+        <div class="flex items-center justify-between mt-4">
+          ${[
+            { n: 1, label: 'Personal', icon: 'person' },
+            { n: 2, label: 'ID Upload', icon: 'badge' },
+            { n: 3, label: 'Arrival', icon: 'flight_land' },
+            { n: 4, label: 'Requests', icon: 'star' },
+            { n: 5, label: 'Terms', icon: 'gavel' }
+          ].map(s => `
+            <div class="flex flex-col items-center gap-1.5 step-indicator" data-step="${s.n}">
+              <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center step-circle-${s.n} transition-all">
+                <span class="material-symbols-outlined text-sm">${s.icon}</span>
+              </div>
+              <span class="text-[10px] font-medium hidden md:block">${s.label}</span>
+            </div>`).join('<div class="flex-1 h-0.5 bg-slate-200 dark:bg-slate-700 mx-1 step-line"></div>')}
+        </div>
+      </div>
+
+      <!-- Steps container -->
+      <div id="steps-container"></div>
+
+      <!-- Navigation -->
+      <div class="flex justify-between gap-3 mt-6">
+        <button id="back-btn" onclick="prevStep()" class="hidden inline-flex items-center gap-2 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl px-6 py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition text-sm">
+          <span class="material-symbols-outlined text-base">arrow_back</span> Back
+        </button>
+        <div class="flex-1"></div>
+        <button id="next-btn" onclick="nextStep()" class="inline-flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-8 py-3 font-semibold hover:bg-[#004f6e] transition text-sm shadow-sm">
+          <span id="next-btn-text">Save & Continue</span>
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'pre-arrival');
+    App.bottomNav.render('pre-arrival');
+
+    const TOTAL_STEPS = 5;
+    let currentStep = 1;
+    let reservation = null;
+    let formData = {};
+
+    const stepTitles = ['Personal Details', 'ID Upload', 'Estimated Arrival', 'Special Requests', 'Terms & Conditions'];
+
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+
+      let reservations = App.reservations.getAll();
+      if (!reservations.length) {
+        const data = await App.data.loadReservations();
+        if (data) {
+          const session = App.auth.getSession();
+          reservations = data.reservations.filter(r => r.guestEmail === session.email);
+          App.reservations.save(reservations);
+        }
+      }
+
+      reservation = id ? reservations.find(r => r.id === id) : App.reservations.getActive();
+
+      if (!reservation) {
+        document.getElementById('steps-container').innerHTML = `<div class="text-center py-10 text-slate-400">No reservation found. <a href="reservations.html" class="text-[#003c52] dark:text-teal-400 underline">Back to reservations</a></div>`;
+        document.getElementById('next-btn').classList.add('hidden');
+        return;
+      }
+
+      document.getElementById('res-subtitle').textContent = `${reservation.propertyName} · ${App.helpers.formatDate(reservation.checkIn)} – ${App.helpers.formatDate(reservation.checkOut)}`;
+
+      // Load saved data
+      formData = App.preArrival.get(reservation.id);
+      const savedStep = formData._step || 1;
+      currentStep = savedStep < TOTAL_STEPS ? savedStep : 1;
+
+      renderStep(currentStep);
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const pct = Math.round((currentStep / TOTAL_STEPS) * 100);
+      document.getElementById('progress-bar').style.width = pct + '%';
+      document.getElementById('step-label').textContent = `Step ${currentStep} of ${TOTAL_STEPS}`;
+      document.getElementById('step-pct').textContent = pct + '%';
+      document.getElementById('next-btn-text').textContent = currentStep === TOTAL_STEPS ? 'Complete Checklist' : 'Save & Continue';
+      document.getElementById('back-btn').classList.toggle('hidden', currentStep === 1);
+
+      // Update step circles
+      for (let i = 1; i <= TOTAL_STEPS; i++) {
+        const circle = document.querySelector(`.step-circle-${i}`);
+        if (!circle) continue;
+        if (i < currentStep) {
+          circle.className = `w-9 h-9 rounded-full border-2 flex items-center justify-center step-circle-${i} transition-all border-[#003c52] dark:border-teal-400 bg-[#003c52] dark:bg-teal-500 text-white`;
+          circle.querySelector('.material-symbols-outlined').textContent = 'check';
+        } else if (i === currentStep) {
+          circle.className = `w-9 h-9 rounded-full border-2 flex items-center justify-center step-circle-${i} transition-all border-[#003c52] dark:border-teal-400 text-[#003c52] dark:text-teal-400 bg-white dark:bg-slate-900`;
+        } else {
+          circle.className = `w-9 h-9 rounded-full border-2 flex items-center justify-center step-circle-${i} transition-all border-slate-300 dark:border-slate-600 text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900`;
+        }
+      }
+    }
+
+    function renderStep(step) {
+      const profile = App.auth.getGuest() || {};
+      const container = document.getElementById('steps-container');
+
+      const card = (title, icon, content) => `
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#003c52]/10 dark:bg-teal-900/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-xl text-[#003c52] dark:text-teal-400">${icon}</span>
+            </div>
+            <div>
+              <h2 class="font-bold text-slate-900 dark:text-white">${title}</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Step ${step} of ${TOTAL_STEPS}</p>
+            </div>
+          </div>
+          <div class="p-6 space-y-5">${content}</div>
+        </div>`;
+
+      const inputCls = 'w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] placeholder-slate-400 transition text-sm';
+      const labelCls = 'block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5';
+
+      if (step === 1) {
+        container.innerHTML = card('Personal Details', 'person', `
+          <p class="text-sm text-slate-500 dark:text-slate-400 -mt-2">Please confirm your personal information as it appears on your travel document.</p>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="${labelCls}">First name</label>
+              <input id="pa-first-name" type="text" value="${formData.firstName || profile.firstName || ''}" placeholder="First name" class="${inputCls}">
+            </div>
+            <div>
+              <label class="${labelCls}">Last name</label>
+              <input id="pa-last-name" type="text" value="${formData.lastName || profile.lastName || ''}" placeholder="Last name" class="${inputCls}">
+            </div>
+          </div>
+          <div>
+            <label class="${labelCls}">Nationality</label>
+            <input id="pa-nationality" type="text" value="${formData.nationality || profile.nationality || ''}" placeholder="e.g. Sri Lankan" class="${inputCls}">
+          </div>
+          <div>
+            <label class="${labelCls}">Date of birth</label>
+            <input id="pa-dob" type="date" value="${formData.dob || profile.dateOfBirth || ''}" class="${inputCls}">
+          </div>
+          <div>
+            <label class="${labelCls}">Email address</label>
+            <input id="pa-email" type="email" value="${formData.email || profile.email || ''}" placeholder="Email" class="${inputCls}">
+          </div>
+          <div>
+            <label class="${labelCls}">Phone number</label>
+            <input id="pa-phone" type="tel" value="${formData.phone || profile.phone || ''}" placeholder="Phone" class="${inputCls}">
+          </div>`);
+
+      } else if (step === 2) {
+        container.innerHTML = card('ID Upload', 'badge', `
+          <p class="text-sm text-slate-500 dark:text-slate-400 -mt-2">Please provide your passport or national ID details for verification purposes.</p>
+          <div>
+            <label class="${labelCls}">Document type</label>
+            <select id="pa-doc-type" class="${inputCls}">
+              <option value="passport" ${(formData.docType || 'passport') === 'passport' ? 'selected' : ''}>Passport</option>
+              <option value="national-id" ${formData.docType === 'national-id' ? 'selected' : ''}>National ID</option>
+              <option value="driving-license" ${formData.docType === 'driving-license' ? 'selected' : ''}>Driving Licence</option>
+            </select>
+          </div>
+          <div>
+            <label class="${labelCls}">Document number</label>
+            <input id="pa-doc-number" type="text" value="${formData.docNumber || profile.passportNumber || ''}" placeholder="e.g. N12345678" class="${inputCls}">
+          </div>
+          <div>
+            <label class="${labelCls}">Expiry date</label>
+            <input id="pa-doc-expiry" type="date" value="${formData.docExpiry || ''}" class="${inputCls}">
+          </div>
+          <!-- Simulated file upload -->
+          <div>
+            <label class="${labelCls}">Upload document (optional)</label>
+            <div id="upload-zone" onclick="triggerFileInput()" class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 hover:bg-[#003c52]/3 transition group">
+              <span class="material-symbols-outlined text-4xl text-slate-400 group-hover:text-[#003c52] dark:group-hover:text-teal-400 transition mb-2 block">upload_file</span>
+              <p class="text-sm font-medium text-slate-600 dark:text-slate-400" id="upload-label">${formData.docFileName || 'Click to upload or drag & drop'}</p>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">JPG, PNG, PDF up to 10MB</p>
+            </div>
+            <input type="file" id="pa-file-input" accept=".jpg,.jpeg,.png,.pdf" class="hidden" onchange="handleFileUpload(this)">
+          </div>`);
+
+      } else if (step === 3) {
+        container.innerHTML = card('Estimated Arrival', 'flight_land', `
+          <p class="text-sm text-slate-500 dark:text-slate-400 -mt-2">Let us know when you expect to arrive so we can prepare your room and welcome you promptly.</p>
+          <div>
+            <label class="${labelCls}">Arrival date</label>
+            <input id="pa-arrival-date" type="date" value="${formData.arrivalDate || reservation.checkIn}" min="${reservation.checkIn}" max="${reservation.checkIn}" class="${inputCls}">
+          </div>
+          <div>
+            <label class="${labelCls}">Estimated arrival time</label>
+            <select id="pa-arrival-time" class="${inputCls}">
+              ${Array.from({length: 34}, (_, i) => {
+                const h = Math.floor(i / 2) + 6;
+                const m = i % 2 === 0 ? '00' : '30';
+                const val = `${String(h).padStart(2,'0')}:${m}`;
+                return `<option value="${val}" ${formData.arrivalTime === val ? 'selected' : ''}>${val}</option>`;
+              }).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="${labelCls}">Flight number <span class="font-normal text-slate-400">(optional)</span></label>
+            <input id="pa-flight" type="text" value="${formData.flightNumber || ''}" placeholder="e.g. UL 123" class="${inputCls}">
+          </div>
+          <div>
+            <label class="${labelCls}">Mode of transport</label>
+            <select id="pa-transport" class="${inputCls}">
+              <option value="flight" ${(formData.transport || 'flight') === 'flight' ? 'selected' : ''}>Flight</option>
+              <option value="train" ${formData.transport === 'train' ? 'selected' : ''}>Train</option>
+              <option value="self-drive" ${formData.transport === 'self-drive' ? 'selected' : ''}>Self Drive</option>
+              <option value="hotel-transfer" ${formData.transport === 'hotel-transfer' ? 'selected' : ''}>Hotel Transfer</option>
+              <option value="other" ${formData.transport === 'other' ? 'selected' : ''}>Other</option>
+            </select>
+          </div>
+          <div class="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-xl border border-teal-100 dark:border-teal-800">
+            <p class="text-xs text-teal-800 dark:text-teal-300 flex items-start gap-2">
+              <span class="material-symbols-outlined text-sm mt-0.5">info</span>
+              If you'd like to arrange an airport transfer, visit <a href="transport.html" class="underline font-semibold">Transport</a> to book a chauffeur service from the airport to the hotel.
+            </p>
+          </div>`);
+
+      } else if (step === 4) {
+        container.innerHTML = card('Special Requests', 'star', `
+          <p class="text-sm text-slate-500 dark:text-slate-400 -mt-2">Let us know your preferences and we'll do our best to accommodate them.</p>
+          <div>
+            <label class="${labelCls}">Special requests</label>
+            <textarea id="pa-special-requests" rows="4" placeholder="e.g. Celebrating our anniversary, high floor preferred, allergy to feather pillows…" class="${inputCls} resize-none">${formData.specialRequests || reservation.specialRequests || ''}</textarea>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">These are requests and cannot be guaranteed, but we'll do our very best.</p>
+          </div>
+          <div class="space-y-3">
+            <p class="${labelCls}">Room preferences</p>
+            ${[
+              { id: 'high-floor', label: 'High floor', icon: 'apartment' },
+              { id: 'quiet-room', label: 'Quiet room away from elevator', icon: 'volume_off' },
+              { id: 'early-check-in', label: 'Early check-in (subject to availability)', icon: 'login' },
+              { id: 'late-check-out', label: 'Late check-out (subject to availability)', icon: 'logout' },
+              { id: 'connecting-rooms', label: 'Connecting rooms', icon: 'meeting_room' }
+            ].map(pref => `
+              <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                <input type="checkbox" name="pref" value="${pref.id}" class="w-4 h-4 rounded text-[#003c52] focus:ring-[#003c52]" ${(formData.preferences || []).includes(pref.id) ? 'checked' : ''}>
+                <span class="material-symbols-outlined text-lg text-slate-400">${pref.icon}</span>
+                <span class="text-sm text-slate-700 dark:text-slate-300">${pref.label}</span>
+              </label>`).join('')}
+          </div>
+          <div>
+            <label class="${labelCls}">Dietary requirements <span class="font-normal text-slate-400">(optional)</span></label>
+            <select id="pa-dietary" class="${inputCls}">
+              <option value="">None</option>
+              <option value="vegetarian" ${formData.dietary === 'vegetarian' ? 'selected' : ''}>Vegetarian</option>
+              <option value="vegan" ${formData.dietary === 'vegan' ? 'selected' : ''}>Vegan</option>
+              <option value="halal" ${formData.dietary === 'halal' ? 'selected' : ''}>Halal</option>
+              <option value="gluten-free" ${formData.dietary === 'gluten-free' ? 'selected' : ''}>Gluten-free</option>
+              <option value="nut-allergy" ${formData.dietary === 'nut-allergy' ? 'selected' : ''}>Nut allergy</option>
+              <option value="other" ${formData.dietary === 'other' ? 'selected' : ''}>Other (note in requests above)</option>
+            </select>
+          </div>`);
+
+      } else if (step === 5) {
+        container.innerHTML = card('Terms & Conditions', 'gavel', `
+          <p class="text-sm text-slate-500 dark:text-slate-400 -mt-2">Please review and accept the following terms to complete your pre-arrival checklist.</p>
+          <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 text-sm text-slate-600 dark:text-slate-400 leading-relaxed space-y-3 max-h-48 overflow-y-auto border border-slate-200 dark:border-slate-700">
+            <p><strong class="text-slate-900 dark:text-white">Check-in Policy:</strong> Standard check-in time is 14:00. Early check-in is subject to availability and may incur additional charges. Late check-out must be requested by 08:00 on the day of departure.</p>
+            <p><strong class="text-slate-900 dark:text-white">Cancellation:</strong> Cancellations made within 48 hours of arrival will be subject to a one-night charge as per the room rate at time of booking.</p>
+            <p><strong class="text-slate-900 dark:text-white">Special Requests:</strong> All special requests are noted and we will endeavour to fulfil them; however, they cannot be guaranteed.</p>
+            <p><strong class="text-slate-900 dark:text-white">Data Privacy:</strong> Personal information provided in this form is used solely for the purposes of your stay management and in accordance with our Privacy Policy.</p>
+            <p><strong class="text-slate-900 dark:text-white">Damage:</strong> Guests are liable for any damage caused to hotel property during their stay.</p>
+          </div>
+          <label class="flex items-start gap-3 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+            <input id="pa-terms" type="checkbox" class="mt-0.5 w-4 h-4 rounded text-[#003c52] focus:ring-[#003c52] flex-shrink-0" ${formData.termsAccepted ? 'checked' : ''}>
+            <span class="text-sm text-slate-700 dark:text-slate-300">I have read and agree to the Terms & Conditions and Privacy Policy of Browns Hotels & Resorts.</span>
+          </label>
+          <label class="flex items-start gap-3 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+            <input id="pa-marketing" type="checkbox" class="mt-0.5 w-4 h-4 rounded text-[#003c52] focus:ring-[#003c52] flex-shrink-0" ${formData.marketingOptIn ? 'checked' : ''}>
+            <span class="text-sm text-slate-700 dark:text-slate-300">I'd like to receive exclusive offers and updates from Browns Hotels & Resorts. <span class="text-xs text-slate-400">(Optional)</span></span>
+          </label>`);
+      }
+    }
+
+    function collectStepData(step) {
+      if (step === 1) {
+        return {
+          firstName: document.getElementById('pa-first-name')?.value.trim() || '',
+          lastName: document.getElementById('pa-last-name')?.value.trim() || '',
+          nationality: document.getElementById('pa-nationality')?.value.trim() || '',
+          dob: document.getElementById('pa-dob')?.value || '',
+          email: document.getElementById('pa-email')?.value.trim() || '',
+          phone: document.getElementById('pa-phone')?.value.trim() || ''
+        };
+      } else if (step === 2) {
+        return {
+          docType: document.getElementById('pa-doc-type')?.value || '',
+          docNumber: document.getElementById('pa-doc-number')?.value.trim() || '',
+          docExpiry: document.getElementById('pa-doc-expiry')?.value || '',
+          docFileName: formData.docFileName || ''
+        };
+      } else if (step === 3) {
+        return {
+          arrivalDate: document.getElementById('pa-arrival-date')?.value || '',
+          arrivalTime: document.getElementById('pa-arrival-time')?.value || '',
+          flightNumber: document.getElementById('pa-flight')?.value.trim() || '',
+          transport: document.getElementById('pa-transport')?.value || ''
+        };
+      } else if (step === 4) {
+        const checkboxes = document.querySelectorAll('input[name="pref"]:checked');
+        return {
+          specialRequests: document.getElementById('pa-special-requests')?.value.trim() || '',
+          preferences: Array.from(checkboxes).map(c => c.value),
+          dietary: document.getElementById('pa-dietary')?.value || ''
+        };
+      } else if (step === 5) {
+        return {
+          termsAccepted: document.getElementById('pa-terms')?.checked || false,
+          marketingOptIn: document.getElementById('pa-marketing')?.checked || false
+        };
+      }
+      return {};
+    }
+
+    function validateStep(step) {
+      if (step === 1) {
+        if (!document.getElementById('pa-first-name')?.value.trim()) { App.toast.show('First name is required.', 'warning'); return false; }
+        if (!document.getElementById('pa-last-name')?.value.trim()) { App.toast.show('Last name is required.', 'warning'); return false; }
+        if (!document.getElementById('pa-nationality')?.value.trim()) { App.toast.show('Nationality is required.', 'warning'); return false; }
+      } else if (step === 2) {
+        if (!document.getElementById('pa-doc-number')?.value.trim()) { App.toast.show('Document number is required.', 'warning'); return false; }
+      } else if (step === 3) {
+        if (!document.getElementById('pa-arrival-time')?.value) { App.toast.show('Please select an estimated arrival time.', 'warning'); return false; }
+      } else if (step === 5) {
+        if (!document.getElementById('pa-terms')?.checked) { App.toast.show('Please accept the terms & conditions to continue.', 'warning'); return false; }
+      }
+      return true;
+    }
+
+    function nextStep() {
+      if (!reservation) return;
+      if (!validateStep(currentStep)) return;
+
+      const stepData = collectStepData(currentStep);
+      formData = { ...formData, ...stepData, _step: currentStep + 1 };
+      App.preArrival.save(reservation.id, formData);
+
+      if (currentStep === TOTAL_STEPS) {
+        completeChecklist();
+        return;
+      }
+
+      currentStep++;
+      renderStep(currentStep);
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function prevStep() {
+      if (currentStep <= 1) return;
+      const stepData = collectStepData(currentStep);
+      formData = { ...formData, ...stepData };
+      App.preArrival.save(reservation.id, formData);
+      currentStep--;
+      renderStep(currentStep);
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function completeChecklist() {
+      App.reservations.update(reservation.id, { preArrivalComplete: true });
+      formData._completed = true;
+      App.preArrival.save(reservation.id, formData);
+
+      document.getElementById('steps-container').innerHTML = `
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-green-200 dark:border-green-800 overflow-hidden text-center p-10">
+          <div class="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-5">
+            <span class="material-symbols-outlined text-4xl text-green-600 dark:text-green-400 fill-icon">check_circle</span>
+          </div>
+          <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">All done!</h2>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Your pre-arrival checklist has been completed. We look forward to welcoming you to ${reservation.propertyName}.</p>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8 text-left">
+            ${formData.firstName ? `<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg"><p class="text-xs text-slate-400 mb-0.5">Guest</p><p class="text-sm font-semibold text-slate-900 dark:text-white">${formData.firstName} ${formData.lastName}</p></div>` : ''}
+            ${formData.arrivalTime ? `<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg"><p class="text-xs text-slate-400 mb-0.5">Est. Arrival</p><p class="text-sm font-semibold text-slate-900 dark:text-white">${formData.arrivalTime} on ${App.helpers.formatDate(reservation.checkIn)}</p></div>` : ''}
+            ${formData.flightNumber ? `<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg"><p class="text-xs text-slate-400 mb-0.5">Flight</p><p class="text-sm font-semibold text-slate-900 dark:text-white">${formData.flightNumber}</p></div>` : ''}
+            ${formData.docType ? `<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg"><p class="text-xs text-slate-400 mb-0.5">ID Type</p><p class="text-sm font-semibold text-slate-900 dark:text-white capitalize">${formData.docType.replace('-', ' ')}</p></div>` : ''}
+            ${formData.dietary ? `<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg"><p class="text-xs text-slate-400 mb-0.5">Dietary</p><p class="text-sm font-semibold text-slate-900 dark:text-white capitalize">${formData.dietary.replace('-', ' ')}</p></div>` : ''}
+            ${formData.specialRequests ? `<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg col-span-2 md:col-span-1"><p class="text-xs text-slate-400 mb-0.5">Special Requests</p><p class="text-xs font-medium text-slate-700 dark:text-slate-300 line-clamp-2">${formData.specialRequests}</p></div>` : ''}
+          </div>
+
+          <a href="reservation-detail.html?id=${reservation.id}" class="inline-flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-8 py-3 font-semibold hover:bg-[#004f6e] transition">
+            <span class="material-symbols-outlined text-base">hotel</span> View Reservation
+          </a>
+        </div>`;
+
+      document.getElementById('next-btn').classList.add('hidden');
+      document.getElementById('back-btn').classList.add('hidden');
+      document.getElementById('progress-bar').style.width = '100%';
+      document.getElementById('step-pct').textContent = '100%';
+      document.getElementById('step-label').textContent = 'Completed';
+      updateProgress();
+
+      App.toast.show('Pre-arrival checklist completed!', 'success');
+    }
+
+    function triggerFileInput() { document.getElementById('pa-file-input').click(); }
+
+    function handleFileUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) { App.toast.show('File size must be under 10MB.', 'error'); return; }
+      formData.docFileName = file.name;
+      document.getElementById('upload-label').textContent = '✓ ' + file.name;
+      document.getElementById('upload-zone').classList.add('border-green-400', 'bg-green-50', 'dark:bg-green-900/10');
+      App.toast.show('Document attached: ' + file.name, 'success');
+    }
+
+    init();
+  </script>
+</body>
+</html>

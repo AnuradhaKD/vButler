@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Reservation Detail | Browns Hotels & Resorts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52', 'bg-light': '#f5f8f8', 'bg-dark': '#0f1e23' }
+        }
+      }
+    }
+  </script>
+  <style>.fill-icon { font-variation-settings: 'FILL' 1; }</style>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <script>
+    if (localStorage.getItem('vb:theme') === 'dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+
+  <div id="app-header"></div>
+  <div class="flex">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl">
+
+      <!-- Back -->
+      <a href="reservations.html" class="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 transition mb-6 font-medium">
+        <span class="material-symbols-outlined text-base">arrow_back</span> Back to Reservations
+      </a>
+
+      <div id="page-content">
+        <!-- Loading state -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-12 text-center border border-slate-200 dark:border-slate-700">
+          <div class="w-8 h-8 border-2 border-[#003c52]/30 border-t-[#003c52] rounded-full animate-spin mx-auto"></div>
+          <p class="text-sm text-slate-400 mt-3">Loading reservation…</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'reservations');
+    App.bottomNav.render('reservations');
+
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+
+      let reservations = App.reservations.getAll();
+      if (!reservations.length) {
+        const data = await App.data.loadReservations();
+        if (data) {
+          const session = App.auth.getSession();
+          reservations = data.reservations.filter(r => r.guestEmail === session.email);
+          App.reservations.save(reservations);
+        }
+      }
+
+      const res = id ? reservations.find(r => r.id === id) : App.reservations.getActive();
+
+      if (!res) {
+        document.getElementById('page-content').innerHTML = `
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-12 text-center border border-slate-200 dark:border-slate-700">
+            <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-3 block">hotel_class</span>
+            <p class="font-semibold text-slate-700 dark:text-slate-300 mb-2">Reservation not found</p>
+            <a href="reservations.html" class="text-sm text-[#003c52] dark:text-teal-400 underline">← Back to reservations</a>
+          </div>`;
+        return;
+      }
+
+      document.title = `Destinity vButler — ${res.bookingReference} | Browns Hotels & Resorts`;
+      renderDetail(res);
+    }
+
+    function renderDetail(res) {
+      const nights = Math.round((new Date(res.checkOut) - new Date(res.checkIn)) / 86400000);
+      const charges = (res.folio || []).filter(f => f.amount > 0);
+      const payments = (res.folio || []).filter(f => f.amount < 0);
+      const totalCharges = charges.reduce((s, f) => s + f.amount, 0);
+      const totalPaid = Math.abs(payments.reduce((s, f) => s + f.amount, 0));
+      const balance = res.balance ?? (totalCharges - totalPaid);
+
+      document.getElementById('page-content').innerHTML = `
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+          <div>
+            <div class="flex items-center gap-3 mb-2">
+              ${App.helpers.statusBadge(res.status)}
+              <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Ref: <span class="text-[#003c52] dark:text-teal-400 font-semibold">${res.bookingReference}</span></span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">${res.propertyName}</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 flex items-center gap-1">
+              <span class="material-symbols-outlined text-base">location_on</span> ${res.propertyCity}
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 md:flex-col md:items-end">
+            <a href="pre-arrival.html?id=${res.id}" class="inline-flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition shadow-sm">
+              <span class="material-symbols-outlined text-base">flight_land</span> Pre-Arrival
+            </a>
+            <a href="billing.html?id=${res.id}" class="inline-flex items-center gap-2 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+              <span class="material-symbols-outlined text-base">receipt_long</span> View Bill
+            </a>
+          </div>
+        </div>
+
+        <!-- Stay Details Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <!-- Stay info card -->
+          <div class="md:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">hotel</span> Stay Details
+            </h2>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5 uppercase tracking-wide font-medium">Check-in</p>
+                <p class="font-semibold text-slate-900 dark:text-white">${App.helpers.formatDate(res.checkIn)}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">from 14:00</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5 uppercase tracking-wide font-medium">Check-out</p>
+                <p class="font-semibold text-slate-900 dark:text-white">${App.helpers.formatDate(res.checkOut)}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">by 11:00</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5 uppercase tracking-wide font-medium">Room</p>
+                <p class="font-semibold text-slate-900 dark:text-white">${res.roomNumber ? 'Room ' + res.roomNumber : 'TBC'}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">${res.roomType}</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5 uppercase tracking-wide font-medium">Duration</p>
+                <p class="font-semibold text-slate-900 dark:text-white">${nights} night${nights !== 1 ? 's' : ''}</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5 uppercase tracking-wide font-medium">Guests</p>
+                <p class="font-semibold text-slate-900 dark:text-white">${res.adults} Adult${res.adults !== 1 ? 's' : ''}${res.children ? ', ' + res.children + ' Child' + (res.children !== 1 ? 'ren' : '') : ''}</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5 uppercase tracking-wide font-medium">Source</p>
+                <p class="font-semibold text-slate-900 dark:text-white">${res.bookingSource || '—'}</p>
+              </div>
+            </div>
+            ${res.specialRequests ? `
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <p class="text-xs text-slate-400 dark:text-slate-500 mb-1 uppercase tracking-wide font-medium">Special Requests</p>
+              <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">"${res.specialRequests}"</p>
+            </div>` : ''}
+          </div>
+
+          <!-- Balance card -->
+          <div class="bg-white dark:bg-slate-900 rounded-2xl border ${balance > 0 ? 'border-amber-200 dark:border-amber-800' : 'border-green-200 dark:border-green-800'} p-6 flex flex-col">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined ${balance > 0 ? 'text-amber-500' : 'text-green-500'}">account_balance_wallet</span> Balance
+            </h2>
+            <div class="flex-1 space-y-3">
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-500 dark:text-slate-400">Total charges</span>
+                <span class="font-semibold text-slate-900 dark:text-white">${App.helpers.formatCurrency(totalCharges, res.currencySymbol || 'Rs.')}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-500 dark:text-slate-400">Total paid</span>
+                <span class="font-semibold text-green-600 dark:text-green-400">- ${App.helpers.formatCurrency(totalPaid, res.currencySymbol || 'Rs.')}</span>
+              </div>
+              <div class="border-t border-slate-100 dark:border-slate-800 pt-3">
+                <div class="flex justify-between">
+                  <span class="font-bold text-slate-900 dark:text-white">Balance Due</span>
+                  <span class="font-bold text-xl ${balance > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-green-600 dark:text-green-400'}">${balance > 0 ? App.helpers.formatCurrency(balance, res.currencySymbol || 'Rs.') : 'Settled'}</span>
+                </div>
+              </div>
+            </div>
+            ${balance > 0 ? `
+            <div class="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+              <p class="text-xs text-amber-700 dark:text-amber-400 leading-relaxed">Balance to be settled at check-out or via front desk.</p>
+            </div>` : `
+            <div class="mt-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <p class="text-xs text-green-700 dark:text-green-400 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-sm">check_circle</span> Fully settled. Nothing to pay.</p>
+            </div>`}
+          </div>
+        </div>
+
+        <!-- Folio table -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden mb-6">
+          <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <h2 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">receipt_long</span> Itemised Folio
+            </h2>
+            <a href="billing.html?id=${res.id}" class="text-xs font-semibold text-[#003c52] dark:text-teal-400 hover:underline">Full billing →</a>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 dark:bg-slate-800/50">
+                <tr>
+                  <th class="text-left px-6 py-3 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Date</th>
+                  <th class="text-left px-6 py-3 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Description</th>
+                  <th class="text-left px-6 py-3 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Category</th>
+                  <th class="text-right px-6 py-3 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Amount</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                ${(res.folio || []).map(f => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                  <td class="px-6 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap">${App.helpers.formatDate(f.date)}</td>
+                  <td class="px-6 py-3.5 text-slate-900 dark:text-white">${f.description}</td>
+                  <td class="px-6 py-3.5">
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">${f.category}</span>
+                  </td>
+                  <td class="px-6 py-3.5 text-right font-semibold whitespace-nowrap ${f.amount < 0 ? 'text-green-600 dark:text-green-400' : 'text-slate-900 dark:text-white'}">
+                    ${f.amount < 0 ? '- ' : ''} ${App.helpers.formatCurrency(Math.abs(f.amount), res.currencySymbol || 'Rs.')}
+                  </td>
+                </tr>`).join('')}
+              </tbody>
+              <tfoot class="bg-slate-50 dark:bg-slate-800/50 border-t-2 border-slate-200 dark:border-slate-700">
+                <tr>
+                  <td colspan="3" class="px-6 py-4 font-bold text-slate-900 dark:text-white">Balance Due</td>
+                  <td class="px-6 py-4 text-right font-bold text-lg ${balance > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-green-600 dark:text-green-400'}">
+                    ${balance > 0 ? App.helpers.formatCurrency(balance, res.currencySymbol || 'Rs.') : 'Settled'}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Quick action buttons row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <a href="pre-arrival.html?id=${res.id}" class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center hover:shadow-md hover:border-[#003c52]/30 transition group">
+            <span class="material-symbols-outlined text-2xl text-[#003c52] dark:text-teal-400 mb-1 block group-hover:scale-110 transition-transform">flight_land</span>
+            <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Pre-Arrival</p>
+          </a>
+          <a href="services.html" class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center hover:shadow-md hover:border-[#003c52]/30 transition group">
+            <span class="material-symbols-outlined text-2xl text-[#003c52] dark:text-teal-400 mb-1 block group-hover:scale-110 transition-transform">room_service</span>
+            <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Services</p>
+          </a>
+          <a href="dining.html" class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center hover:shadow-md hover:border-[#003c52]/30 transition group">
+            <span class="material-symbols-outlined text-2xl text-[#003c52] dark:text-teal-400 mb-1 block group-hover:scale-110 transition-transform">restaurant</span>
+            <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Dining</p>
+          </a>
+          <a href="complaints.html" class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center hover:shadow-md hover:border-[#003c52]/30 transition group">
+            <span class="material-symbols-outlined text-2xl text-[#003c52] dark:text-teal-400 mb-1 block group-hover:scale-110 transition-transform">support_agent</span>
+            <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Feedback</p>
+          </a>
+        </div>`;
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Settings | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+  <style>
+    .toggle-switch { position: relative; width: 44px; height: 24px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-thumb { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; border-radius: 24px; transition: .3s; }
+    .toggle-thumb::before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; border-radius: 50%; transition: .3s; }
+    input:checked + .toggle-thumb { background-color: #003c52; }
+    .dark input:checked + .toggle-thumb { background-color: #14b8a6; }
+    input:checked + .toggle-thumb::before { transform: translateX(20px); }
+  </style>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <div class="mb-6">
+        <a href="profile.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 transition mb-4">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Back to Profile
+        </a>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">App Settings</h1>
+      </div>
+
+      <!-- Language -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mb-5">
+        <h2 class="font-bold text-slate-900 dark:text-white mb-1">Language</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Select your preferred display language</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <button data-lang="en" onclick="setLanguage('en')" class="lang-btn flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition cursor-pointer border-[#003c52] dark:border-teal-500 bg-[#003c52]/5 dark:bg-teal-900/20">
+            <span class="text-2xl">🇬🇧</span>
+            <span class="text-sm font-semibold text-slate-900 dark:text-white">English</span>
+            <span class="text-xs text-slate-400">EN</span>
+          </button>
+          <button data-lang="si" onclick="setLanguage('si')" class="lang-btn flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition cursor-pointer border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">
+            <span class="text-2xl">🇱🇰</span>
+            <span class="text-sm font-semibold text-slate-900 dark:text-white">සිංහල</span>
+            <span class="text-xs text-slate-400">SI</span>
+          </button>
+          <button data-lang="ta" onclick="setLanguage('ta')" class="lang-btn flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition cursor-pointer border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">
+            <span class="text-2xl">🇮🇳</span>
+            <span class="text-sm font-semibold text-slate-900 dark:text-white">தமிழ்</span>
+            <span class="text-xs text-slate-400">TA</span>
+          </button>
+          <button data-lang="ar" onclick="setLanguage('ar')" class="lang-btn flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition cursor-pointer border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">
+            <span class="text-2xl">🇦🇪</span>
+            <span class="text-sm font-semibold text-slate-900 dark:text-white">العربية</span>
+            <span class="text-xs text-slate-400">AR</span>
+          </button>
+          <button data-lang="de" onclick="setLanguage('de')" class="lang-btn flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition cursor-pointer border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">
+            <span class="text-2xl">🇩🇪</span>
+            <span class="text-sm font-semibold text-slate-900 dark:text-white">Deutsch</span>
+            <span class="text-xs text-slate-400">DE</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Theme -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mb-5">
+        <h2 class="font-bold text-slate-900 dark:text-white mb-1">Appearance</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Choose your preferred theme</p>
+        <div class="flex gap-3">
+          <button id="theme-light-btn" onclick="setTheme('light')" class="theme-btn flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition">
+            <span class="material-symbols-outlined text-xl">light_mode</span>
+            <span class="font-semibold text-sm">Light</span>
+          </button>
+          <button id="theme-dark-btn" onclick="setTheme('dark')" class="theme-btn flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition">
+            <span class="material-symbols-outlined text-xl">dark_mode</span>
+            <span class="font-semibold text-sm">Dark</span>
+          </button>
+          <button id="theme-system-btn" onclick="setTheme('system')" class="theme-btn flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition">
+            <span class="material-symbols-outlined text-xl">brightness_auto</span>
+            <span class="font-semibold text-sm">System</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-5 overflow-hidden">
+        <div class="p-5 border-b border-slate-100 dark:border-slate-800">
+          <h2 class="font-bold text-slate-900 dark:text-white">Notification Preferences</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Choose what updates you'd like to receive</p>
+        </div>
+        <div class="divide-y divide-slate-100 dark:divide-slate-800">
+          <div class="flex items-center justify-between px-5 py-4">
+            <div>
+              <div class="text-sm font-semibold text-slate-900 dark:text-white">Service Updates</div>
+              <div class="text-xs text-slate-400 dark:text-slate-500">Request status changes, confirmations</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="notif-service" onchange="saveNotifPrefs()" checked>
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+          <div class="flex items-center justify-between px-5 py-4">
+            <div>
+              <div class="text-sm font-semibold text-slate-900 dark:text-white">Promotions & Offers</div>
+              <div class="text-xs text-slate-400 dark:text-slate-500">Special deals, experience packages</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="notif-promos" onchange="saveNotifPrefs()">
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+          <div class="flex items-center justify-between px-5 py-4">
+            <div>
+              <div class="text-sm font-semibold text-slate-900 dark:text-white">Billing Alerts</div>
+              <div class="text-xs text-slate-400 dark:text-slate-500">New charges, payment confirmations</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="notif-billing" onchange="saveNotifPrefs()" checked>
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mb-5">
+        <h2 class="font-bold text-slate-900 dark:text-white mb-2">Privacy & Data</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+          Destinity vButler stores your preferences and stay data locally on your device. Your profile and reservation data are never shared with third parties. Data is retained for the duration of your stay plus 90 days, after which it is automatically removed. You may request deletion at any time from your profile settings.
+        </p>
+      </div>
+
+      <!-- App Info -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-[#003c52] flex items-center justify-center shrink-0">
+            <span class="text-white font-bold text-sm">vB</span>
+          </div>
+          <div>
+            <div class="font-bold text-slate-900 dark:text-white">Destinity vButler v1.0</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">Browns Hotels & Resorts</div>
+            <div class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">© 2025 Browns Group</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'profile');
+    App.bottomNav.render('profile');
+
+    function setLanguage(lang) {
+      App.storage.set('vb:language', lang);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        const isActive = btn.dataset.lang === lang;
+        btn.className = `lang-btn flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition cursor-pointer ${isActive
+          ? 'border-[#003c52] dark:border-teal-500 bg-[#003c52]/5 dark:bg-teal-900/20'
+          : 'border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500'}`;
+      });
+      App.toast.show('Language preference saved', 'success');
+    }
+
+    function setTheme(t) {
+      if (t === 'system') {
+        App.storage.remove('vb:theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+        document.documentElement.classList.toggle('dark', prefersDark);
+      } else {
+        App.storage.set('vb:theme', t);
+        document.documentElement.classList.toggle('dark', t === 'dark');
+      }
+      updateThemeButtons(t);
+      App.toast.show('Theme updated', 'success');
+    }
+
+    function updateThemeButtons(active) {
+      ['light','dark','system'].forEach(t => {
+        const btn = document.getElementById(`theme-${t}-btn`);
+        const isActive = t === active;
+        btn.className = `theme-btn flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition ${isActive
+          ? 'border-[#003c52] dark:border-teal-500 bg-[#003c52]/5 dark:bg-teal-900/20 text-[#003c52] dark:text-teal-400'
+          : 'border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-400 hover:border-[#003c52] dark:hover:border-teal-500'}`;
+      });
+    }
+
+    function saveNotifPrefs() {
+      const prefs = {
+        service: document.getElementById('notif-service').checked,
+        promos: document.getElementById('notif-promos').checked,
+        billing: document.getElementById('notif-billing').checked
+      };
+      App.storage.set('vb:notifPrefs', prefs);
+      App.toast.show('Notification preferences saved', 'success');
+    }
+
+    // Init
+    (() => {
+      const lang = App.storage.get('vb:language') || 'en';
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        const isActive = btn.dataset.lang === lang;
+        btn.className = `lang-btn flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition cursor-pointer ${isActive
+          ? 'border-[#003c52] dark:border-teal-500 bg-[#003c52]/5 dark:bg-teal-900/20'
+          : 'border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500'}`;
+      });
+
+      const storedTheme = App.storage.get('vb:theme');
+      const currentTheme = storedTheme || 'system';
+      updateThemeButtons(currentTheme);
+
+      const prefs = App.storage.get('vb:notifPrefs') || {};
+      if (prefs.service !== undefined) document.getElementById('notif-service').checked = prefs.service;
+      if (prefs.promos !== undefined) document.getElementById('notif-promos').checked = prefs.promos;
+      if (prefs.billing !== undefined) document.getElementById('notif-billing').checked = prefs.billing;
+    })();
+  </script>
+</body>
+</html>

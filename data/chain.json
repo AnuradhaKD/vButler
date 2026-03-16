@@ -1,0 +1,46 @@
+{
+  "chain": {
+    "id": "browns-hotels-resorts",
+    "name": "Browns Hotels & Resorts",
+    "primaryColor": "#003c52",
+    "website": "https://www.brownshotels.com",
+    "supportEmail": "guest@brownshotels.com"
+  },
+  "featureFlags": {
+    "preArrivalChecklist": true,
+    "inAppPayments": true,
+    "wakeUpCall": true,
+    "localExploration": true,
+    "wellnessSpa": true,
+    "loyaltyPoints": false,
+    "inAppChat": false
+  },
+  "promotions": [
+    {
+      "id": "promo-001",
+      "title": "Ella Weekend Escape",
+      "description": "20% off Wellness packages this April. Book your spa treatment and unwind in the hills.",
+      "imageUrl": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800",
+      "targetProperties": ["newburge-ella"],
+      "validFrom": "2026-04-01",
+      "validTo": "2026-04-30",
+      "ctaLabel": "Book Now",
+      "ctaUrl": "#"
+    },
+    {
+      "id": "promo-002",
+      "title": "Colombo City Break",
+      "description": "Complimentary airport transfer when you book 2 nights or more.",
+      "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+      "targetProperties": ["colombo-city"],
+      "validFrom": "2026-03-01",
+      "validTo": "2026-05-31",
+      "ctaLabel": "Learn More",
+      "ctaUrl": "#"
+    }
+  ],
+  "properties": [
+    { "id": "newburge-ella",  "name": "Browns Hotel Newburge Ella",  "dataFile": "newburge-ella.json",  "city": "Ella, Sri Lanka" },
+    { "id": "colombo-city",   "name": "Browns City Hotel Colombo",   "dataFile": "colombo-city.json",   "city": "Colombo, Sri Lanka" }
+  ]
+}

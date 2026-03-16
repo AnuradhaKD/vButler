@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Airport Transfer Booking | Browns Hotels & Resorts</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8">
+      <div class="max-w-2xl mx-auto">
+
+        <!-- Back link -->
+        <a href="transport.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#003c52] dark:text-teal-400 hover:underline mb-5">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Back to Transport
+        </a>
+
+        <!-- Loading state -->
+        <div id="loading-state" class="space-y-4">
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 animate-pulse">
+            <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-3"></div>
+            <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+          </div>
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 animate-pulse">
+            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/4 mb-4"></div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="h-24 bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
+              <div class="h-24 bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
+              <div class="h-24 bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div id="content-state" class="hidden space-y-6">
+
+          <!-- Transfer Info -->
+          <div id="transfer-info" class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5"></div>
+
+          <!-- Vehicle Selection -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">directions_car</span>
+              Select Vehicle
+            </h2>
+            <div id="vehicle-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+          </div>
+
+          <!-- Booking Form -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">edit_note</span>
+              Booking Details
+            </h2>
+            <div id="booking-form" class="space-y-4"></div>
+          </div>
+
+          <!-- Price Summary -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-[#003c52]/20 dark:border-teal-700/40 p-5">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">receipt_long</span>
+              Price Summary
+            </h2>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                <span id="summary-vehicle-label">— Select a vehicle —</span>
+                <span id="summary-vehicle-price">—</span>
+              </div>
+              <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                <span>1 trip</span>
+                <span>× 1</span>
+              </div>
+              <div class="border-t border-slate-200 dark:border-slate-700 pt-2 mt-2 flex justify-between font-bold text-base text-slate-900 dark:text-white">
+                <span>Total</span>
+                <span id="summary-total" class="text-[#003c52] dark:text-teal-400">—</span>
+              </div>
+            </div>
+            <p class="mt-3 text-xs text-slate-400 dark:text-slate-500">Charged to room folio. Prices include fuel, tolls &amp; driver gratuity.</p>
+          </div>
+
+          <!-- Confirm Button -->
+          <button id="confirm-btn" onclick="confirmBooking()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-4 font-bold text-base hover:bg-[#004f6e] transition shadow-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+            <span class="material-symbols-outlined">check_circle</span>
+            Confirm Booking
+          </button>
+
+        </div>
+
+        <!-- Error state -->
+        <div id="error-state" class="hidden text-center py-20">
+          <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600">error</span>
+          <p class="mt-4 text-slate-500 dark:text-slate-400">Transfer option not found. <a href="transport.html" class="text-[#003c52] dark:text-teal-400 font-semibold">Go back</a></p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'transport');
+    App.bottomNav.render('services');
+
+    let propData = null;
+    let reservation = null;
+    let transportOption = null;
+    let selectedVehicle = null;
+
+    const params = new URLSearchParams(window.location.search);
+    const transferId = params.get('id') || 'airport-arrival';
+
+    async function init() {
+      reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!propData) {
+        document.getElementById('error-state').classList.remove('hidden');
+        return;
+      }
+
+      transportOption = (propData.transport?.options || []).find(o => o.id === transferId);
+      if (!transportOption) {
+        document.getElementById('error-state').classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('content-state').classList.remove('hidden');
+      document.title = `Destinity vButler — ${transportOption.name} | Browns Hotels & Resorts`;
+
+      renderTransferInfo();
+      renderVehicles();
+      renderBookingForm();
+    }
+
+    function renderTransferInfo() {
+      const el = document.getElementById('transfer-info');
+      const isArrival = transportOption.direction === 'arrival';
+      const icon = isArrival ? 'flight_land' : 'flight_takeoff';
+      const badgeClass = isArrival
+        ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
+        : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400';
+
+      el.innerHTML = `
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-[#003c52]/10 dark:bg-teal-900/30 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-2xl text-[#003c52] dark:text-teal-400">${icon}</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <h1 class="text-xl font-bold text-slate-900 dark:text-white">${transportOption.name}</h1>
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full ${badgeClass} capitalize">${transportOption.direction}</span>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-slate-400">${transportOption.description}</p>
+            <div class="flex flex-wrap gap-3 mt-2 text-xs text-slate-500 dark:text-slate-400">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span>4–5 hours</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">verified_user</span>Chauffeur-driven</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">receipt</span>Charged to folio</span>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderVehicles() {
+      const grid = document.getElementById('vehicle-grid');
+      const currency = propData.property?.currencySymbol || 'Rs.';
+      const vehicleIcons = { sedan: 'directions_car', suv: 'directions_car', van: 'airport_shuttle' };
+
+      grid.innerHTML = transportOption.vehicles.map((v, idx) => `
+        <label class="cursor-pointer">
+          <input type="radio" name="vehicle" value="${v.type}" class="sr-only" onchange="selectVehicle('${v.type}', ${v.price}, '${v.label}')">
+          <div id="vehicle-card-${v.type}" class="vehicle-card rounded-xl border-2 border-slate-200 dark:border-slate-700 p-4 flex flex-col items-center gap-2 text-center transition hover:border-[#003c52] dark:hover:border-teal-400 ${idx === 0 ? '' : ''}">
+            <div class="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl text-slate-500 dark:text-slate-400 vehicle-icon">${vehicleIcons[v.type] || 'directions_car'}</span>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 dark:text-white text-sm">${v.label}</p>
+              <p class="text-[#003c52] dark:text-teal-400 font-bold text-base mt-0.5">${currency} ${v.price.toLocaleString()}</p>
+            </div>
+          </div>
+        </label>`).join('');
+
+      // Auto-select first vehicle
+      if (transportOption.vehicles.length > 0) {
+        const first = transportOption.vehicles[0];
+        selectVehicle(first.type, first.price, first.label);
+        const firstRadio = grid.querySelector('input[type="radio"]');
+        if (firstRadio) firstRadio.checked = true;
+      }
+    }
+
+    function selectVehicle(type, price, label) {
+      selectedVehicle = { type, price, label };
+      // Update card visuals
+      document.querySelectorAll('.vehicle-card').forEach(card => {
+        card.classList.remove('border-[#003c52]', 'dark:border-teal-400', 'bg-[#003c52]/5', 'dark:bg-teal-900/20');
+        card.classList.add('border-slate-200', 'dark:border-slate-700');
+        card.querySelector('.vehicle-icon').classList.remove('text-[#003c52]', 'dark:text-teal-400');
+        card.querySelector('.vehicle-icon').classList.add('text-slate-500', 'dark:text-slate-400');
+      });
+      const activeCard = document.getElementById(`vehicle-card-${type}`);
+      if (activeCard) {
+        activeCard.classList.remove('border-slate-200', 'dark:border-slate-700');
+        activeCard.classList.add('border-[#003c52]', 'dark:border-teal-400', 'bg-[#003c52]/5', 'dark:bg-teal-900/20');
+        activeCard.querySelector('.vehicle-icon').classList.remove('text-slate-500', 'dark:text-slate-400');
+        activeCard.querySelector('.vehicle-icon').classList.add('text-[#003c52]', 'dark:text-teal-400');
+      }
+      updateSummary();
+    }
+
+    function updateSummary() {
+      if (!selectedVehicle) return;
+      const currency = propData.property?.currencySymbol || 'Rs.';
+      document.getElementById('summary-vehicle-label').textContent = selectedVehicle.label;
+      document.getElementById('summary-vehicle-price').textContent = `${currency} ${selectedVehicle.price.toLocaleString()}`;
+      document.getElementById('summary-total').textContent = `${currency} ${selectedVehicle.price.toLocaleString()}`;
+    }
+
+    function renderBookingForm() {
+      const el = document.getElementById('booking-form');
+      const isArrival = transportOption.direction === 'arrival';
+      const today = new Date().toISOString().split('T')[0];
+
+      if (isArrival) {
+        el.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Flight Number <span class="text-red-500">*</span></label>
+              <input type="text" id="field-flightNumber" placeholder="e.g. UL 401" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] placeholder:text-slate-400">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Passengers <span class="text-red-500">*</span></label>
+              <input type="number" id="field-passengerCount" min="1" max="8" value="1" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Arrival Date <span class="text-red-500">*</span></label>
+              <input type="date" id="field-arrivalDate" min="${today}" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Arrival Time <span class="text-red-500">*</span></label>
+              <input type="time" id="field-arrivalTime" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Special Requirements</label>
+            <textarea id="field-specialRequirements" rows="3" placeholder="e.g. Child seat required, wheelchair assistance…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] placeholder:text-slate-400 resize-none"></textarea>
+          </div>`;
+      } else {
+        el.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Departure Date <span class="text-red-500">*</span></label>
+              <input type="date" id="field-departureDate" min="${today}" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Preferred Pickup Time <span class="text-red-500">*</span></label>
+              <input type="time" id="field-departureTime" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Flight Number <span class="text-red-500">*</span></label>
+              <input type="text" id="field-flightNumber" placeholder="e.g. UL 402" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] placeholder:text-slate-400">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Passengers <span class="text-red-500">*</span></label>
+              <input type="number" id="field-passengerCount" min="1" max="8" value="1" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Special Requirements</label>
+            <textarea id="field-specialRequirements" rows="3" placeholder="e.g. Extra luggage, early morning pickup…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] placeholder:text-slate-400 resize-none"></textarea>
+          </div>`;
+      }
+    }
+
+    function confirmBooking() {
+      if (!selectedVehicle) {
+        App.toast.show('Please select a vehicle.', 'error');
+        return;
+      }
+      if (!reservation) {
+        App.toast.show('No active reservation found.', 'error');
+        return;
+      }
+
+      const isArrival = transportOption.direction === 'arrival';
+      const details = { vehicle: selectedVehicle.type };
+      const missingFields = [];
+
+      const getValue = id => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+      };
+
+      if (isArrival) {
+        details.flightNumber = getValue('field-flightNumber');
+        details.arrivalDate  = getValue('field-arrivalDate');
+        details.arrivalTime  = getValue('field-arrivalTime');
+        details.passengerCount = parseInt(getValue('field-passengerCount')) || 1;
+        if (!details.flightNumber) missingFields.push('Flight Number');
+        if (!details.arrivalDate)  missingFields.push('Arrival Date');
+        if (!details.arrivalTime)  missingFields.push('Arrival Time');
+      } else {
+        details.departureDate = getValue('field-departureDate');
+        details.departureTime = getValue('field-departureTime');
+        details.flightNumber  = getValue('field-flightNumber');
+        details.passengerCount = parseInt(getValue('field-passengerCount')) || 1;
+        if (!details.departureDate) missingFields.push('Departure Date');
+        if (!details.departureTime) missingFields.push('Preferred Pickup Time');
+        if (!details.flightNumber)  missingFields.push('Flight Number');
+      }
+
+      if (missingFields.length) {
+        App.toast.show(`Please fill in: ${missingFields.join(', ')}.`, 'error');
+        return;
+      }
+
+      const specialRequirements = getValue('field-specialRequirements');
+      const direction = isArrival ? 'Arrival' : 'Departure';
+
+      const btn = document.getElementById('confirm-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Confirming…`;
+
+      App.requests.add({
+        reservationId: reservation.id,
+        serviceName: `Airport Transfer — ${direction}`,
+        serviceId: transportOption.id,
+        category: 'Transport',
+        details,
+        notes: specialRequirements
+      });
+
+      setTimeout(() => {
+        App.toast.show(`${transportOption.name} booked successfully!`, 'success');
+        setTimeout(() => { window.location.href = 'my-requests.html'; }, 1200);
+      }, 600);
+    }
+
+    init();
+  </script>
+</body>
+</html>

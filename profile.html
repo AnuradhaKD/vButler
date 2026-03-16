@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — My Profile | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <div class="mb-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Account</p>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">My Profile</h1>
+      </div>
+
+      <!-- Profile Photo Section -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-5">
+        <div class="flex items-center gap-5">
+          <div class="relative">
+            <div id="avatar-circle" class="w-20 h-20 rounded-full bg-[#003c52] flex items-center justify-center overflow-hidden">
+              <span id="avatar-initials" class="text-white text-2xl font-bold"></span>
+              <img id="avatar-img" src="" alt="Profile" class="hidden w-full h-full object-cover">
+            </div>
+            <button onclick="document.getElementById('photo-input').click()" class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#003c52] dark:bg-teal-600 flex items-center justify-center text-white hover:bg-[#004f6e] transition shadow-md">
+              <span class="material-symbols-outlined text-sm">photo_camera</span>
+            </button>
+            <input id="photo-input" type="file" accept="image/*" class="hidden" onchange="handlePhotoChange(this)">
+          </div>
+          <div>
+            <h2 id="profile-name" class="text-lg font-bold text-slate-900 dark:text-white"></h2>
+            <p id="profile-email" class="text-sm text-slate-500 dark:text-slate-400"></p>
+            <button onclick="document.getElementById('photo-input').click()" class="mt-2 text-xs font-semibold text-[#003c52] dark:text-teal-400 hover:underline">Change Photo</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Fields -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-5 space-y-4">
+        <h2 class="font-bold text-slate-900 dark:text-white mb-2">Personal Information</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">First Name</label>
+            <input id="f-firstName" type="text" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Last Name</label>
+            <input id="f-lastName" type="text" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Email</label>
+          <input id="f-email" type="email" disabled class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-500 text-sm cursor-not-allowed">
+          <p class="text-xs text-slate-400 mt-1">Email cannot be changed</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Phone Number</label>
+          <input id="f-phone" type="tel" placeholder="+94 77 000 0000" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Nationality</label>
+            <input id="f-nationality" type="text" placeholder="e.g. Sri Lankan" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date of Birth</label>
+            <input id="f-dob" type="date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Passport Number</label>
+          <input id="f-passport" type="text" placeholder="Optional — for concierge services" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+        </div>
+
+        <button onclick="saveProfile()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm mt-2">
+          Save Changes
+        </button>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-5 overflow-hidden">
+        <div class="p-4 border-b border-slate-100 dark:border-slate-800">
+          <h2 class="font-bold text-slate-900 dark:text-white text-sm">Quick Links</h2>
+        </div>
+        <a href="settings.html" class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+          <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 text-xl">settings</span>
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-300">App Settings</span>
+          <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-base ml-auto">chevron_right</span>
+        </a>
+        <a href="change-password.html" class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+          <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 text-xl">lock</span>
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Change Password</span>
+          <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-base ml-auto">chevron_right</span>
+        </a>
+        <a href="reservations.html" class="flex items-center gap-3 px-5 py-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+          <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 text-xl">hotel</span>
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-300">My Reservations</span>
+          <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-base ml-auto">chevron_right</span>
+        </a>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 space-y-3">
+        <button onclick="confirmSignOut()" class="w-full flex items-center justify-center gap-2 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-xl px-5 py-3 text-sm font-semibold hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+          <span class="material-symbols-outlined text-base">logout</span>
+          Sign Out
+        </button>
+        <button onclick="showDeleteModal()" class="w-full text-xs text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition font-medium">
+          Request Account Deletion
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Sign out confirmation modal -->
+  <div id="signout-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 max-w-sm w-full">
+      <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Sign Out?</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mb-5">You'll need to log in again to access Destinity vButler.</p>
+      <div class="flex gap-3">
+        <button onclick="document.getElementById('signout-modal').classList.add('hidden')" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition text-sm">Cancel</button>
+        <button onclick="App.auth.logout()" class="flex-1 bg-red-600 text-white rounded-xl py-3 font-semibold hover:bg-red-700 transition text-sm">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete account modal -->
+  <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 max-w-sm w-full">
+      <span class="material-symbols-outlined text-red-500 text-4xl mb-3 block">warning</span>
+      <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Account Deletion</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mb-3">Account deletion is handled by our data privacy team. By proceeding, you acknowledge:</p>
+      <ul class="text-xs text-slate-500 dark:text-slate-400 space-y-1 mb-5 list-disc list-inside">
+        <li>All personal data will be removed within 30 days</li>
+        <li>Active reservations will not be affected</li>
+        <li>This action is irreversible</li>
+      </ul>
+      <div class="flex gap-3">
+        <button onclick="document.getElementById('delete-modal').classList.add('hidden')" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition text-sm">Cancel</button>
+        <button onclick="requestDeletion()" class="flex-1 bg-red-600 text-white rounded-xl py-3 font-semibold hover:bg-red-700 transition text-sm">Request Deletion</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'profile');
+    App.bottomNav.render('profile');
+
+    let profile = App.auth.getGuest() || {};
+
+    function renderAvatar() {
+      const initials = profile.firstName && profile.lastName
+        ? (profile.firstName[0] + profile.lastName[0]).toUpperCase()
+        : (profile.fullName ? profile.fullName.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2) : 'G');
+      document.getElementById('avatar-initials').textContent = initials;
+      if (profile.photoBase64) {
+        document.getElementById('avatar-img').src = profile.photoBase64;
+        document.getElementById('avatar-img').classList.remove('hidden');
+        document.getElementById('avatar-initials').classList.add('hidden');
+      } else {
+        document.getElementById('avatar-img').classList.add('hidden');
+        document.getElementById('avatar-initials').classList.remove('hidden');
+      }
+    }
+
+    function loadProfile() {
+      profile = App.auth.getGuest() || {};
+      document.getElementById('profile-name').textContent = profile.fullName || `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Guest';
+      document.getElementById('profile-email').textContent = profile.email || '';
+      document.getElementById('f-firstName').value = profile.firstName || '';
+      document.getElementById('f-lastName').value = profile.lastName || '';
+      document.getElementById('f-email').value = profile.email || '';
+      document.getElementById('f-phone').value = profile.phone || '';
+      document.getElementById('f-nationality').value = profile.nationality || '';
+      document.getElementById('f-dob').value = profile.dob || '';
+      document.getElementById('f-passport').value = profile.passport || '';
+      renderAvatar();
+    }
+
+    function handlePhotoChange(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) { App.toast.show('Image must be under 2MB', 'warning'); return; }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64 = e.target.result;
+        profile = { ...profile, photoBase64: base64 };
+        App.storage.set('vb:profile', profile);
+        renderAvatar();
+        App.toast.show('Profile photo updated', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveProfile() {
+      const firstName = document.getElementById('f-firstName').value.trim();
+      const lastName = document.getElementById('f-lastName').value.trim();
+      if (!firstName || !lastName) { App.toast.show('First and last name are required', 'warning'); return; }
+      profile = {
+        ...profile,
+        firstName,
+        lastName,
+        fullName: `${firstName} ${lastName}`,
+        phone: document.getElementById('f-phone').value.trim(),
+        nationality: document.getElementById('f-nationality').value.trim(),
+        dob: document.getElementById('f-dob').value,
+        passport: document.getElementById('f-passport').value.trim()
+      };
+      App.storage.set('vb:profile', profile);
+      document.getElementById('profile-name').textContent = profile.fullName;
+      renderAvatar();
+      App.toast.show('Profile updated successfully', 'success');
+    }
+
+    function confirmSignOut() {
+      document.getElementById('signout-modal').classList.remove('hidden');
+    }
+
+    function showDeleteModal() {
+      document.getElementById('delete-modal').classList.remove('hidden');
+    }
+
+    function requestDeletion() {
+      document.getElementById('delete-modal').classList.add('hidden');
+      App.toast.show('Account deletion request submitted', 'info');
+    }
+
+    loadProfile();
+  </script>
+</body>
+</html>

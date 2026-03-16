@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Laundry Service | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8">
+
+      <!-- Page Header -->
+      <div class="flex items-center gap-3 mb-6">
+        <a href="housekeeping.html" class="inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-500 dark:text-slate-400">
+          <span class="material-symbols-outlined text-xl">arrow_back</span>
+        </a>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Housekeeping</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Laundry Service</h1>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-state">
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6 animate-pulse">
+          <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
+          <div class="space-y-3">
+            ${[1,2,3,4].map(()=>`<div class="flex items-center gap-4"><div class="h-4 bg-slate-200 dark:bg-slate-700 rounded flex-1"></div><div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-20"></div></div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+        <div class="grid md:grid-cols-[1fr_340px] gap-6">
+
+          <!-- Left: price list + order builder -->
+          <div class="space-y-6">
+
+            <!-- Express toggle -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-amber-500">bolt</span>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-slate-900 dark:text-white">Express Service</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">1.5× price — Next day instead of 2 days</p>
+                  </div>
+                </div>
+                <button id="express-toggle" onclick="toggleExpress()" class="relative w-14 h-7 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#003c52]" aria-label="Toggle Express">
+                  <span id="express-track" class="absolute inset-0 rounded-full bg-slate-300 dark:bg-slate-600 transition-colors"></span>
+                  <span id="express-thumb" class="absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform"></span>
+                </button>
+              </div>
+              <div id="express-badge" class="hidden mt-3 text-xs font-semibold text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">bolt</span>
+                Express active — prices shown include 1.5× surcharge
+              </div>
+            </div>
+
+            <!-- Items list -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div class="p-5 border-b border-slate-200 dark:border-slate-700">
+                <h2 class="font-bold text-slate-900 dark:text-white">Price List</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Select service type and quantity for each item</p>
+              </div>
+              <!-- Column headers -->
+              <div class="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-5 py-2.5 bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
+                <span>Item</span>
+                <span class="w-24 text-center">Wash</span>
+                <span class="w-24 text-center">Iron Only</span>
+                <span class="w-20 text-center">Qty</span>
+              </div>
+              <div id="price-list" class="divide-y divide-slate-100 dark:divide-slate-800"></div>
+            </div>
+
+          </div>
+
+          <!-- Right: order summary -->
+          <div>
+            <div class="sticky top-24 space-y-4">
+
+              <!-- Order summary -->
+              <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+                <h3 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-xl">shopping_bag</span>
+                  Order Summary
+                </h3>
+                <div id="order-items" class="space-y-2 mb-4 min-h-[60px]">
+                  <p class="text-sm text-slate-400 dark:text-slate-500">No items added yet.</p>
+                </div>
+
+                <div id="order-totals" class="hidden border-t border-slate-200 dark:border-slate-700 pt-4 space-y-2 mb-4">
+                  <div class="flex justify-between text-sm text-slate-600 dark:text-slate-400">
+                    <span>Subtotal</span>
+                    <span id="subtotal-display">Rs. 0</span>
+                  </div>
+                  <div id="express-row" class="hidden flex justify-between text-sm text-amber-600 dark:text-amber-400">
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">bolt</span>Express (×1.5)</span>
+                    <span id="express-surcharge-display"></span>
+                  </div>
+                  <div class="flex justify-between font-bold text-slate-900 dark:text-white text-base border-t border-slate-200 dark:border-slate-700 pt-2">
+                    <span>Total</span>
+                    <span id="total-display">Rs. 0</span>
+                  </div>
+                  <p id="delivery-note" class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">schedule</span>
+                    Ready in 2 business days
+                  </p>
+                </div>
+
+                <!-- Collection time -->
+                <div id="order-form" class="hidden space-y-3">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Collection Time</label>
+                    <input type="time" id="collection-time" class="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Special Instructions</label>
+                    <textarea id="laundry-instructions" rows="2" placeholder="Stains, delicate fabrics, etc." class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52] resize-none placeholder-slate-400"></textarea>
+                  </div>
+                  <button onclick="placeOrder()" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-3 font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2 text-sm">
+                    <span class="material-symbols-outlined text-base">local_laundry_service</span>
+                    Place Laundry Order
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'housekeeping');
+    App.bottomNav.render('services');
+
+    let priceList = [];
+    let currency = 'Rs.';
+    let expressOn = false;
+    let order = {}; // { id: { item, qty, service } } service: 'wash' | 'ironOnly'
+
+    async function init() {
+      const reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      const propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+      if (!propData) return;
+
+      priceList = propData.laundryPriceList;
+      currency = propData.property.currencySymbol || 'Rs.';
+
+      document.getElementById('content-state').classList.remove('hidden');
+      renderPriceList();
+    }
+
+    function renderPriceList() {
+      const container = document.getElementById('price-list');
+      container.innerHTML = priceList.map(item => {
+        const washPrice = expressOn ? Math.round(item.wash * 1.5) : item.wash;
+        const ironPrice = item.ironOnly ? (expressOn ? Math.round(item.ironOnly * 1.5) : item.ironOnly) : null;
+        const o = order[item.id];
+        const qty = o ? o.qty : 0;
+        const svc = o ? o.service : 'wash';
+
+        return `
+          <div id="row-${item.id}" class="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-5 py-3 items-center ${qty > 0 ? 'bg-[#003c52]/5 dark:bg-teal-900/10' : ''}">
+            <span class="text-sm font-medium text-slate-900 dark:text-white">${item.name}</span>
+            <button onclick="setService('${item.id}', 'wash')" class="w-24 px-2 py-1.5 rounded-lg text-xs font-semibold border transition text-center ${svc==='wash' && qty>0 ? 'bg-[#003c52] text-white border-[#003c52]' : 'border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-[#003c52] hover:text-[#003c52]'}">
+              ${App.helpers.formatCurrency(washPrice, currency)}
+            </button>
+            <button onclick="${ironPrice ? `setService('${item.id}', 'ironOnly')` : 'void 0'}" class="w-24 px-2 py-1.5 rounded-lg text-xs font-semibold border transition text-center ${!ironPrice ? 'opacity-30 cursor-not-allowed border-slate-200 dark:border-slate-600 text-slate-500' : svc==='ironOnly' && qty>0 ? 'bg-[#003c52] text-white border-[#003c52]' : 'border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-[#003c52] hover:text-[#003c52]'}">
+              ${ironPrice ? App.helpers.formatCurrency(ironPrice, currency) : 'N/A'}
+            </button>
+            <div class="flex items-center gap-1 w-20 justify-center">
+              <button onclick="adjustItem('${item.id}',-1)" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+                <span class="material-symbols-outlined text-sm">remove</span>
+              </button>
+              <span class="text-sm font-bold text-slate-900 dark:text-white w-5 text-center">${qty}</span>
+              <button onclick="adjustItem('${item.id}',1)" class="w-7 h-7 rounded-full bg-[#003c52] text-white flex items-center justify-center hover:bg-[#004f6e] transition">
+                <span class="material-symbols-outlined text-sm">add</span>
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function setService(id, service) {
+      if (order[id]) {
+        order[id].service = service;
+      } else {
+        const item = priceList.find(i => i.id === id);
+        order[id] = { item, qty: 1, service };
+      }
+      renderPriceList();
+      updateOrderSummary();
+    }
+
+    function adjustItem(id, delta) {
+      const item = priceList.find(i => i.id === id);
+      if (!order[id]) order[id] = { item, qty: 0, service: 'wash' };
+      order[id].qty = Math.max(0, order[id].qty + delta);
+      if (order[id].qty === 0) delete order[id];
+      renderPriceList();
+      updateOrderSummary();
+    }
+
+    function getItemPrice(entry) {
+      const basePrice = entry.service === 'ironOnly' ? (entry.item.ironOnly || entry.item.wash) : entry.item.wash;
+      return expressOn ? Math.round(basePrice * 1.5) : basePrice;
+    }
+
+    function updateOrderSummary() {
+      const entries = Object.values(order);
+      const subtotal = entries.reduce((s, e) => s + getItemPrice(e) * e.qty, 0);
+      const expressBase = entries.reduce((s, e) => {
+        const base = e.service === 'ironOnly' ? (e.item.ironOnly || e.item.wash) : e.item.wash;
+        return s + base * e.qty;
+      }, 0);
+      const expressSurcharge = expressOn ? Math.round(expressBase * 0.5) : 0;
+
+      const orderItems = document.getElementById('order-items');
+      const orderTotals = document.getElementById('order-totals');
+      const orderForm = document.getElementById('order-form');
+
+      if (entries.length === 0) {
+        orderItems.innerHTML = `<p class="text-sm text-slate-400 dark:text-slate-500">No items added yet.</p>`;
+        orderTotals.classList.add('hidden');
+        orderForm.classList.add('hidden');
+        return;
+      }
+
+      orderItems.innerHTML = entries.map(e => `
+        <div class="flex items-center justify-between gap-2 py-1.5 border-b border-slate-100 dark:border-slate-800 last:border-0">
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">${e.item.name}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">${e.service === 'ironOnly' ? 'Iron Only' : 'Wash'} × ${e.qty}</p>
+          </div>
+          <p class="text-sm font-semibold text-slate-900 dark:text-white shrink-0">${App.helpers.formatCurrency(getItemPrice(e) * e.qty, currency)}</p>
+        </div>`).join('');
+
+      document.getElementById('subtotal-display').textContent = App.helpers.formatCurrency(subtotal - expressSurcharge, currency);
+      document.getElementById('total-display').textContent = App.helpers.formatCurrency(subtotal, currency);
+
+      const expressRow = document.getElementById('express-row');
+      if (expressOn) {
+        expressRow.classList.remove('hidden');
+        document.getElementById('express-surcharge-display').textContent = `+${App.helpers.formatCurrency(expressSurcharge, currency)}`;
+      } else {
+        expressRow.classList.add('hidden');
+      }
+
+      document.getElementById('delivery-note').innerHTML = `<span class="material-symbols-outlined text-sm">schedule</span> Ready in ${expressOn ? '1 business day (Express)' : '2 business days'}`;
+
+      orderTotals.classList.remove('hidden');
+      orderForm.classList.remove('hidden');
+    }
+
+    function toggleExpress() {
+      expressOn = !expressOn;
+      const track = document.getElementById('express-track');
+      const thumb = document.getElementById('express-thumb');
+      const badge = document.getElementById('express-badge');
+      if (expressOn) {
+        track.classList.add('!bg-amber-500');
+        thumb.style.transform = 'translateX(28px)';
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+      } else {
+        track.classList.remove('!bg-amber-500');
+        thumb.style.transform = 'translateX(0)';
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+      }
+      renderPriceList();
+      updateOrderSummary();
+    }
+
+    function placeOrder() {
+      const reservation = App.reservations.getActive();
+      const entries = Object.values(order);
+      if (entries.length === 0) { App.toast.show('Please add items to your order.', 'warning'); return; }
+      if (!reservation) { App.toast.show('No active reservation.', 'error'); return; }
+
+      const total = entries.reduce((s, e) => s + getItemPrice(e) * e.qty, 0);
+      const collectionTime = document.getElementById('collection-time').value;
+      const instructions = document.getElementById('laundry-instructions').value.trim();
+
+      const orderSummary = entries.map(e => `${e.item.name} ×${e.qty} (${e.service === 'ironOnly' ? 'Iron Only' : 'Wash'})`).join(', ');
+
+      App.requests.add({
+        reservationId: reservation.id,
+        serviceName: 'Laundry Service',
+        serviceId: 'laundry',
+        category: 'Housekeeping',
+        details: {
+          items: orderSummary,
+          total: App.helpers.formatCurrency(total, currency),
+          express: expressOn ? 'Yes (1 business day)' : 'No (2 business days)',
+          collectionTime: collectionTime || 'Not specified'
+        },
+        notes: instructions
+      });
+
+      App.toast.show('Laundry order submitted!', 'success');
+      setTimeout(() => window.location.href = 'my-requests.html', 1200);
+    }
+
+    init();
+  </script>
+</body>
+</html>

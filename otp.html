@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Verify OTP | Browns Hotels & Resorts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52', 'bg-light': '#f5f8f8', 'bg-dark': '#0f1e23' }
+        }
+      }
+    }
+  </script>
+  <script>
+    if (localStorage.getItem('vb:theme') === 'dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <script src="js/app.js"></script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen flex items-center justify-center px-6 py-12">
+
+  <div class="w-full max-w-md">
+    <!-- Card -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-8 md:p-10">
+
+      <!-- Icon -->
+      <div class="w-16 h-16 rounded-2xl bg-[#003c52]/10 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-3xl text-[#003c52] dark:text-teal-400">verified</span>
+      </div>
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Verification Code</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400">We've sent a 6-digit code to</p>
+        <p id="masked-email" class="text-sm font-semibold text-[#003c52] dark:text-teal-400 mt-1">—</p>
+      </div>
+
+      <!-- OTP Input boxes -->
+      <div id="otp-inputs" class="flex gap-3 justify-center mb-2">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]"
+          class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-[#003c52] dark:focus:border-teal-400 focus:ring-0 transition">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]"
+          class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-[#003c52] dark:focus:border-teal-400 focus:ring-0 transition">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]"
+          class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-[#003c52] dark:focus:border-teal-400 focus:ring-0 transition">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]"
+          class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-[#003c52] dark:focus:border-teal-400 focus:ring-0 transition">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]"
+          class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-[#003c52] dark:focus:border-teal-400 focus:ring-0 transition">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]"
+          class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-[#003c52] dark:focus:border-teal-400 focus:ring-0 transition">
+      </div>
+
+      <p id="otp-error" class="hidden text-center text-xs text-red-600 dark:text-red-400 mb-4">
+        Invalid code. Please check and try again.
+      </p>
+
+      <!-- Verify button -->
+      <button id="verify-btn" class="w-full mt-4 bg-[#003c52] text-white rounded-xl px-8 py-3.5 font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2 shadow-sm shadow-[#003c52]/30 disabled:opacity-60 disabled:cursor-not-allowed">
+        <span id="verify-spinner" class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+        <span id="verify-text">Verify Code</span>
+      </button>
+
+      <!-- Resend -->
+      <div class="text-center mt-6">
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          Didn't receive a code?
+          <button id="resend-btn" class="font-semibold text-[#003c52] dark:text-teal-400 hover:underline disabled:opacity-40 disabled:no-underline disabled:cursor-not-allowed ml-1" disabled>
+            Resend OTP
+          </button>
+        </p>
+        <p id="resend-timer" class="text-xs text-slate-400 dark:text-slate-500 mt-1">Resend available in <span id="timer-count">60</span>s</p>
+      </div>
+
+      <!-- Back link -->
+      <div class="text-center mt-4">
+        <a href="login.html" class="text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition">
+          ← Back to login
+        </a>
+      </div>
+    </div>
+
+    <!-- Demo hint -->
+    <div class="mt-4 p-4 rounded-xl bg-teal-50 dark:bg-teal-900/20 border border-teal-100 dark:border-teal-800">
+      <div class="flex items-start gap-2">
+        <span class="material-symbols-outlined text-teal-600 dark:text-teal-400 text-sm mt-0.5">info</span>
+        <p class="text-xs text-teal-800 dark:text-teal-300">
+          <span class="font-semibold">Demo mode:</span> Any 6-digit code will be accepted for verification.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Redirect if no pending auth
+    const pendingAuth = App.storage.session.get('vb:pendingAuth');
+    if (!pendingAuth) window.location.href = 'login.html';
+
+    // Show masked email
+    if (pendingAuth) {
+      const email = pendingAuth.guest.email;
+      const parts = email.split('@');
+      const masked = parts[0].slice(0, 2) + '***@' + parts[1];
+      document.getElementById('masked-email').textContent = masked;
+    }
+
+    // OTP input auto-tab behaviour
+    const inputs = Array.from(document.querySelectorAll('.otp-input'));
+
+    inputs.forEach((input, idx) => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && idx > 0) {
+          inputs[idx - 1].focus();
+        }
+      });
+
+      input.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/\D/g, '');
+        input.value = val ? val[0] : '';
+        document.getElementById('otp-error').classList.add('hidden');
+        inputs.forEach(i => i.classList.remove('border-red-400'));
+        if (val && idx < 5) inputs[idx + 1].focus();
+        autoVerifyIfFull();
+      });
+
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const paste = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+        paste.split('').forEach((char, i) => {
+          if (inputs[i]) inputs[i].value = char;
+        });
+        if (paste.length > 0) inputs[Math.min(paste.length, 5)].focus();
+        autoVerifyIfFull();
+      });
+    });
+
+    function getOtpValue() {
+      return inputs.map(i => i.value).join('');
+    }
+
+    function autoVerifyIfFull() {
+      if (getOtpValue().length === 6) {
+        setTimeout(verifyOtp, 200);
+      }
+    }
+
+    async function verifyOtp() {
+      const code = getOtpValue();
+      if (code.length !== 6) {
+        App.toast.show('Please enter all 6 digits.', 'warning');
+        return;
+      }
+
+      const btn = document.getElementById('verify-btn');
+      const spinner = document.getElementById('verify-spinner');
+      const text = document.getElementById('verify-text');
+      btn.disabled = true;
+      spinner.classList.remove('hidden');
+      text.textContent = 'Verifying…';
+
+      // Simulate a brief network delay
+      await new Promise(r => setTimeout(r, 800));
+
+      // Demo: accept any 6-digit code
+      if (/^\d{6}$/.test(code)) {
+        const { guest, rememberMe } = pendingAuth;
+        App.auth.createSession(guest, rememberMe);
+        App.storage.session.remove('vb:pendingAuth');
+
+        // Load reservations for this guest
+        try {
+          const data = await App.data.loadReservations();
+          if (data) {
+            const guestRes = data.reservations.filter(r => r.guestEmail === guest.email);
+            App.reservations.save(guestRes);
+            if (guestRes.length > 0) App.reservations.setActive(guestRes[0].id);
+          }
+        } catch(e) { /* non-fatal */ }
+
+        // Success visual feedback
+        inputs.forEach(i => {
+          i.classList.remove('border-slate-200', 'dark:border-slate-600');
+          i.classList.add('border-green-500');
+        });
+        App.toast.show('Verified! Welcome, ' + guest.firstName + '.', 'success');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+
+      } else {
+        btn.disabled = false;
+        spinner.classList.add('hidden');
+        text.textContent = 'Verify Code';
+        document.getElementById('otp-error').classList.remove('hidden');
+        inputs.forEach(i => {
+          i.classList.add('border-red-400');
+          i.classList.remove('border-[#003c52]');
+        });
+        inputs.forEach(i => i.value = '');
+        inputs[0].focus();
+      }
+    }
+
+    document.getElementById('verify-btn').addEventListener('click', verifyOtp);
+
+    // Resend timer
+    let timer = 60;
+    const timerEl = document.getElementById('timer-count');
+    const resendBtn = document.getElementById('resend-btn');
+    const timerText = document.getElementById('resend-timer');
+
+    const countdown = setInterval(() => {
+      timer--;
+      timerEl.textContent = timer;
+      if (timer <= 0) {
+        clearInterval(countdown);
+        resendBtn.disabled = false;
+        timerText.classList.add('hidden');
+      }
+    }, 1000);
+
+    resendBtn.addEventListener('click', () => {
+      resendBtn.disabled = true;
+      timer = 60;
+      timerText.classList.remove('hidden');
+      timerEl.textContent = timer;
+      inputs.forEach(i => i.value = '');
+      inputs[0].focus();
+      App.toast.show('A new code has been sent.', 'info');
+
+      const cd = setInterval(() => {
+        timer--;
+        timerEl.textContent = timer;
+        if (timer <= 0) {
+          clearInterval(cd);
+          resendBtn.disabled = false;
+          timerText.classList.add('hidden');
+        }
+      }, 1000);
+    });
+
+    // Focus first input on load
+    inputs[0].focus();
+  </script>
+</body>
+</html>

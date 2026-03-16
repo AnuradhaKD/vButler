@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Billing | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-3xl">
+
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Account</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Billing & Folio</h1>
+        </div>
+        <a href="reservations.html" class="text-sm text-[#003c52] dark:text-teal-400 font-semibold hover:underline">Switch Reservation</a>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-state" class="space-y-4">
+        <div class="h-40 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+        <div class="h-64 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden space-y-6">
+
+        <!-- Balance Card -->
+        <div id="balance-card" class="rounded-xl p-6 text-white shadow-lg">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <p class="text-sm font-semibold opacity-80">Outstanding Balance</p>
+              <div class="flex items-end gap-1 mt-1">
+                <span id="balance-symbol" class="text-2xl font-bold opacity-90 mb-1">Rs.</span>
+                <span id="balance-amount" class="text-5xl font-extrabold leading-none">0</span>
+              </div>
+              <p id="balance-label" class="text-sm opacity-70 mt-2"></p>
+            </div>
+            <span class="material-symbols-outlined text-5xl opacity-30">receipt_long</span>
+          </div>
+          <div class="flex gap-3 mt-4">
+            <a href="payment.html" id="pay-btn" class="hidden bg-white text-[#003c52] rounded-xl px-5 py-2.5 text-sm font-bold hover:bg-slate-100 transition flex items-center gap-2">
+              <span class="material-symbols-outlined text-base">payments</span>Make Payment
+            </a>
+            <button onclick="downloadInvoice()" class="border border-white/40 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-white/10 transition flex items-center gap-2">
+              <span class="material-symbols-outlined text-base">download</span>Download Invoice
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <h2 class="font-bold text-slate-900 dark:text-white mb-4">Spend by Category</h2>
+          <div id="category-breakdown" class="space-y-3"></div>
+        </div>
+
+        <!-- Folio Table -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div class="p-5 border-b border-slate-200 dark:border-slate-700">
+            <h2 class="font-bold text-slate-900 dark:text-white">Folio Transactions</h2>
+          </div>
+          <div id="folio-table" class="divide-y divide-slate-100 dark:divide-slate-700/50"></div>
+          <div id="folio-empty" class="hidden p-8 text-center">
+            <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600 mb-2 block">receipt</span>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">No transactions yet</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- No Reservation -->
+      <div id="no-res-state" class="hidden text-center py-16">
+        <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-3 block">hotel</span>
+        <p class="text-slate-600 dark:text-slate-400 font-semibold">No active reservation found</p>
+        <a href="reservations.html" class="mt-3 inline-block text-[#003c52] dark:text-teal-400 font-semibold hover:underline">View My Reservations</a>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'billing');
+    App.bottomNav.render('billing');
+
+    function downloadInvoice() {
+      App.toast.show('Invoice download feature coming soon', 'info');
+    }
+
+    function computeCategories(folio) {
+      const cats = {};
+      let total = 0;
+      folio.filter(f => f.amount > 0).forEach(f => {
+        const cat = f.category || 'Other';
+        cats[cat] = (cats[cat] || 0) + f.amount;
+        total += f.amount;
+      });
+      return { cats, total };
+    }
+
+    function renderFolio(folio, symbol) {
+      if (!folio || folio.length === 0) {
+        document.getElementById('folio-empty').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('folio-table').innerHTML = folio.map(item => {
+        const isCredit = item.amount < 0;
+        return `
+          <div class="flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+            <div class="w-9 h-9 rounded-lg ${isCredit ? 'bg-green-100 dark:bg-green-900/20' : 'bg-slate-100 dark:bg-slate-800'} flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-sm ${isCredit ? 'text-green-600 dark:text-green-400' : 'text-slate-500 dark:text-slate-400'}">${isCredit ? 'arrow_downward' : 'arrow_upward'}</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-semibold text-slate-900 dark:text-white truncate">${item.description}</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400">${App.helpers.formatDate(item.date)}${item.category ? ' · ' + item.category : ''}</div>
+            </div>
+            <div class="font-bold text-sm ${isCredit ? 'text-green-600 dark:text-green-400' : 'text-slate-900 dark:text-white'}">${isCredit ? '−' : ''}${symbol} ${Math.abs(item.amount).toLocaleString()}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderCategories(folio, symbol) {
+      const { cats, total } = computeCategories(folio);
+      const catColors = ['bg-blue-500','bg-purple-500','bg-orange-500','bg-pink-500','bg-teal-500','bg-amber-500'];
+      const catList = Object.entries(cats).sort((a, b) => b[1] - a[1]);
+      if (catList.length === 0) {
+        document.getElementById('category-breakdown').innerHTML = '<p class="text-sm text-slate-400">No charges yet.</p>';
+        return;
+      }
+      document.getElementById('category-breakdown').innerHTML = catList.map(([cat, amount], i) => {
+        const pct = total > 0 ? Math.round((amount / total) * 100) : 0;
+        const color = catColors[i % catColors.length];
+        return `
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium text-slate-700 dark:text-slate-300">${cat}</span>
+              <span class="font-semibold text-slate-900 dark:text-white">${symbol} ${amount.toLocaleString()} <span class="text-slate-400 font-normal">(${pct}%)</span></span>
+            </div>
+            <div class="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+              <div class="h-full ${color} rounded-full" style="width:${pct}%"></div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    (() => {
+      const activeRes = App.reservations.getActive();
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!activeRes) {
+        document.getElementById('no-res-state').classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('content-state').classList.remove('hidden');
+      const { folio = [], balance = 0, currencySymbol = 'Rs.' } = activeRes;
+
+      // Balance card
+      const hasBalance = balance > 0;
+      const card = document.getElementById('balance-card');
+      card.className = `rounded-xl p-6 text-white shadow-lg ${hasBalance ? 'bg-gradient-to-br from-red-600 to-red-700' : 'bg-gradient-to-br from-[#003c52] to-[#005f7a]'}`;
+      document.getElementById('balance-symbol').textContent = currencySymbol;
+      document.getElementById('balance-amount').textContent = balance.toLocaleString();
+      document.getElementById('balance-label').textContent = hasBalance ? `Please settle your balance before check-out · ${activeRes.propertyName}` : 'Your account is fully settled';
+
+      if (hasBalance) {
+        document.getElementById('pay-btn').classList.remove('hidden');
+        document.getElementById('pay-btn').classList.add('flex');
+      }
+
+      renderCategories(folio, currencySymbol);
+      renderFolio(folio, currencySymbol);
+    })();
+  </script>
+</body>
+</html>

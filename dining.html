@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Dining | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8">
+
+      <!-- Hero -->
+      <div class="relative rounded-2xl overflow-hidden mb-8 h-48 md:h-64">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200" alt="Dining" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#003c52]/80 to-transparent flex flex-col justify-end p-6 md:p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-teal-300 mb-1">Browns Hotels & Resorts</p>
+          <h1 class="text-3xl md:text-4xl font-serif font-bold text-white mb-1">Dining & Bars</h1>
+          <p id="hero-tagline" class="text-white/80 text-sm"></p>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-state">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          ${[1,2].map(()=>`<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-pulse"><div class="h-40 bg-slate-200 dark:bg-slate-700"></div><div class="p-5"><div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-3"></div><div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full mb-2"></div></div></div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+
+        <!-- In-Room Dining Banner -->
+        <a href="in-room-dining.html" class="flex items-center justify-between bg-[#003c52] text-white rounded-2xl p-5 mb-8 hover:bg-[#004f6e] transition group">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl">room_service</span>
+            </div>
+            <div>
+              <p class="font-bold text-lg">In-Room Dining</p>
+              <p class="text-white/70 text-sm">Order directly to your room — available 07:00–22:00</p>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-white/60 group-hover:text-white transition text-2xl">arrow_forward</span>
+        </a>
+
+        <!-- Restaurants -->
+        <div class="mb-10">
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4">Restaurants</p>
+          <div id="restaurants-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+        </div>
+
+        <!-- Bars -->
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4">Bars</p>
+          <div id="bars-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'dining');
+    App.bottomNav.render('dining');
+
+    async function init() {
+      const reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      const propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!propData) return;
+
+      document.getElementById('hero-tagline').textContent = propData.property.tagline || '';
+      document.getElementById('content-state').classList.remove('hidden');
+
+      renderRestaurants(propData.dining.restaurants, propData.property.currencySymbol);
+      renderBars(propData.dining.bars, propData.property.currencySymbol);
+    }
+
+    function renderHoursBadges(hours) {
+      const badges = [];
+      if (hours.breakfast) badges.push(`<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400">Breakfast ${hours.breakfast}</span>`);
+      if (hours.lunch) badges.push(`<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400">Lunch ${hours.lunch}</span>`);
+      if (hours.dinner) badges.push(`<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400">Dinner ${hours.dinner}</span>`);
+      if (hours.open && hours.close) badges.push(`<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">${hours.open}–${hours.close}</span>`);
+      return badges.join('');
+    }
+
+    function renderRestaurants(restaurants, currency) {
+      const grid = document.getElementById('restaurants-grid');
+      grid.innerHTML = restaurants.map(r => `
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+          <div class="relative h-44 overflow-hidden">
+            <img src="${r.images?.[0] || 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800'}" alt="${r.name}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div class="absolute bottom-3 left-3">
+              <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-800">${r.cuisine}</span>
+            </div>
+          </div>
+          <div class="p-5 flex flex-col flex-1">
+            <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-1">${r.name}</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-3 flex-1">${r.description}</p>
+            <div class="flex flex-wrap gap-2 mb-4">${renderHoursBadges(r.hours)}</div>
+            <a href="restaurant-detail.html?id=${r.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-base">menu_book</span>
+              View Menu & Reserve
+            </a>
+          </div>
+        </div>`).join('');
+    }
+
+    function renderBars(bars, currency) {
+      const grid = document.getElementById('bars-grid');
+      grid.innerHTML = bars.map(b => `
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+          <div class="relative h-44 overflow-hidden">
+            <img src="${b.images?.[0] || 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800'}" alt="${b.name}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          </div>
+          <div class="p-5 flex flex-col flex-1">
+            <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-1">${b.name}</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-3 flex-1">${b.description}</p>
+            <div class="flex flex-wrap gap-2 mb-4">${renderHoursBadges(b.hours)}</div>
+            <a href="bar-booking.html?id=${b.id}" class="w-full border border-[#003c52] text-[#003c52] dark:border-teal-400 dark:text-teal-400 rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#003c52]/5 transition text-center flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-base">local_bar</span>
+              View Bar Menu
+            </a>
+          </div>
+        </div>`).join('');
+    }
+
+    init();
+  </script>
+</body>
+</html>

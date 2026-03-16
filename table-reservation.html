@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Table Reservation | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <!-- Back -->
+      <a id="back-link" href="dining.html" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 mb-6 transition">
+        <span class="material-symbols-outlined text-lg">arrow_back</span>
+        Back to Restaurant
+      </a>
+
+      <!-- Loading -->
+      <div id="loading-state">
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6 animate-pulse">
+          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-3"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+        <div class="mb-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Dining</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Reserve a Table</h1>
+        </div>
+
+        <!-- Restaurant context card -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mb-6">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-[#003c52]/10 dark:bg-teal-900/30 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-2xl">restaurant</span>
+            </div>
+            <div>
+              <h2 id="restaurant-name" class="font-bold text-slate-900 dark:text-white text-lg"></h2>
+              <p id="restaurant-cuisine" class="text-sm text-slate-500 dark:text-slate-400"></p>
+              <div id="hours-display" class="mt-2 flex flex-wrap gap-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+          <form id="reservation-form" class="space-y-5">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date</label>
+                <input type="date" id="field-date" min="" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Time</label>
+                <select id="field-time" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                  <option value="">Select a time</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Party Size</label>
+              <select id="field-partySize" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                ${Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1} ${i===0?'Guest':'Guests'}</option>`).join('')}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Special Requests <span class="font-normal text-slate-400">(optional)</span></label>
+              <textarea id="field-specialRequests" rows="3" placeholder="Dietary requirements, occasion, seating preference..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] resize-none placeholder-slate-400"></textarea>
+            </div>
+
+            <!-- Cancellation note -->
+            <div class="flex items-start gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-sm text-amber-800 dark:text-amber-300">
+              <span class="material-symbols-outlined text-base mt-0.5 shrink-0">info</span>
+              <span>Please cancel at least 1 hour before your reservation time.</span>
+            </div>
+
+            <button type="submit" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3.5 font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2 text-base">
+              <span class="material-symbols-outlined">event_available</span>
+              Confirm Reservation
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'dining');
+    App.bottomNav.render('dining');
+
+    const params = new URLSearchParams(window.location.search);
+    const restaurantId = params.get('restaurantId');
+    let restaurant = null;
+
+    function generateTimeSlots(from, to) {
+      const slots = [];
+      const [fh, fm] = from.split(':').map(Number);
+      const [th, tm] = to.split(':').map(Number);
+      let cur = fh * 60 + fm;
+      const end = th * 60 + tm;
+      while (cur <= end) {
+        const h = String(Math.floor(cur/60)).padStart(2,'0');
+        const m = String(cur%60).padStart(2,'0');
+        slots.push(`${h}:${m}`);
+        cur += 30;
+      }
+      return slots;
+    }
+
+    async function init() {
+      const reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      const propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!propData || !restaurantId) return;
+
+      restaurant = propData.dining.restaurants.find(r => r.id === restaurantId);
+      if (!restaurant) return;
+
+      document.getElementById('back-link').href = `restaurant-detail.html?id=${restaurant.id}`;
+      document.getElementById('content-state').classList.remove('hidden');
+
+      document.getElementById('restaurant-name').textContent = restaurant.name;
+      document.getElementById('restaurant-cuisine').textContent = restaurant.cuisine;
+
+      const hd = document.getElementById('hours-display');
+      if (restaurant.hours.breakfast) hd.innerHTML += `<span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400">Breakfast ${restaurant.hours.breakfast}</span>`;
+      if (restaurant.hours.lunch) hd.innerHTML += `<span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400">Lunch ${restaurant.hours.lunch}</span>`;
+      if (restaurant.hours.dinner) hd.innerHTML += `<span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400">Dinner ${restaurant.hours.dinner}</span>`;
+
+      // Set min date
+      document.getElementById('field-date').min = new Date().toISOString().split('T')[0];
+      document.getElementById('field-date').value = new Date().toISOString().split('T')[0];
+
+      // Generate time slots from all meal periods
+      const timeSelect = document.getElementById('field-time');
+      const hours = restaurant.hours;
+      const allSlots = new Set();
+
+      function addSlots(timeRange) {
+        if (!timeRange) return;
+        const [from, to] = timeRange.split('–');
+        if (from && to) generateTimeSlots(from.trim(), to.trim()).forEach(s => allSlots.add(s));
+      }
+
+      addSlots(hours.breakfast);
+      addSlots(hours.lunch);
+      addSlots(hours.dinner);
+
+      // Sort and add to select
+      const sorted = [...allSlots].sort();
+      sorted.forEach(slot => {
+        const opt = document.createElement('option');
+        opt.value = slot;
+        opt.textContent = slot;
+        timeSelect.appendChild(opt);
+      });
+
+      document.getElementById('reservation-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!reservation) { App.toast.show('No active reservation.', 'error'); return; }
+
+        const date = document.getElementById('field-date').value;
+        const time = document.getElementById('field-time').value;
+        const partySize = document.getElementById('field-partySize').value;
+        const specialRequests = document.getElementById('field-specialRequests').value.trim();
+
+        if (!date || !time) { App.toast.show('Please select date and time.', 'warning'); return; }
+
+        App.requests.add({
+          reservationId: reservation.id,
+          serviceName: `Table Reservation — ${restaurant.name}`,
+          serviceId: 'table-reservation',
+          category: 'Dining',
+          details: { date, time, partySize: `${partySize} guests`, restaurant: restaurant.name },
+          notes: specialRequests
+        });
+
+        App.toast.show('Table reserved successfully!', 'success');
+        setTimeout(() => window.location.href = 'my-requests.html', 1200);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

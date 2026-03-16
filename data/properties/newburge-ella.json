@@ -1,0 +1,638 @@
+{
+  "property": {
+    "id": "newburge-ella",
+    "name": "Browns Hotel Newburge Ella",
+    "tagline": "Escape to the hills of Ella",
+    "address": "Kings Road, Ella, Badulla District, Sri Lanka",
+    "phone": "+94 57 222 8888",
+    "email": "ella@brownshotels.com",
+    "currency": "LKR",
+    "currencySymbol": "Rs.",
+    "timezone": "Asia/Colombo",
+    "heroImages": [
+      "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200",
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200"
+    ],
+    "facilities": ["Pool", "Spa", "Restaurant", "Bar", "Gym", "Free WiFi", "Concierge"]
+  },
+
+  "quickActions": [
+    { "id": "services",     "label": "Services",      "icon": "room_service",    "route": "services.html" },
+    { "id": "dining",       "label": "Dining",         "icon": "restaurant",      "route": "dining.html" },
+    { "id": "wellness",     "label": "Wellness",       "icon": "spa",             "route": "wellness.html" },
+    { "id": "my-bill",      "label": "My Bill",        "icon": "receipt_long",    "route": "billing.html" },
+    { "id": "experiences",  "label": "Experiences",    "icon": "hiking",          "route": "experiences.html" },
+    { "id": "complaints",   "label": "Complaints",     "icon": "support_agent",   "route": "complaints.html" },
+    { "id": "housekeeping", "label": "Room Requests",  "icon": "bed",             "route": "housekeeping.html" },
+    { "id": "explore",      "label": "Explore",        "icon": "explore",         "route": "local-explore.html" }
+  ],
+
+  "services": {
+    "categories": [
+      {
+        "id": "housekeeping",
+        "label": "Housekeeping",
+        "icon": "cleaning_services",
+        "items": [
+          {
+            "id": "room-makeup",
+            "name": "Room Makeup",
+            "description": "Full room cleaning and bed making at your preferred time.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "08:00", "to": "17:00" },
+            "estimatedTime": "45 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "turndown",
+            "name": "Turndown Service",
+            "description": "Evening turndown with chocolates and soft lighting.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "17:00", "to": "21:00" },
+            "estimatedTime": "20 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "extra-towels",
+            "name": "Extra Towels",
+            "description": "Request additional bath or pool towels.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "15 minutes",
+            "requiresBooking": false,
+            "fields": ["quantity", "towelType"]
+          },
+          {
+            "id": "extra-pillows",
+            "name": "Extra Pillows / Blankets",
+            "description": "Additional bedding comfort items delivered to your room.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "15 minutes",
+            "requiresBooking": false,
+            "fields": ["quantity", "itemType"]
+          }
+        ]
+      },
+      {
+        "id": "dining",
+        "label": "Dining & Bars",
+        "icon": "restaurant",
+        "items": [
+          {
+            "id": "inroom-dining",
+            "name": "In-Room Dining",
+            "description": "Order from our full menu, delivered directly to your room.",
+            "price": null,
+            "priceNote": "Charges added to folio",
+            "availableHours": { "from": "07:00", "to": "22:00" },
+            "estimatedTime": "30–45 minutes",
+            "requiresBooking": false,
+            "fields": ["deliveryTime", "specialInstructions"]
+          }
+        ]
+      },
+      {
+        "id": "transport",
+        "label": "Transport",
+        "icon": "directions_car",
+        "items": [
+          {
+            "id": "airport-transfer",
+            "name": "Airport Transfer",
+            "description": "Chauffeur-driven transfer to or from Bandaranaike International Airport.",
+            "price": 15000,
+            "priceNote": "From LKR 15,000",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "4–5 hours",
+            "requiresBooking": true,
+            "fields": ["flightNumber", "date", "time", "direction", "passengerCount", "vehicleType"]
+          },
+          {
+            "id": "local-tuktuk",
+            "name": "Tuk-Tuk (Local)",
+            "description": "Short local trips around Ella town and nearby attractions.",
+            "price": 500,
+            "priceNote": "LKR 500 per trip",
+            "availableHours": { "from": "06:00", "to": "22:00" },
+            "estimatedTime": "On demand",
+            "requiresBooking": false,
+            "fields": ["destination", "time"]
+          }
+        ]
+      },
+      {
+        "id": "wellness",
+        "label": "Spa & Wellness",
+        "icon": "spa",
+        "items": [
+          {
+            "id": "spa-booking",
+            "name": "Spa Treatment Booking",
+            "description": "Book a massage, facial, or wellness package at our in-house spa.",
+            "price": 8500,
+            "priceNote": "From LKR 8,500",
+            "availableHours": { "from": "09:00", "to": "20:00" },
+            "estimatedTime": "60–120 minutes",
+            "requiresBooking": true,
+            "fields": ["treatment", "date", "time", "therapistGender", "specialRequests"]
+          }
+        ]
+      },
+      {
+        "id": "concierge",
+        "label": "Concierge",
+        "icon": "concierge",
+        "items": [
+          {
+            "id": "luggage-storage",
+            "name": "Luggage Storage",
+            "description": "Secure storage for your bags before check-in or after check-out.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "5 minutes",
+            "requiresBooking": false,
+            "fields": ["bagCount", "collectionTime"]
+          },
+          {
+            "id": "restaurant-booking",
+            "name": "Restaurant Reservation Assistance",
+            "description": "Our concierge will arrange reservations at local restaurants on your behalf.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "08:00", "to": "20:00" },
+            "estimatedTime": "30 minutes",
+            "requiresBooking": false,
+            "fields": ["restaurantName", "date", "time", "partySize", "specialRequests"]
+          }
+        ]
+      }
+    ]
+  },
+
+  "laundryPriceList": [
+    { "id": "shirt",      "name": "Shirt / Blouse",     "wash": 350,  "ironOnly": 200,  "expressMultiplier": 1.5 },
+    { "id": "trouser",    "name": "Trousers / Pants",   "wash": 400,  "ironOnly": 250,  "expressMultiplier": 1.5 },
+    { "id": "dress",      "name": "Dress / Skirt",      "wash": 500,  "ironOnly": 300,  "expressMultiplier": 1.5 },
+    { "id": "suit",       "name": "Suit (2 piece)",     "wash": 1200, "ironOnly": 600,  "expressMultiplier": 1.5 },
+    { "id": "saree",      "name": "Saree",              "wash": 800,  "ironOnly": 400,  "expressMultiplier": 1.5 },
+    { "id": "underwear",  "name": "Underwear",          "wash": 200,  "ironOnly": null, "expressMultiplier": 1.5 },
+    { "id": "socks",      "name": "Socks (pair)",       "wash": 150,  "ironOnly": null, "expressMultiplier": 1.5 },
+    { "id": "bed-sheet",  "name": "Bed Sheet",          "wash": 600,  "ironOnly": 300,  "expressMultiplier": 1.5 },
+    { "id": "bath-robe",  "name": "Bath Robe",          "wash": 700,  "ironOnly": null, "expressMultiplier": 1.5 },
+    { "id": "t-shirt",    "name": "T-Shirt",            "wash": 300,  "ironOnly": 150,  "expressMultiplier": 1.5 },
+    { "id": "shorts",     "name": "Shorts",             "wash": 300,  "ironOnly": 150,  "expressMultiplier": 1.5 },
+    { "id": "jacket",     "name": "Jacket / Blazer",    "wash": 900,  "ironOnly": 450,  "expressMultiplier": 1.5 }
+  ],
+
+  "dining": {
+    "restaurants": [
+      {
+        "id": "the-summit",
+        "name": "The Summit Restaurant",
+        "cuisine": "Sri Lankan & International",
+        "description": "Panoramic views of the Ella Gap with a menu celebrating local ingredients. Breakfast buffet, à la carte lunch, and multi-course dinner.",
+        "hours": { "breakfast": "07:00–10:30", "lunch": "12:00–14:30", "dinner": "18:30–22:00" },
+        "images": [
+          "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+          "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800"
+        ],
+        "acceptsReservations": true,
+        "cancellationCutoffHours": 1,
+        "maxPartySize": 12,
+        "menu": [
+          {
+            "category": "Starters",
+            "items": [
+              { "id": "ts-001", "name": "Prawn Cocktail", "description": "Tiger prawns, marie rose sauce, avocado, crispy lettuce.", "price": 1800, "tags": ["seafood"], "image": null },
+              { "id": "ts-002", "name": "Soup of the Day", "description": "Ask your server for today's chef selection.", "price": 900, "tags": ["vegetarian-option"], "image": null },
+              { "id": "ts-003", "name": "Pol Sambol & Hoppers", "description": "Traditional Sri Lankan coconut relish with crispy bowl-shaped hoppers.", "price": 1200, "tags": ["vegetarian", "local"], "image": null }
+            ]
+          },
+          {
+            "category": "Mains",
+            "items": [
+              { "id": "ts-004", "name": "Grilled Barramundi", "description": "Lemon butter sauce, seasonal vegetables, saffron rice.", "price": 4500, "tags": ["seafood", "gluten-free"], "image": null },
+              { "id": "ts-005", "name": "Lankan Rice & Curry", "description": "Daily selection of 6 curries, dhal, papadam, and condiments.", "price": 2800, "tags": ["vegetarian-option", "local"], "image": null },
+              { "id": "ts-006", "name": "Beef Tenderloin", "description": "200g grass-fed tenderloin, red wine jus, roasted potatoes.", "price": 6500, "tags": ["signature"], "image": null },
+              { "id": "ts-007", "name": "Mushroom Risotto", "description": "Arborio rice, wild mushrooms, truffle oil, parmesan.", "price": 3200, "tags": ["vegetarian"], "image": null }
+            ]
+          },
+          {
+            "category": "Desserts",
+            "items": [
+              { "id": "ts-008", "name": "Watalappam", "description": "Traditional Sri Lankan coconut custard with jaggery and spices.", "price": 950, "tags": ["local", "vegetarian"], "image": null },
+              { "id": "ts-009", "name": "Chocolate Fondant", "description": "Warm dark chocolate cake, vanilla bean ice cream.", "price": 1100, "tags": ["signature"], "image": null }
+            ]
+          },
+          {
+            "category": "Beverages",
+            "items": [
+              { "id": "ts-010", "name": "Ceylon Tea (pot)", "description": "Single-estate high-grown Ella tea.", "price": 600, "tags": ["local", "hot"], "image": null },
+              { "id": "ts-011", "name": "King Coconut", "description": "Fresh king coconut water, served chilled.", "price": 450, "tags": ["cold", "local"], "image": null },
+              { "id": "ts-012", "name": "Fresh Juice", "description": "Mango, pineapple, watermelon, or passion fruit.", "price": 700, "tags": ["cold"], "image": null }
+            ]
+          }
+        ]
+      }
+    ],
+    "bars": [
+      {
+        "id": "the-terrace-bar",
+        "name": "The Terrace Bar",
+        "description": "Open-air terrace bar with sweeping valley views. Cocktails, arrack, fine wines, and light bites.",
+        "hours": { "open": "16:00", "close": "23:00" },
+        "images": [
+          "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800"
+        ],
+        "acceptsReservations": true,
+        "menu": [
+          {
+            "category": "Cocktails",
+            "items": [
+              { "id": "tb-001", "name": "Ella Sunrise",     "description": "Local arrack, passion fruit, lime, soda.",     "price": 1800 },
+              { "id": "tb-002", "name": "Nine Arches Mule", "description": "Ginger beer, lime, mint, vodka.",              "price": 2000 },
+              { "id": "tb-003", "name": "Mocktail of Day",  "description": "Ask your bartender. Always seasonal.",         "price": 1200 }
+            ]
+          },
+          {
+            "category": "Wine",
+            "items": [
+              { "id": "tb-004", "name": "House White (glass)", "description": "Sauvignon Blanc, crisp and dry.",           "price": 1600 },
+              { "id": "tb-005", "name": "House Red (glass)",   "description": "Merlot, medium-bodied.",                   "price": 1600 }
+            ]
+          },
+          {
+            "category": "Light Bites",
+            "items": [
+              { "id": "tb-006", "name": "Cheese & Charcuterie Board", "description": "Selection of imported cheeses and cured meats.", "price": 3500 },
+              { "id": "tb-007", "name": "Spring Rolls (6 pcs)",       "description": "Crispy vegetable spring rolls, sweet chilli dip.", "price": 1400 }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "wellness": {
+    "treatments": [
+      {
+        "id": "swedish-massage",
+        "name": "Swedish Relaxation Massage",
+        "description": "A full-body relaxation massage using long, flowing strokes to ease tension and improve circulation.",
+        "duration": 60,
+        "price": 8500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600"
+      },
+      {
+        "id": "deep-tissue",
+        "name": "Deep Tissue Massage",
+        "description": "Targets deep muscle layers to release chronic tension. Ideal for sports recovery and back pain.",
+        "duration": 60,
+        "price": 9500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600"
+      },
+      {
+        "id": "couples-retreat",
+        "name": "Couples Retreat Package",
+        "description": "Side-by-side massages, floral bath ritual, herbal tea, and fresh fruit platter — the perfect anniversary experience.",
+        "duration": 120,
+        "price": 22000,
+        "therapistPreference": false,
+        "cancellationPolicy": "Cancel at least 6 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1552693673-1bf958298935?w=600"
+      },
+      {
+        "id": "ayurvedic-ritual",
+        "name": "Ayurvedic Head Ritual",
+        "description": "Traditional Shirodhara and scalp massage using warm herbal oils. Deeply calming and restorative.",
+        "duration": 75,
+        "price": 12000,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=600"
+      },
+      {
+        "id": "ella-glow-facial",
+        "name": "Ella Glow Facial",
+        "description": "A hydrating facial using local botanical extracts — green tea, coconut milk, and turmeric.",
+        "duration": 60,
+        "price": 10500,
+        "therapistPreference": false,
+        "cancellationPolicy": "Cancel at least 2 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600"
+      }
+    ],
+    "classes": [
+      {
+        "id": "sunrise-yoga",
+        "name": "Sunrise Yoga",
+        "description": "Open-air yoga session overlooking the Ella hills. All levels welcome.",
+        "schedule": ["Mon 06:30", "Wed 06:30", "Fri 06:30", "Sun 06:30"],
+        "duration": 60,
+        "price": 2500,
+        "maxParticipants": 10,
+        "image": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600"
+      },
+      {
+        "id": "meditation-session",
+        "name": "Mindfulness Meditation",
+        "description": "Guided meditation in our garden pavilion. A perfect way to begin your day.",
+        "schedule": ["Tue 07:00", "Thu 07:00", "Sat 07:00"],
+        "duration": 45,
+        "price": 2000,
+        "maxParticipants": 8,
+        "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600"
+      },
+      {
+        "id": "aqua-aerobics",
+        "name": "Aqua Aerobics",
+        "description": "Fun and energetic pool workout suitable for all fitness levels.",
+        "schedule": ["Mon 09:00", "Wed 09:00", "Fri 09:00"],
+        "duration": 45,
+        "price": 1500,
+        "maxParticipants": 12,
+        "image": "https://images.unsplash.com/photo-1519315901367-f34ff9154487?w=600"
+      }
+    ],
+    "packages": [
+      {
+        "id": "rejuvenation-day",
+        "name": "Rejuvenation Day Package",
+        "description": "Full-day wellness immersion: Swedish massage, Ella Glow Facial, Sunrise Yoga, and healthy lunch.",
+        "duration": "Full Day",
+        "price": 28000,
+        "includes": ["Swedish Massage (60 min)", "Ella Glow Facial (60 min)", "Sunrise Yoga (60 min)", "Healthy Lunch"],
+        "savings": 4500,
+        "image": "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600"
+      }
+    ]
+  },
+
+  "transport": {
+    "options": [
+      {
+        "id": "airport-arrival",
+        "type": "airport",
+        "direction": "arrival",
+        "name": "Airport Arrival Transfer",
+        "description": "Chauffeur-driven transfer from BIA (Colombo) to Ella.",
+        "vehicles": [
+          { "type": "sedan", "label": "Sedan (1–3 pax)",  "price": 15000 },
+          { "type": "suv",   "label": "SUV (1–5 pax)",    "price": 18000 },
+          { "type": "van",   "label": "Van (1–8 pax)",    "price": 22000 }
+        ],
+        "requiredFields": ["flightNumber", "arrivalDate", "arrivalTime", "passengerCount"]
+      },
+      {
+        "id": "airport-departure",
+        "type": "airport",
+        "direction": "departure",
+        "name": "Airport Departure Transfer",
+        "description": "Chauffeur-driven transfer from Ella to BIA (Colombo).",
+        "vehicles": [
+          { "type": "sedan", "label": "Sedan (1–3 pax)",  "price": 15000 },
+          { "type": "suv",   "label": "SUV (1–5 pax)",    "price": 18000 },
+          { "type": "van",   "label": "Van (1–8 pax)",    "price": 22000 }
+        ],
+        "requiredFields": ["departureDate", "departureTime", "flightNumber", "passengerCount"]
+      },
+      {
+        "id": "hotel-shuttle",
+        "type": "shuttle",
+        "name": "Hotel Shuttle (Town)",
+        "description": "Complimentary shuttle to/from Ella town. Departs every 2 hours.",
+        "schedule": ["09:00", "11:00", "13:00", "15:00", "17:00", "19:00"],
+        "vehicles": [
+          { "type": "shuttle", "label": "Shuttle Bus (8 pax)", "price": 0, "priceNote": "Complimentary" }
+        ],
+        "requiredFields": ["direction", "time", "passengerCount"]
+      },
+      {
+        "id": "local-tuktuk",
+        "type": "local",
+        "name": "Tuk-Tuk (Local)",
+        "description": "On-demand tuk-tuk for local attractions.",
+        "vehicles": [
+          { "type": "tuktuk", "label": "Tuk-Tuk (1–3 pax)", "price": 500, "priceNote": "per trip" }
+        ],
+        "requiredFields": ["destination", "date", "time", "passengerCount"]
+      }
+    ]
+  },
+
+  "experiences": [
+    {
+      "id": "little-adams-peak",
+      "name": "Little Adam's Peak Trek",
+      "category": "Adventure",
+      "description": "Guided sunrise trek to the iconic Little Adam's Peak. Witness breathtaking views of Ella Gap and the Nine Arches Bridge. Suitable for most fitness levels with gentle gradients.",
+      "duration": "3 hours",
+      "inclusions": ["Certified guide", "Walking sticks", "Refreshments on return"],
+      "price": 5500,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 8,
+      "bookingCutoffHours": 12,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "05:30",
+      "images": ["https://images.unsplash.com/photo-1551632811-561732d1e306?w=800"],
+      "isFeatured": true,
+      "addOns": [
+        { "id": "packed-breakfast", "name": "Packed Breakfast", "price": 1200 }
+      ]
+    },
+    {
+      "id": "cooking-class",
+      "name": "Sri Lankan Cooking Class",
+      "category": "Culinary",
+      "description": "Learn to prepare authentic Sri Lankan curries, hoppers, and string hoppers with our head chef. You'll cook — and then eat — a full lunch.",
+      "duration": "2.5 hours",
+      "inclusions": ["All ingredients", "Recipe cards", "Lunch of what you cook", "Cooking apron"],
+      "price": 8000,
+      "priceNote": "per person",
+      "minGuests": 2,
+      "maxGuests": 6,
+      "bookingCutoffHours": 24,
+      "availableDays": ["Tue", "Thu", "Sat"],
+      "startTime": "10:00",
+      "images": ["https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800"],
+      "isFeatured": true,
+      "addOns": []
+    },
+    {
+      "id": "tea-plantation-tour",
+      "name": "Tea Plantation & Factory Tour",
+      "category": "Culture",
+      "description": "Immerse yourself in Sri Lanka's iconic tea culture. Walk through lush tea gardens, watch the plucking process, and tour a working tea factory.",
+      "duration": "4 hours",
+      "inclusions": ["Transportation", "Expert guide", "Factory tour", "Tea tasting session"],
+      "price": 6500,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 10,
+      "bookingCutoffHours": 12,
+      "availableDays": ["Mon", "Wed", "Fri", "Sat"],
+      "startTime": "08:00",
+      "images": ["https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=800"],
+      "isFeatured": false,
+      "addOns": [
+        { "id": "tea-gift-pack", "name": "Premium Tea Gift Pack", "price": 2500 }
+      ]
+    },
+    {
+      "id": "nine-arches-cycling",
+      "name": "Nine Arches Bridge Cycling Tour",
+      "category": "Adventure",
+      "description": "Cycle through Ella's scenic countryside to the famous Nine Arches Bridge. Timed to coincide with the train crossing for the perfect photo.",
+      "duration": "2 hours",
+      "inclusions": ["Bicycle rental", "Helmet", "Guide", "Refreshments"],
+      "price": 4500,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 6,
+      "bookingCutoffHours": 4,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "07:30",
+      "images": ["https://images.unsplash.com/photo-1544191696-102dbeb328d0?w=800"],
+      "isFeatured": false,
+      "addOns": []
+    },
+    {
+      "id": "stargazing-evening",
+      "name": "Stargazing Evening",
+      "category": "Unique",
+      "description": "Ella's high altitude and clear night skies make it perfect for stargazing. Our guide will introduce you to the Southern Hemisphere constellations with a high-powered telescope.",
+      "duration": "1.5 hours",
+      "inclusions": ["Telescope use", "Expert astronomer guide", "Hot chocolate", "Star map"],
+      "price": 4000,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 8,
+      "bookingCutoffHours": 6,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "20:00",
+      "images": ["https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800"],
+      "isFeatured": true,
+      "addOns": []
+    }
+  ],
+
+  "localPlaces": [
+    {
+      "id": "nine-arches",
+      "name": "Nine Arches Bridge",
+      "category": "Culture",
+      "description": "Iconic colonial-era viaduct surrounded by lush tea plantations. One of the most photographed spots in Sri Lanka.",
+      "distanceKm": 2.1,
+      "travelTime": "10 min by tuk-tuk",
+      "hotelNote": "Best viewed at 08:30 or 15:15 when the train passes. Ask our concierge for exact timings.",
+      "mapUrl": "https://maps.google.com/?q=Nine+Arches+Bridge+Ella",
+      "images": ["https://images.unsplash.com/photo-1599394022918-6bdb6a091819?w=600"]
+    },
+    {
+      "id": "ella-rock",
+      "name": "Ella Rock",
+      "category": "Adventure",
+      "description": "A challenging but rewarding hike with panoramic views of the Ella Valley. About 3–4 hours return.",
+      "distanceKm": 4.5,
+      "travelTime": "20 min by tuk-tuk + 3hr hike",
+      "hotelNote": "Our concierge can arrange a guide. Start by 06:00 to avoid heat. Wear sturdy footwear.",
+      "mapUrl": "https://maps.google.com/?q=Ella+Rock+Sri+Lanka",
+      "images": ["https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600"]
+    },
+    {
+      "id": "ravana-falls",
+      "name": "Ravana Falls",
+      "category": "Nature",
+      "description": "One of the widest waterfalls in Sri Lanka. Legend holds that King Ravana kept Princess Sita here.",
+      "distanceKm": 6.0,
+      "travelTime": "15 min by tuk-tuk",
+      "hotelNote": "Visit early morning for fewer crowds. Slippery rocks — wear appropriate footwear.",
+      "mapUrl": "https://maps.google.com/?q=Ravana+Falls+Ella",
+      "images": ["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600"]
+    },
+    {
+      "id": "ella-town",
+      "name": "Ella Town Centre",
+      "category": "Shopping",
+      "description": "Browse local boutiques, gem shops, and try street food. Ella's main street has a relaxed backpacker and upscale traveller mix.",
+      "distanceKm": 1.2,
+      "travelTime": "5 min by tuk-tuk or 15 min walk",
+      "hotelNote": "Our favourite spots: Café Chill (coffee), Ella Village Inn (local rice & curry), and the spice market on the main road.",
+      "mapUrl": "https://maps.google.com/?q=Ella+Town+Sri+Lanka",
+      "images": ["https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600"]
+    },
+    {
+      "id": "demodara-loop",
+      "name": "Demodara Loop & Bridge",
+      "category": "Culture",
+      "description": "One of the world's greatest railway engineering feats — the train spirals under itself in a figure-8 loop through the mountain.",
+      "distanceKm": 8.0,
+      "travelTime": "20 min by tuk-tuk",
+      "hotelNote": "We can arrange a short train ride from Ella station to Demodara and back. A unique experience.",
+      "mapUrl": "https://maps.google.com/?q=Demodara+Loop+Sri+Lanka",
+      "images": []
+    }
+  ],
+
+  "complaintCategories": [
+    {
+      "id": "room",
+      "label": "Room",
+      "icon": "bed",
+      "subcategories": ["Cleanliness", "Maintenance / Repair", "Room Temperature", "Noise", "Amenities Missing", "Other"]
+    },
+    {
+      "id": "dining",
+      "label": "Dining",
+      "icon": "restaurant",
+      "subcategories": ["Food Quality", "Service Speed", "Order Incorrect", "Billing Error", "Hygiene", "Other"]
+    },
+    {
+      "id": "service",
+      "label": "Service",
+      "icon": "room_service",
+      "subcategories": ["Request Not Fulfilled", "Delayed Response", "Staff Attitude", "Other"]
+    },
+    {
+      "id": "facilities",
+      "label": "Facilities",
+      "icon": "pool",
+      "subcategories": ["Pool", "Gym", "Spa", "WiFi / Internet", "Parking", "Other"]
+    },
+    {
+      "id": "staff",
+      "label": "Staff",
+      "icon": "person",
+      "subcategories": ["Rude / Unprofessional", "Incorrect Information", "Unhelpful", "Other"]
+    },
+    {
+      "id": "other",
+      "label": "Other",
+      "icon": "help_outline",
+      "subcategories": ["General Feedback", "Safety Concern", "Other"]
+    }
+  ],
+
+  "whatsappGroups": {
+    "housekeeping": "+94701234001",
+    "fnb": "+94701234002",
+    "concierge": "+94701234003",
+    "frontDesk": "+94701234004",
+    "dutyManager": "+94701234005",
+    "gm": "+94701234006"
+  }
+}

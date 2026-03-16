@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Wake-Up Call | Browns Hotels & Resorts</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8">
+      <div class="max-w-xl mx-auto">
+
+        <!-- Page Header -->
+        <div class="mb-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Concierge</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span class="material-symbols-outlined fill-icon text-[#003c52] dark:text-teal-400 text-3xl">alarm</span>
+            Wake-Up Call
+          </h1>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Our team will call your room at the time you choose.</p>
+        </div>
+
+        <!-- ─── Schedule Form ──────────────────────────────────────────────── -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mb-6">
+          <h2 class="font-bold text-slate-900 dark:text-white mb-5 flex items-center gap-2 text-base">
+            <span class="w-7 h-7 rounded-full bg-[#003c52]/10 dark:bg-teal-900/30 flex items-center justify-center">
+              <span class="material-symbols-outlined text-sm text-[#003c52] dark:text-teal-400">add</span>
+            </span>
+            Schedule Wake-Up Call
+          </h2>
+
+          <div class="space-y-4">
+
+            <!-- Date & Time row -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date <span class="text-red-500">*</span></label>
+                <input type="date" id="wakeup-date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Time <span class="text-red-500">*</span></label>
+                <input type="time" id="wakeup-time" value="07:00" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              </div>
+            </div>
+
+            <!-- Repeat -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Repeat</label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-400 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-400 dark:has-[:checked]:bg-teal-900/20">
+                  <input type="radio" name="repeat" value="once" checked class="accent-[#003c52]">
+                  <span class="material-symbols-outlined text-lg text-slate-400">looks_one</span>
+                  <div>
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Once</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Single alarm on the selected date</p>
+                  </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-400 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-400 dark:has-[:checked]:bg-teal-900/20">
+                  <input type="radio" name="repeat" value="daily" class="accent-[#003c52]">
+                  <span class="material-symbols-outlined text-lg text-slate-400">repeat</span>
+                  <div>
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Daily (rest of stay)</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Every morning until check-out</p>
+                  </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-400 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-400 dark:has-[:checked]:bg-teal-900/20">
+                  <input type="radio" name="repeat" value="weekdays" class="accent-[#003c52]">
+                  <span class="material-symbols-outlined text-lg text-slate-400">calendar_today</span>
+                  <div>
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Weekdays Only</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Monday through Friday</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Notes <span class="text-slate-400 font-normal">(optional)</span></label>
+              <textarea id="wakeup-notes" rows="2" placeholder="e.g. Gentle knock first, hot coffee please…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] placeholder:text-slate-400 resize-none text-sm"></textarea>
+            </div>
+
+            <button onclick="scheduleWakeUp()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-bold hover:bg-[#004f6e] transition shadow-sm flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined fill-icon">alarm_add</span>
+              Set Wake-Up Call
+            </button>
+
+          </div>
+        </div>
+
+        <!-- ─── Scheduled Calls ────────────────────────────────────────────── -->
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">alarm_on</span>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Scheduled Calls</h2>
+          </div>
+          <div id="calls-list"></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'wake-up');
+    App.bottomNav.render('services');
+
+    let reservation = null;
+
+    function init() {
+      reservation = App.reservations.getActive();
+
+      // Default date = tomorrow
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowStr = tomorrow.toISOString().split('T')[0];
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      document.getElementById('wakeup-date').value = tomorrowStr;
+      document.getElementById('wakeup-date').min = todayStr;
+
+      renderCallsList();
+    }
+
+    function scheduleWakeUp() {
+      const date  = document.getElementById('wakeup-date').value;
+      const time  = document.getElementById('wakeup-time').value;
+      const repeat = document.querySelector('input[name="repeat"]:checked')?.value || 'once';
+      const notes = document.getElementById('wakeup-notes').value.trim();
+
+      if (!date || !time) {
+        App.toast.show('Please select a date and time.', 'error');
+        return;
+      }
+      if (!reservation) {
+        App.toast.show('No active reservation found.', 'error');
+        return;
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(date);
+      selectedDate.setHours(0, 0, 0, 0);
+      if (selectedDate < today) {
+        App.toast.show('Please select today or a future date.', 'error');
+        return;
+      }
+
+      App.wakeUpCalls.add({ reservationId: reservation.id, date, time, repeat, notes });
+
+      // Format date for toast
+      const formatted = App.helpers.formatDate ? App.helpers.formatDate(date) : date;
+      App.toast.show(`Wake-up call set for ${time} on ${formatted}.`, 'success');
+
+      // Reset notes, keep date/time for convenience
+      document.getElementById('wakeup-notes').value = '';
+
+      renderCallsList();
+    }
+
+    function renderCallsList() {
+      const el = document.getElementById('calls-list');
+      if (!reservation) {
+        el.innerHTML = `
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 text-center">
+            <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">hotel</span>
+            <p class="mt-3 text-slate-500 dark:text-slate-400 text-sm">No active reservation.</p>
+          </div>`;
+        return;
+      }
+
+      const calls = App.wakeUpCalls.getAll(reservation.id);
+
+      if (!calls.length) {
+        el.innerHTML = `
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 text-center">
+            <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">alarm_off</span>
+            <p class="mt-3 font-semibold text-slate-500 dark:text-slate-400 text-sm">No wake-up calls scheduled yet.</p>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Use the form above to set your first alarm.</p>
+          </div>`;
+        return;
+      }
+
+      el.innerHTML = `<div class="space-y-3">
+        ${calls.map(call => {
+          const isCancelled = call.status === 'cancelled';
+          const repeatLabels = { once: 'Once', daily: 'Daily (rest of stay)', weekdays: 'Weekdays only' };
+          const repeatLabel = repeatLabels[call.repeat] || call.repeat || 'Once';
+          const formatted = App.helpers.formatDate ? App.helpers.formatDate(call.date) : call.date;
+
+          const statusBadge = isCancelled
+            ? `<span class="text-xs font-bold px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">Cancelled</span>`
+            : `<span class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400">Scheduled</span>`;
+
+          return `
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border ${isCancelled ? 'border-slate-200 dark:border-slate-700 opacity-60' : 'border-slate-200 dark:border-slate-700'} p-4">
+            <div class="flex items-center gap-4">
+              <!-- Time display -->
+              <div class="w-16 h-16 rounded-xl ${isCancelled ? 'bg-slate-100 dark:bg-slate-800' : 'bg-[#003c52]/10 dark:bg-teal-900/30'} flex flex-col items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-xl ${isCancelled ? 'text-slate-400' : 'text-[#003c52] dark:text-teal-400'} fill-icon">alarm</span>
+                <span class="text-xs font-bold ${isCancelled ? 'text-slate-400' : 'text-[#003c52] dark:text-teal-400'} mt-0.5">${call.time}</span>
+              </div>
+              <!-- Details -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap mb-0.5">
+                  <span class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">${call.time}</span>
+                  ${statusBadge}
+                </div>
+                <p class="text-sm text-slate-600 dark:text-slate-400">${formatted}</p>
+                <div class="flex items-center gap-3 mt-1 text-xs text-slate-500 dark:text-slate-500">
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">repeat</span>${repeatLabel}</span>
+                  ${call.notes ? `<span class="flex items-center gap-1 truncate max-w-[160px]"><span class="material-symbols-outlined text-sm">notes</span>${call.notes}</span>` : ''}
+                </div>
+              </div>
+              <!-- Cancel button -->
+              ${!isCancelled ? `
+              <button onclick="cancelCall('${call.id}')" class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition" title="Cancel wake-up call">
+                <span class="material-symbols-outlined text-xl">alarm_off</span>
+              </button>` : ''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+
+    function cancelCall(id) {
+      if (!confirm('Cancel this wake-up call?')) return;
+      App.wakeUpCalls.cancel(id);
+      App.toast.show('Wake-up call cancelled.', 'info');
+      renderCallsList();
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Bar | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 pb-24 md:pb-8">
+
+      <!-- Loading -->
+      <div id="loading-state" class="p-4 md:p-8">
+        <div class="h-56 bg-slate-200 dark:bg-slate-700 rounded-2xl animate-pulse mb-6"></div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+        <!-- Hero -->
+        <div class="relative h-56 md:h-72 overflow-hidden">
+          <img id="hero-img" src="" alt="" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-5 md:p-8">
+            <a href="dining.html" class="inline-flex items-center gap-1.5 text-white/80 hover:text-white text-sm font-semibold mb-3 transition">
+              <span class="material-symbols-outlined text-lg">arrow_back</span>
+              Back to Dining
+            </a>
+            <h1 id="bar-name" class="text-3xl md:text-4xl font-serif font-bold text-white"></h1>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="p-4 md:p-8 max-w-4xl grid md:grid-cols-[1fr_360px] gap-8">
+
+          <!-- Left: info + menu -->
+          <div>
+            <!-- Bar info -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mb-6">
+              <p id="bar-description" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4"></p>
+              <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-base">access_time</span>
+                <span>Open: <strong id="bar-hours" class="text-slate-900 dark:text-white"></strong></span>
+              </div>
+            </div>
+
+            <!-- Menu -->
+            <div id="bar-menu" class="space-y-6"></div>
+          </div>
+
+          <!-- Right: reservation form -->
+          <div>
+            <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 sticky top-24">
+              <h2 class="font-bold text-lg text-slate-900 dark:text-white mb-5 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">event_seat</span>
+                Reserve a Table
+              </h2>
+              <form id="booking-form" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date</label>
+                  <input type="date" id="field-date" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Time</label>
+                  <select id="field-time" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                    <option value="">Select time</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Party Size</label>
+                  <select id="field-partySize" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                    ${Array.from({length:10},(_,i)=>`<option value="${i+1}">${i+1} ${i===0?'Guest':'Guests'}</option>`).join('')}
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Special Requests <span class="font-normal text-slate-400">(optional)</span></label>
+                  <textarea id="field-requests" rows="3" placeholder="Seating preference, special occasion..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] resize-none placeholder-slate-400"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-[#003c52] text-white rounded-xl px-5 py-3 font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">event_available</span>
+                  Confirm Reservation
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Not found -->
+      <div id="notfound-state" class="hidden text-center py-20 p-8">
+        <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600">local_bar</span>
+        <p class="mt-4 text-slate-500 dark:text-slate-400">Bar not found.</p>
+        <a href="dining.html" class="mt-4 inline-block text-[#003c52] dark:text-teal-400 font-semibold hover:underline">Back to Dining</a>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'dining');
+    App.bottomNav.render('dining');
+
+    const params = new URLSearchParams(window.location.search);
+    const barId = params.get('id');
+    let bar = null;
+
+    async function init() {
+      const reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      const propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!propData || !barId) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+      bar = propData.dining.bars.find(b => b.id === barId);
+      if (!bar) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+
+      document.getElementById('content-state').classList.remove('hidden');
+      document.getElementById('hero-img').src = bar.images?.[0] || 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800';
+      document.getElementById('hero-img').alt = bar.name;
+      document.getElementById('bar-name').textContent = bar.name;
+      document.getElementById('bar-description').textContent = bar.description;
+      document.getElementById('bar-hours').textContent = `${bar.hours.open} – ${bar.hours.close}`;
+
+      // Time slots
+      const timeSelect = document.getElementById('field-time');
+      const [oh, om] = bar.hours.open.split(':').map(Number);
+      const [ch, cm] = bar.hours.close.split(':').map(Number);
+      let cur = oh * 60 + om;
+      const end = ch * 60 + cm;
+      while (cur <= end) {
+        const h = String(Math.floor(cur/60)).padStart(2,'0');
+        const m = String(cur%60).padStart(2,'0');
+        const opt = document.createElement('option');
+        opt.value = `${h}:${m}`; opt.textContent = `${h}:${m}`;
+        timeSelect.appendChild(opt);
+        cur += 30;
+      }
+
+      document.getElementById('field-date').min = new Date().toISOString().split('T')[0];
+      document.getElementById('field-date').value = new Date().toISOString().split('T')[0];
+
+      // Menu
+      const currency = propData.property.currencySymbol || 'Rs.';
+      document.getElementById('bar-menu').innerHTML = bar.menu.map(section => `
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-3 pb-2 border-b border-slate-200 dark:border-slate-700">${section.category}</h2>
+          <div class="space-y-2">
+            ${section.items.map(item => `
+              <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 flex items-start justify-between gap-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 dark:text-white text-sm">${item.name}</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${item.description}</p>
+                </div>
+                <p class="font-bold text-[#003c52] dark:text-teal-400 text-sm whitespace-nowrap">${App.helpers.formatCurrency(item.price, currency)}</p>
+              </div>`).join('')}
+          </div>
+        </div>`).join('');
+
+      document.getElementById('booking-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!reservation) { App.toast.show('No active reservation.', 'error'); return; }
+        const date = document.getElementById('field-date').value;
+        const time = document.getElementById('field-time').value;
+        const partySize = document.getElementById('field-partySize').value;
+        const requests = document.getElementById('field-requests').value.trim();
+
+        App.requests.add({
+          reservationId: reservation.id,
+          serviceName: `Bar Table — ${bar.name}`,
+          serviceId: 'bar-table',
+          category: 'Dining & Bars',
+          details: { date, time, partySize: `${partySize} guests`, bar: bar.name },
+          notes: requests
+        });
+
+        App.toast.show('Table reserved at ' + bar.name + '!', 'success');
+        setTimeout(() => window.location.href = 'my-requests.html', 1200);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

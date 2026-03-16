@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Notifications | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Updates</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Notifications</h1>
+        </div>
+        <button id="mark-all-btn" onclick="markAllRead()" class="text-sm font-semibold text-[#003c52] dark:text-teal-400 hover:underline hidden">
+          Mark all as read
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden text-center py-20">
+        <span class="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600 mb-4 block">notifications_none</span>
+        <p class="text-slate-600 dark:text-slate-400 font-semibold text-lg">All caught up!</p>
+        <p class="text-slate-400 dark:text-slate-500 text-sm mt-1">No notifications yet. We'll let you know when something happens.</p>
+      </div>
+
+      <!-- Notifications List -->
+      <div id="notifications-container" class="space-y-6"></div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'notifications');
+    App.bottomNav.render('notifications');
+
+    const typeIcons = {
+      request:   'check_circle',
+      complaint: 'support_agent',
+      wakeup:    'alarm',
+      billing:   'receipt_long',
+      info:      'info',
+      default:   'notifications'
+    };
+
+    const typeColors = {
+      request:   'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+      complaint: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+      wakeup:    'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400',
+      billing:   'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
+      info:      'bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400',
+      default:   'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+    };
+
+    function groupNotifications(notifications) {
+      const now = new Date();
+      const groups = { Today: [], Yesterday: [], Earlier: [] };
+
+      notifications.forEach(n => {
+        const d = new Date(n.timestamp);
+        const diffDays = Math.floor((now - d) / 86400000);
+        if (diffDays === 0) groups.Today.push(n);
+        else if (diffDays === 1) groups.Yesterday.push(n);
+        else groups.Earlier.push(n);
+      });
+      return groups;
+    }
+
+    function renderNotification(n) {
+      const icon = n.icon || typeIcons[n.type] || typeIcons.default;
+      const colorClass = typeColors[n.type] || typeColors.default;
+      return `
+        <div id="notif-${n.id}" onclick="markRead('${n.id}', this)" class="flex items-start gap-4 p-4 rounded-xl cursor-pointer transition-colors hover:bg-white dark:hover:bg-slate-800 ${n.read ? '' : 'bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-700'}">
+          <div class="relative shrink-0">
+            <div class="w-10 h-10 rounded-full ${colorClass} flex items-center justify-center">
+              <span class="material-symbols-outlined text-xl">${icon}</span>
+            </div>
+            ${!n.read ? '<div class="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#003c52] dark:bg-teal-500 border-2 border-white dark:border-slate-900"></div>' : ''}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <p class="text-sm font-semibold ${n.read ? 'text-slate-600 dark:text-slate-400' : 'text-slate-900 dark:text-white'}">${n.title}</p>
+              <span class="text-xs text-slate-400 dark:text-slate-500 shrink-0">${App.helpers.timeAgo(n.timestamp)}</span>
+            </div>
+            <p class="text-sm ${n.read ? 'text-slate-400 dark:text-slate-500' : 'text-slate-600 dark:text-slate-300'} mt-0.5 leading-relaxed">${n.message}</p>
+          </div>
+        </div>`;
+    }
+
+    function renderAll() {
+      const all = App.notifications.getAll();
+      const container = document.getElementById('notifications-container');
+      const empty = document.getElementById('empty-state');
+      const markAllBtn = document.getElementById('mark-all-btn');
+
+      if (all.length === 0) {
+        empty.classList.remove('hidden');
+        container.innerHTML = '';
+        markAllBtn.classList.add('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      const unreadCount = all.filter(n => !n.read).length;
+      if (unreadCount > 0) markAllBtn.classList.remove('hidden');
+      else markAllBtn.classList.add('hidden');
+
+      const groups = groupNotifications(all);
+      let html = '';
+      Object.entries(groups).forEach(([groupName, items]) => {
+        if (items.length === 0) return;
+        html += `
+          <div>
+            <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3">${groupName}</h2>
+            <div class="space-y-2">${items.map(n => renderNotification(n)).join('')}</div>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function markRead(id, el) {
+      App.notifications.markRead(id);
+      // Update dot & styling
+      const dot = el.querySelector('.absolute.w-3');
+      if (dot) dot.remove();
+      el.classList.remove('bg-white', 'dark:bg-slate-900', 'shadow-sm', 'border', 'border-slate-200', 'dark:border-slate-700');
+      el.querySelectorAll('p').forEach(p => {
+        p.className = p.className.replace('text-slate-900 dark:text-white', 'text-slate-600 dark:text-slate-400')
+                                 .replace('text-slate-600 dark:text-slate-300', 'text-slate-400 dark:text-slate-500');
+      });
+      // Update header badge
+      const badge = document.getElementById('notif-badge');
+      if (badge) {
+        const count = App.notifications.getUnreadCount();
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+      }
+      const remaining = App.notifications.getAll().filter(n => !n.read).length;
+      if (remaining === 0) document.getElementById('mark-all-btn').classList.add('hidden');
+    }
+
+    function markAllRead() {
+      App.notifications.markAllRead();
+      const badge = document.getElementById('notif-badge');
+      if (badge) badge.style.display = 'none';
+      renderAll();
+      App.toast.show('All notifications marked as read', 'success');
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>

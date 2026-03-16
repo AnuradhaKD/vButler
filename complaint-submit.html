@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Submit Complaint | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <div class="mb-6">
+        <a href="complaints.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 transition mb-4">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Back to Complaints
+        </a>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Submit a Complaint</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">We're here to help — your feedback matters</p>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-state" class="space-y-4">
+        <div class="h-16 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+        <div class="h-48 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+      </div>
+
+      <!-- Progress indicator -->
+      <div id="progress-bar" class="hidden mb-6">
+        <div class="flex items-center gap-1.5 mb-2">
+          <div class="flex-1 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"><div id="progress-fill" class="h-full bg-[#003c52] dark:bg-teal-500 rounded-full transition-all duration-300"></div></div>
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400" id="progress-label">Step 1 of 5</p>
+      </div>
+
+      <!-- Steps -->
+      <div id="steps-container" class="hidden">
+
+        <!-- Step 1: Category -->
+        <div id="step-1" class="step-panel">
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-4">What is your complaint about?</h2>
+            <div id="categories-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+          </div>
+        </div>
+
+        <!-- Step 2: Subcategory -->
+        <div id="step-2" class="step-panel hidden">
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-1">Select a specific issue</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4" id="step2-category-label"></p>
+            <div id="subcategories-list" class="space-y-2"></div>
+            <div class="flex gap-3 mt-6">
+              <button onclick="goStep(1)" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">Back</button>
+              <button onclick="goStep(3)" id="sub-next-btn" disabled class="flex-1 bg-[#003c52] text-white rounded-xl py-3 font-semibold hover:bg-[#004f6e] transition disabled:opacity-40">Next</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Details -->
+        <div id="step-3" class="step-panel hidden">
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 space-y-4">
+            <h2 class="font-bold text-slate-900 dark:text-white">Describe the issue</h2>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description <span class="text-red-500">*</span></label>
+              <textarea id="description" rows="4" placeholder="Please describe the issue in detail (minimum 20 characters)…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm resize-none"></textarea>
+              <p id="desc-count" class="text-xs text-slate-400 mt-1 text-right">0 / min. 20 chars</p>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Urgency Level <span class="text-red-500">*</span></label>
+              <div class="flex gap-3">
+                <label class="flex-1 flex items-center gap-2 p-3 rounded-lg border-2 border-slate-200 dark:border-slate-600 cursor-pointer hover:border-green-400 transition urgency-card">
+                  <input type="radio" name="urgency" value="low" class="accent-green-500"> <span class="text-sm font-semibold text-slate-800 dark:text-white">Low</span>
+                </label>
+                <label class="flex-1 flex items-center gap-2 p-3 rounded-lg border-2 border-slate-200 dark:border-slate-600 cursor-pointer hover:border-amber-400 transition urgency-card">
+                  <input type="radio" name="urgency" value="medium" class="accent-amber-500"> <span class="text-sm font-semibold text-slate-800 dark:text-white">Medium</span>
+                </label>
+                <label class="flex-1 flex items-center gap-2 p-3 rounded-lg border-2 border-slate-200 dark:border-slate-600 cursor-pointer hover:border-red-400 transition urgency-card">
+                  <input type="radio" name="urgency" value="high" class="accent-red-500"> <span class="text-sm font-semibold text-slate-800 dark:text-white">High</span>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Location</label>
+              <input id="location" type="text" placeholder="e.g. Room 205, Pool area, Restaurant…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+            </div>
+            <div class="flex gap-3 pt-2">
+              <button onclick="goStep(2)" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">Back</button>
+              <button onclick="goStep(4)" class="flex-1 bg-[#003c52] text-white rounded-xl py-3 font-semibold hover:bg-[#004f6e] transition">Next</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Photo note -->
+        <div id="step-4" class="step-panel hidden">
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 space-y-4">
+            <h2 class="font-bold text-slate-900 dark:text-white">Additional Visual Description</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">If applicable, describe what you can see that relates to the complaint.</p>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Visual Notes <span class="text-slate-400 font-normal">(optional)</span></label>
+              <textarea id="visual-notes" rows="3" placeholder="Describe what you see — e.g. 'Water stain on ceiling above bed', 'Broken chair near pool'…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm resize-none"></textarea>
+            </div>
+            <div class="flex gap-3 pt-2">
+              <button onclick="goStep(3)" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">Back</button>
+              <button onclick="goStep(5)" class="flex-1 bg-[#003c52] text-white rounded-xl py-3 font-semibold hover:bg-[#004f6e] transition">Review</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Review & Submit -->
+        <div id="step-5" class="step-panel hidden">
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-4">Review Your Complaint</h2>
+            <div class="space-y-3 mb-6">
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <span class="text-xs font-bold uppercase text-slate-400 w-24 shrink-0 mt-0.5">Category</span>
+                <span id="review-category" class="text-sm font-semibold text-slate-900 dark:text-white"></span>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <span class="text-xs font-bold uppercase text-slate-400 w-24 shrink-0 mt-0.5">Issue</span>
+                <span id="review-subcategory" class="text-sm font-semibold text-slate-900 dark:text-white"></span>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <span class="text-xs font-bold uppercase text-slate-400 w-24 shrink-0 mt-0.5">Description</span>
+                <span id="review-description" class="text-sm text-slate-700 dark:text-slate-300"></span>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <span class="text-xs font-bold uppercase text-slate-400 w-24 shrink-0 mt-0.5">Urgency</span>
+                <span id="review-urgency" class="text-sm font-semibold text-slate-900 dark:text-white"></span>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <span class="text-xs font-bold uppercase text-slate-400 w-24 shrink-0 mt-0.5">Location</span>
+                <span id="review-location" class="text-sm text-slate-700 dark:text-slate-300"></span>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <button onclick="goStep(4)" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">Back</button>
+              <button onclick="submitComplaint()" class="flex-1 bg-[#003c52] text-white rounded-xl py-3 font-semibold hover:bg-[#004f6e] transition">Submit Complaint</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Success State -->
+      <div id="success-state" class="hidden text-center py-12">
+        <div class="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-6">
+          <span class="material-symbols-outlined text-5xl text-green-600 dark:text-green-400" style="font-variation-settings:'FILL' 1">check_circle</span>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Complaint Submitted</h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mb-1">Your reference number is:</p>
+        <p id="ref-number" class="text-2xl font-mono font-bold text-[#003c52] dark:text-teal-400 mb-2"></p>
+        <p class="text-slate-400 dark:text-slate-500 text-xs mb-8">Our team will respond within 2 hours</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="complaints.html" class="inline-flex items-center justify-center gap-2 bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm">
+            <span class="material-symbols-outlined text-base">list</span>View My Complaints
+          </a>
+          <a id="whatsapp-link" href="#" target="_blank" class="inline-flex items-center justify-center gap-2 border border-green-500 text-green-600 dark:text-green-400 dark:border-green-500 rounded-xl px-6 py-3 font-semibold hover:bg-green-50 dark:hover:bg-green-900/20 transition text-sm">
+            <span class="material-symbols-outlined text-base">chat</span>Escalate via WhatsApp
+          </a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'complaints');
+    App.bottomNav.render('complaints');
+
+    const activeRes = App.reservations.getActive();
+    let categories = [];
+    let currentStep = 1;
+    let selectedCategory = null;
+    let selectedSubcategory = null;
+
+    const totalSteps = 5;
+
+    function updateProgress() {
+      const pct = ((currentStep - 1) / (totalSteps - 1)) * 100;
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-label').textContent = `Step ${currentStep} of ${totalSteps}`;
+    }
+
+    function goStep(n) {
+      // Validate before proceeding
+      if (n > currentStep) {
+        if (currentStep === 2 && !selectedSubcategory) { App.toast.show('Please select an issue', 'warning'); return; }
+        if (currentStep === 3) {
+          const desc = document.getElementById('description').value.trim();
+          if (desc.length < 20) { App.toast.show('Description must be at least 20 characters', 'warning'); return; }
+          const urgency = document.querySelector('input[name="urgency"]:checked');
+          if (!urgency) { App.toast.show('Please select an urgency level', 'warning'); return; }
+        }
+        if (n === 5) populateReview();
+      }
+
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById(`step-${n}`).classList.remove('hidden');
+      currentStep = n;
+      updateProgress();
+    }
+
+    function populateReview() {
+      document.getElementById('review-category').textContent = selectedCategory?.label || '';
+      document.getElementById('review-subcategory').textContent = selectedSubcategory || '';
+      document.getElementById('review-description').textContent = document.getElementById('description').value;
+      const urgency = document.querySelector('input[name="urgency"]:checked');
+      document.getElementById('review-urgency').textContent = urgency ? urgency.value.charAt(0).toUpperCase() + urgency.value.slice(1) : '';
+      document.getElementById('review-location').textContent = document.getElementById('location').value || 'Not specified';
+    }
+
+    function selectCategory(cat) {
+      selectedCategory = cat;
+      selectedSubcategory = null;
+
+      // Update UI
+      document.querySelectorAll('.cat-card').forEach(c => {
+        const isSelected = c.dataset.catId === cat.id;
+        c.className = `cat-card flex flex-col items-center gap-2 p-4 rounded-xl border-2 cursor-pointer transition ${isSelected
+          ? 'border-[#003c52] dark:border-teal-500 bg-[#003c52]/5 dark:bg-teal-900/20'
+          : 'border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500'}`;
+      });
+
+      // Populate subcategories
+      document.getElementById('step2-category-label').textContent = cat.label;
+      document.getElementById('subcategories-list').innerHTML = cat.subcategories.map(sub => `
+        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-600 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition sub-option">
+          <input type="radio" name="subcategory" value="${sub}" onchange="selectSubcategory('${sub}')" class="accent-[#003c52]">
+          <span class="text-sm font-medium text-slate-800 dark:text-white">${sub}</span>
+        </label>`).join('');
+
+      document.getElementById('sub-next-btn').disabled = true;
+      goStep(2);
+    }
+
+    function selectSubcategory(sub) {
+      selectedSubcategory = sub;
+      document.getElementById('sub-next-btn').disabled = false;
+    }
+
+    document.getElementById('description').addEventListener('input', function() {
+      document.getElementById('desc-count').textContent = `${this.value.length} / min. 20 chars`;
+    });
+
+    function submitComplaint() {
+      const description = document.getElementById('description').value.trim();
+      const urgency = document.querySelector('input[name="urgency"]:checked')?.value;
+      const location = document.getElementById('location').value.trim();
+      const visualNotes = document.getElementById('visual-notes').value.trim();
+
+      const complaint = App.complaints.add({
+        reservationId: activeRes?.id,
+        category: selectedCategory.label,
+        subcategory: selectedSubcategory,
+        description: description + (visualNotes ? `\n\nVisual notes: ${visualNotes}` : ''),
+        urgency,
+        location: location || activeRes?.roomNumber ? `Room ${activeRes?.roomNumber}` : ''
+      });
+
+      document.getElementById('steps-container').classList.add('hidden');
+      document.getElementById('progress-bar').classList.add('hidden');
+      document.getElementById('success-state').classList.remove('hidden');
+      document.getElementById('ref-number').textContent = complaint.ref;
+      document.getElementById('whatsapp-link').href = `https://wa.me/94701234005?text=Complaint%20reference%20${complaint.ref}%20requires%20escalation.`;
+      App.toast.show('Complaint submitted successfully', 'success');
+    }
+
+    (async () => {
+      const propData = await App.data.loadProperty(activeRes?.propertyId || 'newburge-ella');
+      categories = propData?.complaintCategories || [];
+
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('progress-bar').classList.remove('hidden');
+      document.getElementById('steps-container').classList.remove('hidden');
+
+      document.getElementById('categories-grid').innerHTML = categories.map(cat => `
+        <button data-cat-id="${cat.id}" onclick='selectCategory(${JSON.stringify(cat)})' class="cat-card flex flex-col items-center gap-2 p-4 rounded-xl border-2 cursor-pointer transition border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">
+          <span class="material-symbols-outlined text-3xl text-[#003c52] dark:text-teal-400">${cat.icon}</span>
+          <span class="text-sm font-semibold text-slate-800 dark:text-white">${cat.label}</span>
+        </button>`).join('');
+
+      updateProgress();
+    })();
+  </script>
+</body>
+</html>

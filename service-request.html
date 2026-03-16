@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Service Request | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-2xl">
+
+      <!-- Back button -->
+      <a href="services.html" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 mb-6 transition">
+        <span class="material-symbols-outlined text-lg">arrow_back</span>
+        Back to Services
+      </a>
+
+      <!-- Loading -->
+      <div id="loading-state">
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6 animate-pulse">
+          <div class="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-3"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full mb-2"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+        <!-- Reservation context -->
+        <div id="reservation-context" class="bg-[#003c52]/5 dark:bg-teal-900/20 border border-[#003c52]/20 dark:border-teal-800 rounded-xl p-4 mb-6 flex items-center gap-3">
+          <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">hotel</span>
+          <div id="reservation-info" class="text-sm text-slate-700 dark:text-slate-300"></div>
+        </div>
+
+        <!-- Service details card -->
+        <div id="service-details" class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-6"></div>
+
+        <!-- Request form -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-5">Request Details</h2>
+          <form id="request-form" class="space-y-5">
+            <div id="dynamic-fields"></div>
+            <!-- Notes always present -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Special Instructions <span class="font-normal text-slate-400">(optional)</span></label>
+              <textarea id="field-notes" rows="3" placeholder="Any special instructions or notes for our team..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] resize-none placeholder-slate-400"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3.5 font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2 text-base">
+              <span class="material-symbols-outlined">send</span>
+              Submit Request
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Not found state -->
+      <div id="notfound-state" class="hidden text-center py-20">
+        <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600">search_off</span>
+        <p class="mt-4 text-slate-500 dark:text-slate-400">Service not found.</p>
+        <a href="services.html" class="mt-4 inline-block text-[#003c52] dark:text-teal-400 font-semibold hover:underline">Browse all services</a>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'services');
+    App.bottomNav.render('services');
+
+    const params = new URLSearchParams(window.location.search);
+    const serviceId = params.get('serviceId');
+    const categoryId = params.get('categoryId');
+
+    async function init() {
+      const reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      const propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!propData || !serviceId) {
+        document.getElementById('notfound-state').classList.remove('hidden');
+        return;
+      }
+
+      // Find service
+      let service = null, category = null;
+      for (const cat of propData.services.categories) {
+        const found = cat.items.find(i => i.id === serviceId);
+        if (found) { service = found; category = cat; break; }
+      }
+
+      if (!service) {
+        document.getElementById('notfound-state').classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('content-state').classList.remove('hidden');
+
+      // Reservation context
+      if (reservation) {
+        document.getElementById('reservation-info').innerHTML = `
+          <strong>${propData.property.name}</strong> &mdash; Room ${reservation.roomNumber || 'N/A'}
+          <span class="mx-2 text-slate-400">&middot;</span> ${reservation.roomType || ''} &mdash; Checking out ${App.helpers.formatDate(reservation.checkOut)}`;
+      } else {
+        document.getElementById('reservation-context').classList.add('hidden');
+      }
+
+      // Service details
+      const currency = propData.property.currencySymbol || 'Rs.';
+      document.getElementById('service-details').innerHTML = `
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-start gap-3">
+            <div class="w-12 h-12 rounded-xl bg-[#003c52]/10 dark:bg-teal-900/30 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-2xl">${category.icon}</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-0.5">${category.label}</p>
+              <h1 class="text-xl font-bold text-slate-900 dark:text-white">${service.name}</h1>
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+            ${service.price ? `<p class="font-bold text-[#003c52] dark:text-teal-400 text-lg">${App.helpers.formatCurrency(service.price, currency)}</p>` : `<p class="text-green-600 dark:text-green-400 font-semibold text-sm">${service.priceNote || ''}</p>`}
+          </div>
+        </div>
+        <p class="mt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">${service.description}</p>
+        <div class="mt-3 flex flex-wrap gap-4 text-xs text-slate-500 dark:text-slate-400">
+          ${service.estimatedTime ? `<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span>Est. ${service.estimatedTime}</span>` : ''}
+          ${service.availableHours ? `<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">access_time</span>Available ${service.availableHours.from}–${service.availableHours.to}</span>` : ''}
+        </div>`;
+
+      // Dynamic fields
+      renderDynamicFields(service.fields || []);
+
+      // Form submit
+      document.getElementById('request-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!reservation) {
+          App.toast.show('No active reservation found.', 'error');
+          return;
+        }
+        const details = collectFieldValues(service.fields || []);
+        const notes = document.getElementById('field-notes').value.trim();
+
+        App.requests.add({
+          reservationId: reservation.id,
+          serviceName: service.name,
+          serviceId: service.id,
+          category: category.label,
+          details,
+          notes
+        });
+
+        App.toast.show('Request submitted successfully!', 'success');
+        setTimeout(() => window.location.href = 'my-requests.html', 1200);
+      });
+    }
+
+    function renderDynamicFields(fields) {
+      const container = document.getElementById('dynamic-fields');
+      let html = '';
+      fields.forEach(field => {
+        switch(field) {
+          case 'preferredTime':
+          case 'time':
+            html += fieldWrap('Preferred Time', `<input type="time" id="field-${field}" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'deliveryTime':
+            html += fieldWrap('Delivery Time', `<input type="time" id="field-deliveryTime" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'date':
+            html += fieldWrap('Date', `<input type="date" id="field-date" min="${new Date().toISOString().split('T')[0]}" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'quantity':
+            html += fieldWrap('Quantity', `<input type="number" id="field-quantity" min="1" max="10" value="1" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'towelType':
+            html += fieldWrap('Towel Type', `
+              <div class="flex gap-4">
+                ${['Bath Towel','Pool Towel','Hand Towel'].map((t,i) => `
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="towelType" value="${t}" ${i===0?'checked':''} class="accent-[#003c52]">
+                  <span class="text-sm text-slate-700 dark:text-slate-300">${t}</span>
+                </label>`).join('')}
+              </div>`);
+            break;
+          case 'itemType':
+            html += fieldWrap('Item Type', `
+              <div class="flex gap-4">
+                ${['Pillow','Blanket','Both'].map((t,i) => `
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="itemType" value="${t}" ${i===0?'checked':''} class="accent-[#003c52]">
+                  <span class="text-sm text-slate-700 dark:text-slate-300">${t}</span>
+                </label>`).join('')}
+              </div>`);
+            break;
+          case 'flightNumber':
+            html += fieldWrap('Flight Number', `<input type="text" id="field-flightNumber" placeholder="e.g. UL 202" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'destination':
+            html += fieldWrap('Destination', `<input type="text" id="field-destination" placeholder="e.g. Ella Town" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'specialInstructions':
+          case 'specialRequests':
+            html += fieldWrap('Special Instructions', `<textarea id="field-${field}" rows="3" placeholder="Dietary requirements, preferences..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] resize-none"></textarea>`);
+            break;
+          case 'passengerCount':
+          case 'partySize':
+            html += fieldWrap('Number of Guests', `<input type="number" id="field-${field}" min="1" max="12" value="2" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'vehicleType':
+            html += fieldWrap('Vehicle Type', `
+              <select id="field-vehicleType" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                <option value="sedan">Sedan (1–3 pax)</option>
+                <option value="suv">SUV (1–5 pax)</option>
+                <option value="van">Van (1–8 pax)</option>
+              </select>`);
+            break;
+          case 'direction':
+            html += fieldWrap('Transfer Direction', `
+              <select id="field-direction" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                <option value="arrival">Airport → Hotel (Arrival)</option>
+                <option value="departure">Hotel → Airport (Departure)</option>
+              </select>`);
+            break;
+          case 'bagCount':
+            html += fieldWrap('Number of Bags', `<input type="number" id="field-bagCount" min="1" max="20" value="1" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'collectionTime':
+            html += fieldWrap('Collection Time', `<input type="time" id="field-collectionTime" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'restaurantName':
+            html += fieldWrap('Restaurant Name', `<input type="text" id="field-restaurantName" placeholder="Name of the restaurant" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'treatment':
+            html += fieldWrap('Treatment Type', `<input type="text" id="field-treatment" placeholder="e.g. Swedish Massage" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            break;
+          case 'therapistGender':
+            html += fieldWrap('Therapist Preference', `
+              <div class="flex gap-4">
+                ${['No Preference','Female','Male'].map((t,i) => `
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="therapistGender" value="${t}" ${i===0?'checked':''} class="accent-[#003c52]">
+                  <span class="text-sm text-slate-700 dark:text-slate-300">${t}</span>
+                </label>`).join('')}
+              </div>`);
+            break;
+        }
+      });
+      container.innerHTML = html;
+    }
+
+    function fieldWrap(label, input) {
+      return `<div><label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">${label}</label>${input}</div>`;
+    }
+
+    function collectFieldValues(fields) {
+      const details = {};
+      fields.forEach(field => {
+        if (['towelType'].includes(field)) {
+          const radio = document.querySelector('input[name="towelType"]:checked');
+          if (radio) details[field] = radio.value;
+        } else if (['itemType'].includes(field)) {
+          const radio = document.querySelector('input[name="itemType"]:checked');
+          if (radio) details[field] = radio.value;
+        } else if (['therapistGender'].includes(field)) {
+          const radio = document.querySelector('input[name="therapistGender"]:checked');
+          if (radio) details[field] = radio.value;
+        } else {
+          const el = document.getElementById(`field-${field}`);
+          if (el) details[field] = el.value;
+        }
+      });
+      return details;
+    }
+
+    init();
+  </script>
+</body>
+</html>

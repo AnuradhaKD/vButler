@@ -1,0 +1,15 @@
+{
+  "name": "Destinity vButler — Browns Hotels & Resorts",
+  "short_name": "Destinity vButler",
+  "description": "Your personal digital butler — manage your hotel stay from your pocket.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#003c52",
+  "theme_color": "#003c52",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "assets/images/destinity-inspire.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "categories": ["travel", "lifestyle"],
+  "lang": "en"
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Restaurant | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+  <style>
+    .tag-seafood      { background:#eff6ff; color:#1d4ed8; }
+    .tag-vegetarian   { background:#f0fdf4; color:#15803d; }
+    .tag-vegetarian-option { background:#f0fdf4; color:#15803d; }
+    .tag-signature    { background:#faf5ff; color:#7e22ce; }
+    .tag-local        { background:#fff7ed; color:#c2410c; }
+    .tag-gluten-free  { background:#fefce8; color:#a16207; }
+    .tag-hot          { background:#fef2f2; color:#dc2626; }
+    .tag-cold         { background:#eff6ff; color:#1d4ed8; }
+    .dark .tag-seafood      { background:#1e3a5f20; color:#93c5fd; }
+    .dark .tag-vegetarian   { background:#14532d20; color:#86efac; }
+    .dark .tag-vegetarian-option { background:#14532d20; color:#86efac; }
+    .dark .tag-signature    { background:#4a044e20; color:#d8b4fe; }
+    .dark .tag-local        { background:#431407 20; color:#fdba74; }
+    .dark .tag-gluten-free  { background:#45350020; color:#fde047; }
+    .dark .tag-hot          { background:#450a0a20; color:#fca5a5; }
+    .dark .tag-cold         { background:#1e3a5f20; color:#93c5fd; }
+  </style>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 pb-24 md:pb-8">
+
+      <!-- Loading -->
+      <div id="loading-state" class="p-4 md:p-8">
+        <div class="h-56 md:h-72 bg-slate-200 dark:bg-slate-700 rounded-2xl animate-pulse mb-6"></div>
+        <div class="h-7 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-3 animate-pulse"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-2/3 animate-pulse"></div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+        <!-- Hero image -->
+        <div class="relative h-56 md:h-80 overflow-hidden">
+          <img id="hero-img" src="" alt="" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-5 md:p-8">
+            <a href="dining.html" class="inline-flex items-center gap-1.5 text-white/80 hover:text-white text-sm font-semibold mb-3 transition">
+              <span class="material-symbols-outlined text-lg">arrow_back</span>
+              Back to Dining
+            </a>
+            <p id="hero-cuisine" class="text-xs font-bold uppercase tracking-widest text-teal-300 mb-1"></p>
+            <h1 id="hero-name" class="text-3xl md:text-4xl font-serif font-bold text-white"></h1>
+          </div>
+        </div>
+
+        <!-- Info bar -->
+        <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-5 md:px-8 py-4">
+          <div class="flex flex-wrap items-center gap-4">
+            <div id="hours-badges" class="flex flex-wrap gap-2"></div>
+            <div class="ml-auto">
+              <a id="reserve-btn-top" href="#" class="inline-flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
+                <span class="material-symbols-outlined text-base">event_seat</span>
+                Reserve a Table
+              </a>
+            </div>
+          </div>
+          <p id="restaurant-description" class="mt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed"></p>
+        </div>
+
+        <!-- Menu sections -->
+        <div id="menu-content" class="p-4 md:p-8 max-w-4xl"></div>
+      </div>
+
+      <!-- Not found -->
+      <div id="notfound-state" class="hidden text-center py-20 p-8">
+        <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600">restaurant_menu</span>
+        <p class="mt-4 text-slate-500 dark:text-slate-400">Restaurant not found.</p>
+        <a href="dining.html" class="mt-4 inline-block text-[#003c52] dark:text-teal-400 font-semibold hover:underline">Back to Dining</a>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Sticky Reserve Button (mobile) -->
+  <div id="sticky-reserve" class="hidden fixed bottom-16 md:bottom-0 inset-x-0 md:hidden z-30 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 px-4 py-3 safe-area-pb">
+    <a id="sticky-reserve-btn" href="#" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3.5 font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2 text-base">
+      <span class="material-symbols-outlined">event_seat</span>
+      Reserve a Table
+    </a>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'dining');
+    App.bottomNav.render('dining');
+
+    const params = new URLSearchParams(window.location.search);
+    const restaurantId = params.get('id');
+
+    const TAG_COLOURS = {
+      seafood: 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400',
+      vegetarian: 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400',
+      'vegetarian-option': 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400',
+      signature: 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400',
+      local: 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400',
+      'gluten-free': 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400',
+      hot: 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400',
+      cold: 'bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400',
+    };
+
+    async function init() {
+      const reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      const propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!propData || !restaurantId) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+
+      const restaurant = propData.dining.restaurants.find(r => r.id === restaurantId);
+      if (!restaurant) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+
+      document.getElementById('content-state').classList.remove('hidden');
+      document.getElementById('sticky-reserve').classList.remove('hidden');
+
+      // Hero
+      document.getElementById('hero-img').src = restaurant.images?.[0] || 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200';
+      document.getElementById('hero-img').alt = restaurant.name;
+      document.getElementById('hero-name').textContent = restaurant.name;
+      document.getElementById('hero-cuisine').textContent = restaurant.cuisine;
+      document.getElementById('restaurant-description').textContent = restaurant.description;
+
+      // Hours badges
+      const hoursBadges = document.getElementById('hours-badges');
+      if (restaurant.hours.breakfast) hoursBadges.innerHTML += `<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400">Breakfast ${restaurant.hours.breakfast}</span>`;
+      if (restaurant.hours.lunch) hoursBadges.innerHTML += `<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400">Lunch ${restaurant.hours.lunch}</span>`;
+      if (restaurant.hours.dinner) hoursBadges.innerHTML += `<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400">Dinner ${restaurant.hours.dinner}</span>`;
+
+      // Reserve links
+      const reserveUrl = `table-reservation.html?restaurantId=${restaurant.id}`;
+      document.getElementById('reserve-btn-top').href = reserveUrl;
+      document.getElementById('sticky-reserve-btn').href = reserveUrl;
+
+      // Menu
+      const currency = propData.property.currencySymbol || 'Rs.';
+      let menuHtml = '';
+      restaurant.menu.forEach(section => {
+        menuHtml += `
+          <div class="mb-8">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">${section.category}</h2>
+            <div class="space-y-3">
+              ${section.items.map(item => `
+                <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex items-start justify-between gap-4">
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1 flex-wrap">
+                      <h3 class="font-bold text-slate-900 dark:text-white text-sm">${item.name}</h3>
+                      ${(item.tags||[]).map(tag => `<span class="px-2 py-0.5 rounded-full text-xs font-semibold capitalize ${TAG_COLOURS[tag] || 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}">${tag.replace('-',' ')}</span>`).join('')}
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">${item.description}</p>
+                  </div>
+                  <div class="shrink-0 text-right">
+                    <p class="font-bold text-[#003c52] dark:text-teal-400 whitespace-nowrap">${App.helpers.formatCurrency(item.price, currency)}</p>
+                  </div>
+                </div>`).join('')}
+            </div>
+          </div>`;
+      });
+      document.getElementById('menu-content').innerHTML = menuHtml;
+    }
+
+    init();
+  </script>
+</body>
+</html>

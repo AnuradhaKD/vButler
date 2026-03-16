@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Wellness & Spa | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 pb-24 md:pb-8">
+
+      <!-- Hero -->
+      <div class="relative h-48 md:h-64 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1200" alt="Wellness & Spa" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#003c52]/80 to-[#003c52]/30 flex flex-col justify-end p-6 md:p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-teal-300 mb-1">Browns Hotels & Resorts</p>
+          <h1 class="text-3xl md:text-4xl font-serif font-bold text-white">Wellness & Spa</h1>
+          <p class="text-white/80 text-sm mt-1">Rejuvenate your body and mind</p>
+        </div>
+      </div>
+
+      <div class="p-4 md:p-8">
+        <!-- Tab filters -->
+        <div id="tab-bar" class="flex gap-2 mb-8 overflow-x-auto pb-2">
+          <button onclick="setTab('treatments')" data-tab="treatments" class="tab-btn flex items-center gap-1.5 shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold transition bg-[#003c52] text-white">
+            <span class="material-symbols-outlined text-base">spa</span>Treatments
+          </button>
+          <button onclick="setTab('classes')" data-tab="classes" class="tab-btn flex items-center gap-1.5 shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+            <span class="material-symbols-outlined text-base">self_improvement</span>Classes
+          </button>
+          <button onclick="setTab('packages')" data-tab="packages" class="tab-btn flex items-center gap-1.5 shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+            <span class="material-symbols-outlined text-base">card_giftcard</span>Packages
+          </button>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-state">
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            ${[1,2,3].map(()=>`<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-pulse"><div class="h-40 bg-slate-200 dark:bg-slate-700"></div><div class="p-5"><div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-3"></div><div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full"></div></div></div>`).join('')}
+          </div>
+        </div>
+
+        <!-- Sections -->
+        <div id="section-treatments" class="hidden"></div>
+        <div id="section-classes" class="hidden"></div>
+        <div id="section-packages" class="hidden"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'wellness');
+    App.bottomNav.render('wellness');
+
+    let activeTab = 'treatments';
+
+    function setTab(tab) {
+      activeTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.dataset.tab === tab) {
+          btn.className = 'tab-btn flex items-center gap-1.5 shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold transition bg-[#003c52] text-white';
+        } else {
+          btn.className = 'tab-btn flex items-center gap-1.5 shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700';
+        }
+      });
+      ['treatments','classes','packages'].forEach(t => {
+        document.getElementById(`section-${t}`).classList.toggle('hidden', t !== tab);
+      });
+    }
+
+    async function init() {
+      const reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      const propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+      if (!propData) return;
+
+      const currency = propData.property.currencySymbol || 'Rs.';
+      const wellness = propData.wellness;
+
+      // Treatments
+      document.getElementById('section-treatments').innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          ${wellness.treatments.map(t => `
+            <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+              <div class="relative h-44 overflow-hidden">
+                <img src="${t.image || 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600'}" alt="${t.name}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+              </div>
+              <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 dark:text-white mb-1">${t.name}</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-3 flex-1">${t.description}</p>
+                <div class="flex items-center gap-3 mb-4 text-sm">
+                  <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="material-symbols-outlined text-sm">schedule</span>${t.duration} min</span>
+                  <span class="font-bold text-[#003c52] dark:text-teal-400">${App.helpers.formatCurrency(t.price, currency)}</span>
+                </div>
+                <a href="wellness-booking.html?type=treatment&id=${t.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">spa</span>
+                  Book Now
+                </a>
+              </div>
+            </div>`).join('')}
+        </div>`;
+
+      // Classes
+      document.getElementById('section-classes').innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          ${wellness.classes.map(c => `
+            <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+              <div class="relative h-44 overflow-hidden">
+                <img src="${c.image || 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600'}" alt="${c.name}" class="w-full h-full object-cover">
+              </div>
+              <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 dark:text-white mb-1">${c.name}</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-3 flex-1">${c.description}</p>
+                <div class="flex flex-wrap gap-1.5 mb-3">
+                  ${c.schedule.map(s=>`<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#003c52]/10 dark:bg-teal-900/30 text-[#003c52] dark:text-teal-400">${s}</span>`).join('')}
+                </div>
+                <div class="flex items-center gap-3 mb-4 text-sm">
+                  <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="material-symbols-outlined text-sm">schedule</span>${c.duration} min</span>
+                  <span class="text-slate-500 dark:text-slate-400"><span class="material-symbols-outlined text-sm">group</span> Max ${c.maxParticipants}</span>
+                  <span class="font-bold text-[#003c52] dark:text-teal-400">${App.helpers.formatCurrency(c.price, currency)}</span>
+                </div>
+                <a href="wellness-booking.html?type=class&id=${c.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">event</span>
+                  Book Class
+                </a>
+              </div>
+            </div>`).join('')}
+        </div>`;
+
+      // Packages
+      document.getElementById('section-packages').innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          ${wellness.packages.map(p => `
+            <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+              <div class="relative h-44 overflow-hidden">
+                <img src="${p.image || 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600'}" alt="${p.name}" class="w-full h-full object-cover">
+                <div class="absolute top-3 right-3">
+                  <span class="px-3 py-1.5 rounded-full text-xs font-bold bg-green-500 text-white">Save ${App.helpers.formatCurrency(p.savings, currency)}</span>
+                </div>
+              </div>
+              <div class="p-5 flex flex-col flex-1">
+                <div class="flex items-start justify-between gap-3 mb-2">
+                  <h3 class="font-bold text-slate-900 dark:text-white text-lg leading-tight">${p.name}</h3>
+                  <span class="font-bold text-[#003c52] dark:text-teal-400 text-lg whitespace-nowrap">${App.helpers.formatCurrency(p.price, currency)}</span>
+                </div>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4 flex-1">${p.description}</p>
+                <div class="mb-4">
+                  <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Includes</p>
+                  <ul class="space-y-1.5">
+                    ${p.includes.map(inc=>`<li class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300"><span class="material-symbols-outlined text-sm text-green-500">check_circle</span>${inc}</li>`).join('')}
+                  </ul>
+                </div>
+                <a href="wellness-booking.html?type=package&id=${p.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">card_giftcard</span>
+                  Book Package
+                </a>
+              </div>
+            </div>`).join('')}
+        </div>`;
+
+      setTab('treatments');
+    }
+
+    init();
+  </script>
+</body>
+</html>

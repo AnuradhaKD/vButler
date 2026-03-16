@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Transport | Browns Hotels & Resorts</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl">
+
+      <!-- Page Header -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Getting Around</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-3xl">directions_car</span>
+            Transport
+          </h1>
+        </div>
+        <a href="my-requests.html" class="flex items-center gap-2 border border-[#003c52] text-[#003c52] dark:border-teal-400 dark:text-teal-400 rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#003c52]/5 transition">
+          <span class="material-symbols-outlined text-base">assignment</span>
+          My Requests
+        </a>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loading-state" class="space-y-4">
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 animate-pulse">
+          <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-3"></div>
+          <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-2/3 mb-4"></div>
+          <div class="flex gap-3">
+            <div class="h-24 bg-slate-200 dark:bg-slate-700 rounded-xl flex-1"></div>
+            <div class="h-24 bg-slate-200 dark:bg-slate-700 rounded-xl flex-1"></div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 animate-pulse">
+          <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-3"></div>
+          <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-2/3 mb-4"></div>
+          <div class="h-10 bg-slate-200 dark:bg-slate-700 rounded-xl w-36"></div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden space-y-8">
+
+        <!-- ─── Airport Transfers ─────────────────────────────────────────── -->
+        <section>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">flight</span>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Airport Transfers</h2>
+          </div>
+          <div id="airport-transfers-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </section>
+
+        <!-- ─── Hotel Shuttle ─────────────────────────────────────────────── -->
+        <section>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">airport_shuttle</span>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Hotel Shuttle</h2>
+          </div>
+          <div id="shuttle-section"></div>
+        </section>
+
+        <!-- ─── Tuk-Tuk ───────────────────────────────────────────────────── -->
+        <section>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">electric_rickshaw</span>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Local Transport</h2>
+          </div>
+          <div id="tuktuk-section"></div>
+        </section>
+
+        <!-- ─── Recent Transport Bookings ────────────────────────────────── -->
+        <section>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">history</span>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Recent Bookings</h2>
+          </div>
+          <div id="recent-bookings"></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Shuttle Inline Form (hidden by default) -->
+  <div id="shuttle-form-overlay" class="hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-end md:items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md p-6 border border-slate-200 dark:border-slate-700">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">airport_shuttle</span>
+          Reserve Shuttle Seat
+        </h3>
+        <button onclick="closeShuttleForm()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date</label>
+          <input type="date" id="shuttle-date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Departure Time</label>
+          <select id="shuttle-time" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Direction</label>
+          <select id="shuttle-direction" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            <option value="to-town">Hotel → Ella Town</option>
+            <option value="from-town">Ella Town → Hotel</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Passengers</label>
+          <input type="number" id="shuttle-pax" min="1" max="8" value="1" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+        </div>
+      </div>
+      <button onclick="submitShuttleForm()" class="mt-6 w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition shadow-sm flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-base">check_circle</span>
+        Reserve Seat
+      </button>
+    </div>
+  </div>
+
+  <!-- Tuk-Tuk Inline Form (hidden by default) -->
+  <div id="tuktuk-form-overlay" class="hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-end md:items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md p-6 border border-slate-200 dark:border-slate-700">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">electric_rickshaw</span>
+          Request Tuk-Tuk
+        </h3>
+        <button onclick="closeTuktukForm()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Destination</label>
+          <input type="text" id="tuktuk-destination" placeholder="e.g. Nine Arches Bridge" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] placeholder:text-slate-400">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date</label>
+            <input type="date" id="tuktuk-date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Time</label>
+            <input type="time" id="tuktuk-time" value="10:00" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Passengers</label>
+          <input type="number" id="tuktuk-pax" min="1" max="3" value="1" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm">info</span>
+        Rs. 500 per trip · On-demand · 1–3 passengers
+      </p>
+      <button onclick="submitTuktukForm()" class="mt-4 w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition shadow-sm flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-base">check_circle</span>
+        Request Tuk-Tuk
+      </button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'transport');
+    App.bottomNav.render('services');
+
+    let propData = null;
+    let reservation = null;
+    let shuttleOption = null;
+    let tuktukOption = null;
+
+    async function init() {
+      reservation = App.reservations.getActive();
+      const propertyId = reservation?.propertyId || 'newburge-ella';
+      propData = await App.data.loadProperty(propertyId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('content-state').classList.remove('hidden');
+
+      if (!propData) {
+        document.getElementById('content-state').innerHTML = `
+          <div class="text-center py-20">
+            <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600">error</span>
+            <p class="mt-4 text-slate-500 dark:text-slate-400">Failed to load transport options. Please refresh.</p>
+          </div>`;
+        return;
+      }
+
+      const options = propData.transport?.options || [];
+      const airportOptions = options.filter(o => o.type === 'airport');
+      shuttleOption = options.find(o => o.type === 'shuttle');
+      tuktukOption = options.find(o => o.type === 'local');
+
+      renderAirportTransfers(airportOptions);
+      renderShuttle(shuttleOption);
+      renderTuktuk(tuktukOption);
+      renderRecentBookings();
+
+      // Set default dates
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('shuttle-date').value = today;
+      document.getElementById('shuttle-date').min = today;
+      document.getElementById('tuktuk-date').value = today;
+      document.getElementById('tuktuk-date').min = today;
+    }
+
+    function renderAirportTransfers(options) {
+      const grid = document.getElementById('airport-transfers-grid');
+      if (!options.length) {
+        grid.innerHTML = `<p class="text-slate-500 dark:text-slate-400 col-span-2">No airport transfer options available.</p>`;
+        return;
+      }
+      const currency = propData.property?.currencySymbol || 'Rs.';
+      grid.innerHTML = options.map(opt => {
+        const icon = opt.direction === 'arrival' ? 'flight_land' : 'flight_takeoff';
+        const iconColor = opt.direction === 'arrival' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400';
+        const badgeBg = opt.direction === 'arrival' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400';
+        const fromPrice = Math.min(...opt.vehicles.map(v => v.price));
+        return `
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col gap-4 hover:shadow-md transition-shadow">
+            <div class="flex items-start gap-3">
+              <div class="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-2xl ${iconColor}">${icon}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap mb-1">
+                  <h3 class="font-bold text-slate-900 dark:text-white text-base">${opt.name}</h3>
+                  <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${badgeBg} capitalize">${opt.direction}</span>
+                </div>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">${opt.description}</p>
+              </div>
+            </div>
+            <!-- Vehicle options preview -->
+            <div class="space-y-2">
+              ${opt.vehicles.map(v => `
+                <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 text-sm">
+                  <span class="text-slate-700 dark:text-slate-300 font-medium flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base text-slate-400">${vehicleIcon(v.type)}</span>
+                    ${v.label}
+                  </span>
+                  <span class="font-bold text-[#003c52] dark:text-teal-400">${currency} ${v.price.toLocaleString()}</span>
+                </div>`).join('')}
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500">From ${currency} ${fromPrice.toLocaleString()} · Chauffeur-driven</p>
+            <a href="transport-booking.html?id=${opt.id}" class="mt-auto flex items-center justify-center gap-2 bg-[#003c52] text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
+              <span class="material-symbols-outlined text-base">add_circle</span>
+              Book Transfer
+            </a>
+          </div>`;
+      }).join('');
+    }
+
+    function vehicleIcon(type) {
+      const icons = { sedan: 'directions_car', suv: 'directions_car', van: 'airport_shuttle', shuttle: 'airport_shuttle', tuktuk: 'electric_rickshaw' };
+      return icons[type] || 'directions_car';
+    }
+
+    function renderShuttle(opt) {
+      const el = document.getElementById('shuttle-section');
+      if (!opt) {
+        el.innerHTML = `<p class="text-slate-500 dark:text-slate-400">Shuttle service information not available.</p>`;
+        return;
+      }
+      const scheduleHtml = opt.schedule ? opt.schedule.map(t => `
+        <span class="inline-flex items-center gap-1 bg-[#003c52]/10 dark:bg-teal-900/30 text-[#003c52] dark:text-teal-400 text-sm font-semibold px-3 py-1.5 rounded-full">
+          <span class="material-symbols-outlined text-sm">schedule</span>${t}
+        </span>`).join('') : '';
+
+      el.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <div class="flex items-start gap-3 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-2xl text-green-600 dark:text-green-400">airport_shuttle</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">${opt.name}</h3>
+              <p class="text-sm text-slate-500 dark:text-slate-400">${opt.description}</p>
+            </div>
+            <span class="ml-auto shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400">Complimentary</span>
+          </div>
+          ${scheduleHtml ? `
+          <div class="mb-4">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Daily Departures</p>
+            <div class="flex flex-wrap gap-2">${scheduleHtml}</div>
+          </div>` : ''}
+          <div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 flex items-start gap-2 mb-4">
+            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-base shrink-0 mt-0.5">info</span>
+            <p class="text-sm text-blue-700 dark:text-blue-300">Complimentary hotel shuttle to/from Ella Town. Runs every 2 hours. Seats are limited — reserve in advance.</p>
+          </div>
+          <button onclick="openShuttleForm()" class="flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
+            <span class="material-symbols-outlined text-base">event_seat</span>
+            Reserve Seat
+          </button>
+        </div>`;
+    }
+
+    function renderTuktuk(opt) {
+      const el = document.getElementById('tuktuk-section');
+      if (!opt) {
+        el.innerHTML = `<p class="text-slate-500 dark:text-slate-400">Tuk-tuk service information not available.</p>`;
+        return;
+      }
+      const currency = propData.property?.currencySymbol || 'Rs.';
+      const vehicle = opt.vehicles?.[0];
+
+      el.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <div class="flex items-start gap-3 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-2xl text-amber-600 dark:text-amber-400">electric_rickshaw</span>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">${opt.name}</h3>
+              <p class="text-sm text-slate-500 dark:text-slate-400">${opt.description}</p>
+            </div>
+            ${vehicle ? `<span class="ml-auto shrink-0 text-sm font-bold text-[#003c52] dark:text-teal-400">${currency} ${vehicle.price.toLocaleString()} / trip</span>` : ''}
+          </div>
+          <div class="flex flex-wrap gap-3 mb-4 text-sm text-slate-500 dark:text-slate-400">
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">bolt</span>On-demand</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">people</span>Up to 3 passengers</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">schedule</span>Available 06:00 – 22:00</span>
+          </div>
+          <button onclick="openTuktukForm()" class="flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
+            <span class="material-symbols-outlined text-base">electric_rickshaw</span>
+            Request Tuk-Tuk
+          </button>
+        </div>`;
+    }
+
+    function renderRecentBookings() {
+      const el = document.getElementById('recent-bookings');
+      if (!reservation) {
+        el.innerHTML = `<p class="text-sm text-slate-500 dark:text-slate-400">No active reservation found.</p>`;
+        return;
+      }
+      const all = App.requests.getAll(reservation.id).filter(r => r.category === 'Transport');
+      if (!all.length) {
+        el.innerHTML = `
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 text-center">
+            <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">directions_car</span>
+            <p class="mt-3 text-slate-500 dark:text-slate-400 text-sm">No transport bookings yet.</p>
+          </div>`;
+        return;
+      }
+      el.innerHTML = `<div class="space-y-3">
+        ${all.slice(0, 5).map(req => {
+          const badge = App.helpers.statusBadge ? App.helpers.statusBadge(req.status) : `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 capitalize">${req.status}</span>`;
+          return `
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-[#003c52]/10 dark:bg-teal-900/30 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-xl text-[#003c52] dark:text-teal-400">directions_car</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-slate-900 dark:text-white text-sm truncate">${req.serviceName}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">${App.helpers.formatDateTime ? App.helpers.formatDateTime(req.createdAt) : req.createdAt}</p>
+            </div>
+            ${badge}
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+
+    // ─── Shuttle form ───────────────────────────────────────────────────────────
+    function openShuttleForm() {
+      if (shuttleOption?.schedule) {
+        const sel = document.getElementById('shuttle-time');
+        sel.innerHTML = shuttleOption.schedule.map(t => `<option value="${t}">${t}</option>`).join('');
+      }
+      document.getElementById('shuttle-form-overlay').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeShuttleForm() {
+      document.getElementById('shuttle-form-overlay').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function submitShuttleForm() {
+      const date = document.getElementById('shuttle-date').value;
+      const time = document.getElementById('shuttle-time').value;
+      const direction = document.getElementById('shuttle-direction').value;
+      const pax = document.getElementById('shuttle-pax').value;
+
+      if (!date || !time) {
+        App.toast.show('Please fill in all required fields.', 'error');
+        return;
+      }
+      if (!reservation) {
+        App.toast.show('No active reservation found.', 'error');
+        return;
+      }
+
+      App.requests.add({
+        reservationId: reservation.id,
+        serviceName: 'Hotel Shuttle — ' + (direction === 'to-town' ? 'Hotel → Town' : 'Town → Hotel'),
+        serviceId: 'hotel-shuttle',
+        category: 'Transport',
+        details: { date, time, direction, passengerCount: parseInt(pax) },
+        notes: ''
+      });
+
+      closeShuttleForm();
+      App.toast.show(`Shuttle seat reserved for ${time} on ${App.helpers.formatDate(date)}.`, 'success');
+      renderRecentBookings();
+    }
+
+    // ─── Tuk-Tuk form ──────────────────────────────────────────────────────────
+    function openTuktukForm() {
+      document.getElementById('tuktuk-form-overlay').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeTuktukForm() {
+      document.getElementById('tuktuk-form-overlay').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function submitTuktukForm() {
+      const destination = document.getElementById('tuktuk-destination').value.trim();
+      const date = document.getElementById('tuktuk-date').value;
+      const time = document.getElementById('tuktuk-time').value;
+      const pax = document.getElementById('tuktuk-pax').value;
+
+      if (!destination || !date || !time) {
+        App.toast.show('Please fill in destination, date and time.', 'error');
+        return;
+      }
+      if (!reservation) {
+        App.toast.show('No active reservation found.', 'error');
+        return;
+      }
+
+      App.requests.add({
+        reservationId: reservation.id,
+        serviceName: 'Tuk-Tuk — ' + destination,
+        serviceId: 'local-tuktuk',
+        category: 'Transport',
+        details: { destination, date, time, passengerCount: parseInt(pax) },
+        notes: ''
+      });
+
+      closeTuktukForm();
+      App.toast.show(`Tuk-tuk to ${destination} requested for ${time}.`, 'success');
+      document.getElementById('tuktuk-destination').value = '';
+      renderRecentBookings();
+    }
+
+    // Close overlays on backdrop click
+    document.getElementById('shuttle-form-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeShuttleForm();
+    });
+    document.getElementById('tuktuk-form-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeTuktukForm();
+    });
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "guests": [
+    {
+      "id": "guest-001",
+      "email": "demo@guest.com",
+      "passwordHash": "1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "passwordPlain": "Password1!",
+      "fullName": "Anuradha Bandara",
+      "firstName": "Anuradha",
+      "lastName": "Bandara",
+      "phone": "+94771234567",
+      "nationality": "Sri Lankan",
+      "passportNumber": "N12345678",
+      "dateOfBirth": "1990-06-15",
+      "linkedReservationIds": ["RES-20260401-001", "RES-20260501-002"]
+    },
+    {
+      "id": "guest-002",
+      "email": "jane.doe@example.com",
+      "passwordHash": "1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "passwordPlain": "Password1!",
+      "fullName": "Jane Doe",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "phone": "+447700900123",
+      "nationality": "British",
+      "passportNumber": "GB8765432",
+      "dateOfBirth": "1985-03-22",
+      "linkedReservationIds": ["RES-20260601-003"]
+    }
+  ]
+}

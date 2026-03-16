@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Experience Detail | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 pb-24 md:pb-8 max-w-3xl">
+
+      <!-- Back nav -->
+      <div class="px-4 md:px-8 pt-6 pb-4">
+        <a href="experiences.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-[#003c52] dark:hover:text-teal-400 transition">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Back to Experiences
+        </a>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-state" class="px-4 md:px-8">
+        <div class="h-64 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse mb-6"></div>
+        <div class="h-8 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-4 animate-pulse"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full mb-2 animate-pulse"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-2/3 animate-pulse"></div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+        <!-- Hero Image -->
+        <div class="relative h-72 md:h-80 overflow-hidden">
+          <img id="hero-img" src="" alt="" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <span id="cat-badge" class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-sm mb-2"></span>
+            <h1 id="exp-name" class="text-3xl font-bold text-white font-serif leading-tight"></h1>
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div class="px-4 md:px-8 py-6 space-y-6">
+
+          <!-- Quick Info Bar -->
+          <div class="flex flex-wrap gap-4 py-4 border-y border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-xl">schedule</span>
+              <div><div class="text-xs text-slate-400">Duration</div><div class="font-semibold text-slate-800 dark:text-white" id="exp-duration"></div></div>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-xl">alarm</span>
+              <div><div class="text-xs text-slate-400">Start Time</div><div class="font-semibold text-slate-800 dark:text-white" id="exp-start"></div></div>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-xl">group</span>
+              <div><div class="text-xs text-slate-400">Guests</div><div class="font-semibold text-slate-800 dark:text-white" id="exp-guests"></div></div>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-xl">payments</span>
+              <div><div class="text-xs text-slate-400">Price</div><div class="font-bold text-[#003c52] dark:text-teal-400 text-base" id="exp-price"></div></div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white mb-2">About this Experience</h2>
+            <p id="exp-desc" class="text-slate-600 dark:text-slate-300 leading-relaxed text-sm"></p>
+          </div>
+
+          <!-- Inclusions -->
+          <div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white mb-3">What's Included</h2>
+            <ul id="exp-inclusions" class="space-y-2"></ul>
+          </div>
+
+          <!-- Available Days -->
+          <div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white mb-3">Available Days</h2>
+            <div id="exp-days" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Add-Ons -->
+          <div id="addons-section" class="hidden">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white mb-3">Available Add-Ons</h2>
+            <div id="exp-addons" class="space-y-2"></div>
+          </div>
+
+          <!-- Booking Cutoff Notice -->
+          <div id="cutoff-notice" class="flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+            <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 mt-0.5">info</span>
+            <p id="cutoff-text" class="text-sm text-amber-800 dark:text-amber-300"></p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-3 pt-2">
+            <button id="wishlist-btn" onclick="toggleWishlist()" class="flex items-center gap-2 border border-[#003c52] dark:border-teal-400 text-[#003c52] dark:text-teal-400 rounded-xl px-5 py-3 font-semibold hover:bg-[#003c52]/5 transition">
+              <span id="wishlist-icon" class="material-symbols-outlined text-xl">favorite_border</span>
+              Save
+            </button>
+            <a id="book-btn" href="#" class="flex-1 bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-center text-sm">
+              Book This Experience
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Not Found -->
+      <div id="notfound-state" class="hidden px-4 md:px-8 py-16 text-center">
+        <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-3 block">search_off</span>
+        <p class="text-slate-600 dark:text-slate-400 font-semibold">Experience not found</p>
+        <a href="experiences.html" class="mt-4 inline-block text-[#003c52] dark:text-teal-400 font-semibold hover:underline">Browse all experiences</a>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'experiences');
+    App.bottomNav.render('experiences');
+
+    const params = new URLSearchParams(window.location.search);
+    const expId = params.get('id');
+    let currentExp = null;
+
+    const allDays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+    function toggleWishlist() {
+      if (!currentExp) return;
+      const added = App.wishlist.toggle({ id: currentExp.id, type: 'experience', name: currentExp.name, category: currentExp.category, price: currentExp.price, image: currentExp.images?.[0] });
+      const icon = document.getElementById('wishlist-icon');
+      if (added) {
+        icon.textContent = 'favorite';
+        icon.style.fontVariationSettings = "'FILL' 1";
+        App.toast.show('Added to Saved Experiences', 'success');
+      } else {
+        icon.textContent = 'favorite_border';
+        icon.style.fontVariationSettings = "'FILL' 0";
+        App.toast.show('Removed from Saved', 'info');
+      }
+    }
+
+    (async () => {
+      if (!expId) { document.getElementById('loading-state').classList.add('hidden'); document.getElementById('notfound-state').classList.remove('hidden'); return; }
+
+      const activeRes = App.reservations.getActive();
+      const propData = await App.data.loadProperty(activeRes?.propertyId || 'newburge-ella');
+      const exp = propData?.experiences?.find(e => e.id === expId);
+
+      document.getElementById('loading-state').classList.add('hidden');
+
+      if (!exp) { document.getElementById('notfound-state').classList.remove('hidden'); return; }
+      currentExp = exp;
+
+      document.getElementById('content-state').classList.remove('hidden');
+      document.title = `Destinity vButler — ${exp.name} | Browns Hotels & Resorts`;
+
+      // Hero
+      document.getElementById('hero-img').src = exp.images?.[0] || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200';
+      document.getElementById('hero-img').alt = exp.name;
+      document.getElementById('exp-name').textContent = exp.name;
+      document.getElementById('cat-badge').textContent = exp.category;
+
+      // Quick info
+      document.getElementById('exp-duration').textContent = exp.duration;
+      document.getElementById('exp-start').textContent = exp.startTime;
+      document.getElementById('exp-guests').textContent = exp.minGuests === exp.maxGuests ? `${exp.minGuests} person` : `${exp.minGuests}–${exp.maxGuests} persons`;
+      document.getElementById('exp-price').textContent = `Rs. ${exp.price.toLocaleString()} ${exp.priceNote}`;
+
+      // Description
+      document.getElementById('exp-desc').textContent = exp.description;
+
+      // Inclusions
+      document.getElementById('exp-inclusions').innerHTML = exp.inclusions.map(inc => `
+        <li class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+          <span class="material-symbols-outlined text-green-500 text-base">check_circle</span>
+          ${inc}
+        </li>`).join('');
+
+      // Days
+      document.getElementById('exp-days').innerHTML = allDays.map(d => {
+        const avail = exp.availableDays.includes(d);
+        return `<span class="px-3 py-1.5 rounded-lg text-xs font-semibold ${avail ? 'bg-[#003c52] text-white dark:bg-teal-700' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 line-through'}">${d}</span>`;
+      }).join('');
+
+      // Add-ons
+      if (exp.addOns && exp.addOns.length > 0) {
+        document.getElementById('addons-section').classList.remove('hidden');
+        document.getElementById('exp-addons').innerHTML = exp.addOns.map(a => `
+          <div class="flex items-center justify-between bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3">
+            <span class="text-sm font-medium text-slate-800 dark:text-white">${a.name}</span>
+            <span class="text-sm font-semibold text-[#003c52] dark:text-teal-400">+ Rs. ${a.price.toLocaleString()}</span>
+          </div>`).join('');
+      }
+
+      // Cutoff
+      document.getElementById('cutoff-text').textContent = `Booking must be made at least ${exp.bookingCutoffHours} hours before the experience starts at ${exp.startTime}.`;
+
+      // Wishlist
+      const inWishlist = App.wishlist.has(exp.id, 'experience');
+      const icon = document.getElementById('wishlist-icon');
+      if (inWishlist) { icon.textContent = 'favorite'; icon.style.fontVariationSettings = "'FILL' 1"; }
+
+      // Book button
+      document.getElementById('book-btn').href = `experience-booking.html?id=${exp.id}`;
+    })();
+  </script>
+</body>
+</html>

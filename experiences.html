@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Experiences | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl">
+
+      <!-- Page Header -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Browns Hotel Newburge Ella</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white font-serif">Experiences</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="#" id="wishlist-btn" class="relative flex items-center gap-2 border border-[#003c52] text-[#003c52] dark:border-teal-400 dark:text-teal-400 rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#003c52]/5 transition">
+            <span class="material-symbols-outlined text-base">favorite</span>
+            Saved
+            <span id="wishlist-count" class="hidden bg-[#003c52] dark:bg-teal-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading-state">
+        <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
+          <div class="h-9 w-16 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse shrink-0"></div>
+          <div class="h-9 w-28 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse shrink-0"></div>
+          <div class="h-9 w-24 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse shrink-0"></div>
+          <div class="h-9 w-24 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse shrink-0"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          ${[1,2,3].map(()=>`<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden animate-pulse"><div class="h-48 bg-slate-200 dark:bg-slate-700"></div><div class="p-4"><div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-3"></div><div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full mb-2"></div><div class="h-9 bg-slate-200 dark:bg-slate-700 rounded-lg w-full mt-4"></div></div></div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+        <!-- Filter chips -->
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+          <button data-filter="all" onclick="setFilter('all')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-[#003c52] text-white">All</button>
+          <button data-filter="Adventure" onclick="setFilter('Adventure')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">Adventure</button>
+          <button data-filter="Culinary" onclick="setFilter('Culinary')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">Culinary</button>
+          <button data-filter="Culture" onclick="setFilter('Culture')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">Culture</button>
+          <button data-filter="Unique" onclick="setFilter('Unique')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500">Unique</button>
+        </div>
+
+        <!-- Featured Row -->
+        <div id="featured-section">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-amber-500 text-lg">star</span>
+            <h2 class="text-sm font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">Featured Experiences</h2>
+          </div>
+          <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8"></div>
+        </div>
+
+        <!-- All Experiences -->
+        <div id="all-section">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 mb-3">All Experiences</h2>
+          <div id="experiences-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="hidden text-center py-16">
+          <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-3 block">hiking</span>
+          <p class="text-slate-500 dark:text-slate-400 font-medium">No experiences in this category</p>
+          <p class="text-slate-400 dark:text-slate-500 text-sm mt-1">Try selecting a different filter above</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'experiences');
+    App.bottomNav.render('experiences');
+
+    let allExperiences = [];
+    let currentFilter = 'all';
+
+    const categoryColors = {
+      Adventure: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+      Culinary:  'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+      Culture:   'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+      Unique:    'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
+      default:   'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300'
+    };
+
+    function getCatColor(cat) {
+      return categoryColors[cat] || categoryColors.default;
+    }
+
+    function updateWishlistBadge() {
+      const items = App.wishlist.get().filter(w => w.type === 'experience');
+      const badge = document.getElementById('wishlist-count');
+      if (items.length > 0) {
+        badge.textContent = items.length;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+      } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+      }
+    }
+
+    function renderCard(exp, featured = false) {
+      const inWishlist = App.wishlist.has(exp.id, 'experience');
+      const imgUrl = (exp.images && exp.images[0]) ? exp.images[0] : 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800';
+      return `
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden group hover:shadow-md transition-shadow${featured ? ' md:col-span-1' : ''}">
+          <div class="relative overflow-hidden" style="height:${featured ? '220px' : '180px'}">
+            <img src="${imgUrl}" alt="${exp.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+            ${featured ? '<div class="absolute top-3 left-3 flex items-center gap-1 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full"><span class="material-symbols-outlined text-xs" style="font-size:12px">star</span> Featured</div>' : ''}
+            <button onclick="toggleWishlist('${exp.id}', this)" data-id="${exp.id}" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition wishlist-btn">
+              <span class="material-symbols-outlined text-lg" style="${inWishlist ? 'font-variation-settings:\'FILL\' 1' : ''}">${inWishlist ? 'favorite' : 'favorite_border'}</span>
+            </button>
+            <div class="absolute bottom-3 left-3">
+              <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold ${getCatColor(exp.category)}">${exp.category}</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1 leading-tight">${exp.name}</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-3 line-clamp-2">${exp.description}</p>
+            <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mb-4">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span>${exp.duration}</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">alarm</span>${exp.startTime}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-lg font-bold text-[#003c52] dark:text-teal-400">Rs. ${exp.price.toLocaleString()}</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400 ml-1">${exp.priceNote}</span>
+              </div>
+              <a href="experience-detail.html?id=${exp.id}" class="bg-[#003c52] text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-[#004f6e] transition">View Details</a>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-chip').forEach(btn => {
+        const isActive = btn.dataset.filter === filter;
+        btn.className = `filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition ${isActive
+          ? 'bg-[#003c52] text-white'
+          : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:border-[#003c52] dark:hover:border-teal-500'}`;
+      });
+      renderExperiences();
+    }
+
+    function renderExperiences() {
+      const filtered = currentFilter === 'all'
+        ? allExperiences
+        : allExperiences.filter(e => e.category === currentFilter);
+
+      const featured = filtered.filter(e => e.isFeatured);
+      const rest = filtered.filter(e => !e.isFeatured);
+
+      const featSection = document.getElementById('featured-section');
+      const allSection = document.getElementById('all-section');
+      const emptyState = document.getElementById('empty-state');
+
+      if (filtered.length === 0) {
+        featSection.classList.add('hidden');
+        allSection.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      if (featured.length > 0) {
+        featSection.classList.remove('hidden');
+        document.getElementById('featured-grid').innerHTML = featured.map(e => renderCard(e, true)).join('');
+      } else {
+        featSection.classList.add('hidden');
+      }
+
+      if (rest.length > 0) {
+        allSection.classList.remove('hidden');
+        document.getElementById('experiences-grid').innerHTML = rest.map(e => renderCard(e, false)).join('');
+      } else {
+        allSection.classList.add('hidden');
+      }
+    }
+
+    function toggleWishlist(id, btn) {
+      const exp = allExperiences.find(e => e.id === id);
+      if (!exp) return;
+      const added = App.wishlist.toggle({ id: exp.id, type: 'experience', name: exp.name, category: exp.category, price: exp.price, image: exp.images?.[0] });
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (added) {
+        icon.textContent = 'favorite';
+        icon.style.fontVariationSettings = "'FILL' 1";
+        App.toast.show('Added to Saved Experiences', 'success');
+      } else {
+        icon.textContent = 'favorite_border';
+        icon.style.fontVariationSettings = "'FILL' 0";
+        App.toast.show('Removed from Saved', 'info');
+      }
+      updateWishlistBadge();
+      // refresh all matching buttons
+      document.querySelectorAll(`[data-id="${id}"]`).forEach(b => {
+        if (b !== btn) {
+          const i = b.querySelector('.material-symbols-outlined');
+          if (i) { i.textContent = added ? 'favorite' : 'favorite_border'; i.style.fontVariationSettings = added ? "'FILL' 1" : "'FILL' 0"; }
+        }
+      });
+    }
+
+    (async () => {
+      const activeRes = App.reservations.getActive();
+      const propData = await App.data.loadProperty(activeRes?.propertyId || 'newburge-ella');
+      allExperiences = propData?.experiences || [];
+
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('content-state').classList.remove('hidden');
+      renderExperiences();
+      updateWishlistBadge();
+    })();
+  </script>
+</body>
+</html>

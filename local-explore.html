@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Local Explore | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl">
+
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Around Ella</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white font-serif">Local Exploration</h1>
+        </div>
+        <a href="transport.html" class="flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
+          <span class="material-symbols-outlined text-base">directions_car</span>
+          Arrange Transport
+        </a>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-state" class="space-y-4">
+        <div class="flex gap-3 overflow-x-auto pb-2">
+          <div class="h-9 w-16 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse shrink-0"></div>
+          <div class="h-9 w-24 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse shrink-0"></div>
+          <div class="h-9 w-24 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse shrink-0"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          ${[1,2,3,4].map(() => `<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden animate-pulse"><div class="h-44 bg-slate-200 dark:bg-slate-700"></div><div class="p-4"><div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-2"></div><div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full mb-2"></div><div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-2/3"></div></div></div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content-state" class="hidden">
+
+        <!-- Filter chips -->
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+          <button data-filter="all" onclick="setFilter('all')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-[#003c52] text-white">All</button>
+          <button data-filter="Culture" onclick="setFilter('Culture')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">Culture</button>
+          <button data-filter="Adventure" onclick="setFilter('Adventure')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">Adventure</button>
+          <button data-filter="Nature" onclick="setFilter('Nature')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">Nature</button>
+          <button data-filter="Shopping" onclick="setFilter('Shopping')" class="filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">Shopping</button>
+        </div>
+
+        <div id="places-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8"></div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="hidden text-center py-16">
+          <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-3 block">explore</span>
+          <p class="text-slate-500 dark:text-slate-400 font-medium">No places in this category</p>
+        </div>
+
+        <!-- Saved Places -->
+        <div id="saved-section" class="hidden">
+          <div class="flex items-center gap-2 mb-3 mt-4">
+            <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-lg">bookmark</span>
+            <h2 class="text-sm font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">Saved Places</h2>
+          </div>
+          <div id="saved-places" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- Transport CTA -->
+        <div class="mt-8 bg-[#003c52] rounded-xl p-6 flex items-center justify-between gap-4">
+          <div>
+            <h3 class="font-bold text-white text-lg">Ready to Explore?</h3>
+            <p class="text-teal-200 text-sm mt-1">Our concierge can arrange tuk-tuks, shuttles, or private transfers to any of these places.</p>
+          </div>
+          <a href="transport.html" class="shrink-0 bg-white text-[#003c52] rounded-xl px-5 py-3 text-sm font-bold hover:bg-slate-100 transition">Arrange Now</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'local-explore');
+    App.bottomNav.render('local-explore');
+
+    let allPlaces = [];
+    let currentFilter = 'all';
+
+    const catColors = {
+      Culture:   'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+      Adventure: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+      Nature:    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+      Shopping:  'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400',
+      default:   'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300'
+    };
+
+    function placeCard(place) {
+      const saved = App.wishlist.has(place.id, 'place');
+      const img = place.images?.[0] || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600';
+      const catColor = catColors[place.category] || catColors.default;
+      return `
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div class="relative h-44 overflow-hidden">
+            <img src="${img}" alt="${place.name}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <button onclick="toggleSave('${place.id}', this)" data-id="${place.id}" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition save-btn">
+              <span class="material-symbols-outlined text-xl" style="${saved ? "font-variation-settings:'FILL' 1" : ''}">${saved ? 'bookmark' : 'bookmark_border'}</span>
+            </button>
+            <div class="absolute bottom-3 left-3">
+              <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-sm">${place.category}</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">${place.name}</h3>
+            <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mb-2">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">near_me</span>${place.distanceKm} km</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">directions_car</span>${place.travelTime}</span>
+            </div>
+            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-3">${place.description}</p>
+            ${place.hotelNote ? `
+            <div class="bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg p-3 mb-3">
+              <div class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-sm mt-0.5">tips_and_updates</span>
+                <p class="text-xs text-[#003c52] dark:text-teal-300 font-medium">${place.hotelNote}</p>
+              </div>
+            </div>` : ''}
+            <div class="flex gap-2">
+              ${place.mapUrl ? `<a href="${place.mapUrl}" target="_blank" rel="noopener" class="flex-1 flex items-center justify-center gap-2 border border-[#003c52] dark:border-teal-400 text-[#003c52] dark:text-teal-400 rounded-lg px-3 py-2 text-sm font-semibold hover:bg-[#003c52]/5 transition">
+                <span class="material-symbols-outlined text-base">map</span>View on Map
+              </a>` : '<div class="flex-1"></div>'}
+              <a href="transport.html" class="flex items-center gap-2 bg-[#003c52]/10 dark:bg-teal-900/30 text-[#003c52] dark:text-teal-400 rounded-lg px-3 py-2 text-sm font-semibold hover:bg-[#003c52]/20 transition">
+                <span class="material-symbols-outlined text-base">directions_car</span>Transport
+              </a>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function savedPlaceCard(place) {
+      return `
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 flex items-center gap-3">
+          <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-2xl">place</span>
+          <div class="flex-1 min-w-0">
+            <div class="font-semibold text-slate-900 dark:text-white text-sm">${place.name}</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">${place.category} · ${place.distanceKm} km away</div>
+          </div>
+          ${place.mapUrl ? `<a href="${place.mapUrl}" target="_blank" class="text-[#003c52] dark:text-teal-400 hover:underline text-xs font-semibold">Map</a>` : ''}
+        </div>`;
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-chip').forEach(btn => {
+        const isActive = btn.dataset.filter === filter;
+        btn.className = `filter-chip shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition ${isActive ? 'bg-[#003c52] text-white' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:border-[#003c52]'}`;
+      });
+      renderPlaces();
+    }
+
+    function renderPlaces() {
+      const filtered = currentFilter === 'all' ? allPlaces : allPlaces.filter(p => p.category === currentFilter);
+      const grid = document.getElementById('places-grid');
+      const empty = document.getElementById('empty-state');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        grid.innerHTML = filtered.map(p => placeCard(p)).join('');
+      }
+
+      // Saved
+      const saved = App.wishlist.get().filter(w => w.type === 'place');
+      const savedSection = document.getElementById('saved-section');
+      if (saved.length > 0) {
+        savedSection.classList.remove('hidden');
+        const savedDetails = saved.map(s => allPlaces.find(p => p.id === s.id)).filter(Boolean);
+        document.getElementById('saved-places').innerHTML = savedDetails.map(p => savedPlaceCard(p)).join('');
+      } else {
+        savedSection.classList.add('hidden');
+      }
+    }
+
+    function toggleSave(id, btn) {
+      const place = allPlaces.find(p => p.id === id);
+      if (!place) return;
+      const added = App.wishlist.toggle({ id: place.id, type: 'place', name: place.name, category: place.category, distanceKm: place.distanceKm, mapUrl: place.mapUrl });
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (added) {
+        icon.textContent = 'bookmark';
+        icon.style.fontVariationSettings = "'FILL' 1";
+        App.toast.show('Place saved!', 'success');
+      } else {
+        icon.textContent = 'bookmark_border';
+        icon.style.fontVariationSettings = "'FILL' 0";
+        App.toast.show('Removed from saved', 'info');
+      }
+      renderPlaces();
+    }
+
+    (async () => {
+      const activeRes = App.reservations.getActive();
+      const propData = await App.data.loadProperty(activeRes?.propertyId || 'newburge-ella');
+      allPlaces = propData?.localPlaces || [];
+
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('content-state').classList.remove('hidden');
+      renderPlaces();
+    })();
+  </script>
+</body>
+</html>
