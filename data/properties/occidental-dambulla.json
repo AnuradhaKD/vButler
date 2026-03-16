@@ -4,9 +4,9 @@
     "name": "Occidental Paradise Dambulla",
     "fullName": "Occidental Paradise Dambulla",
     "tagline": "At the heart of Sri Lanka's cultural triangle",
-    "address": "Kandy – Jaffna Highway (A9), Dambulla, Central Province, Sri Lanka",
-    "phone": "+94 66 228 4400",
-    "email": "dambulla@brownshotels.com",
+    "address": "Kubukkadanwala, Dambulla 21100, Central Province, Sri Lanka",
+    "phone": "+94 66 228 6300",
+    "email": "reservations@brownshotels.com",
     "currency": "LKR",
     "currencySymbol": "Rs.",
     "timezone": "Asia/Colombo",
@@ -14,7 +14,7 @@
       "https://images.unsplash.com/photo-1589308454676-22b99fd7de75?w=1200",
       "https://images.unsplash.com/photo-1567596388756-f6d710c8fc07?w=1200"
     ],
-    "facilities": ["Pool", "Restaurant", "Bar", "Conference Rooms", "Free WiFi", "Concierge", "Tour Desk", "Laundry", "Gift Shop"]
+    "facilities": ["Outdoor Pool", "Kids Pool", "Spa (Thai & Ayurveda)", "3 Restaurants", "2 Bars", "Conference Rooms", "Gym", "Free WiFi", "Concierge", "Tour Desk", "Laundry", "Gift Shop", "Cycling", "Archery", "Tennis Court"]
   },
 
   "quickActions": [
@@ -192,7 +192,42 @@
     ]
   },
 
-  "wellness": null,
+  "wellness": {
+    "treatments": [
+      {
+        "id": "thai-massage",
+        "name": "Traditional Thai Massage",
+        "description": "A full-body stretching and pressure-point massage performed on a floor mat using traditional Thai techniques. Excellent for releasing tension after a day of climbing Sigiriya or trekking temple sites.",
+        "duration": 60,
+        "price": 7500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 2 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600"
+      },
+      {
+        "id": "ayurveda-oil-massage",
+        "name": "Ayurvedic Herbal Oil Massage",
+        "description": "A deeply therapeutic massage using warm medicated herbal oils selected to your body type (dosha). Rooted in the 3,000-year-old Sri Lankan Ayurvedic tradition.",
+        "duration": 60,
+        "price": 8500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 2 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600"
+      },
+      {
+        "id": "couples-package",
+        "name": "Heritage Couples Package",
+        "description": "Side-by-side Thai oil massages in our couples suite, followed by a herbal steam bath and a platter of local fruit and herbal teas.",
+        "duration": 90,
+        "price": 20000,
+        "therapistPreference": false,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1552693673-1bf958298935?w=600"
+      }
+    ],
+    "classes": [],
+    "packages": []
+  },
 
   "transport": {
     "options": [
@@ -285,36 +320,81 @@
   "localPlaces": [
     {
       "id": "dambulla-cave",
-      "name": "Dambulla Cave Temple",
+      "name": "Dambulla Cave Temple (Golden Temple)",
       "category": "Culture",
-      "description": "A UNESCO World Heritage Site — five caves with 150+ Buddha statues and 2,100 sq m of murals spanning 22 centuries.",
+      "description": "A UNESCO World Heritage Site and the largest cave temple complex in Asia, carved into a 160 m granite outcrop above the town. Five caves contain 153 statues of the Buddha and 2,100 sq m of intricate murals spanning over 22 centuries, from 1st century BC to the 18th century. The site has been a place of continuous pilgrimage for over two millennia.",
       "distanceKm": 1.2,
       "travelTime": "3 min by car or 15 min walk",
-      "hotelNote": "Visit before 09:00 or after 16:00 to avoid tour groups. Modest dress required.",
+      "openingHours": "Daily 07:00–19:00 (last tickets sold at 17:00)",
+      "entryFee": "LKR 1,500 foreigners (approximately USD 5)",
+      "hotelNote": "Visit before 09:00 or after 16:00 to avoid large tour groups. Modest dress is required — sarongs are available at the entrance. Remove shoes before entering the cave complex.",
       "mapUrl": "https://maps.google.com/?q=Dambulla+Cave+Temple",
       "images": ["https://images.unsplash.com/photo-1567596388756-f6d710c8fc07?w=600"]
     },
     {
       "id": "sigiriya",
-      "name": "Sigiriya Lion Rock",
+      "name": "Sigiriya Lion Rock Fortress",
       "category": "Culture",
-      "description": "A 5th-century rock fortress rising 200m above the jungle. UNESCO World Heritage Site and Sri Lanka's single most visited attraction.",
-      "distanceKm": 18.0,
+      "description": "Sri Lanka's most iconic sight — a 5th-century royal citadel perched atop a 200 m volcanic rock plug rising sheer from the jungle. Built by King Kashyapa (477–495 AD), the fortress features the famous Lion's Paw entrance gate, a network of gardens (the world's oldest surviving landscaped gardens), and extraordinary frescoes of heavenly maidens painted directly onto the rock face. A UNESCO World Heritage Site.",
+      "distanceKm": 21.0,
       "travelTime": "30 min by car",
-      "hotelNote": "Best climbed early morning. Our tour desk can arrange tickets and a guide. Wear comfortable shoes.",
+      "openingHours": "Daily 05:00–18:30 (tickets sold until 17:00)",
+      "entryFee": "USD 30 per adult foreigner",
+      "hotelNote": "Our tour desk arranges early-morning guided ascents (05:30 departure) to beat the heat and tour buses. The climb takes 45–90 minutes. Good footwear and water are essential.",
       "mapUrl": "https://maps.google.com/?q=Sigiriya+Sri+Lanka",
       "images": ["https://images.unsplash.com/photo-1589308454676-22b99fd7de75?w=600"]
     },
     {
+      "id": "pidurangala",
+      "name": "Pidurangala Rock",
+      "category": "Adventure",
+      "description": "The local alternative to Sigiriya, Pidurangala is a 310 m monastic rock rising immediately north of Sigiriya Rock and provides the best aerial view of the Lion Rock — beloved by photographers. The 40-minute climb passes through the 5th-century Pidurangala Rajamaha Viharaya temple with a reclining rock Buddha, then scrambles across exposed boulders to the summit.",
+      "distanceKm": 22.0,
+      "travelTime": "32 min by car",
+      "openingHours": "Ticket office open daily 05:00–18:00",
+      "entryFee": "LKR 500 per person (approx. USD 1.50)",
+      "hotelNote": "Sunrise from Pidurangala with Sigiriya glowing in the pink morning light is one of the best photographs you will ever take. Depart our hotel by 05:30. The hike requires basic bouldering — closed shoes essential.",
+      "mapUrl": "https://maps.google.com/?q=Pidurangala+Rock+Sigiriya",
+      "images": []
+    },
+    {
       "id": "minneriya",
-      "name": "Minneriya National Park",
+      "name": "Minneriya National Park — The Elephant Gathering",
       "category": "Nature",
-      "description": "Home to the famous 'Gathering' — up to 300 wild elephants congregate at Minneriya Tank between July and October.",
-      "distanceKm": 32.0,
-      "travelTime": "45 min by car",
-      "hotelNote": "Best visited late afternoon (14:30–18:00). Jeep safaris available through our tour desk.",
+      "description": "Between July and October, the annual 'Gathering' at the ancient Minneriya Tank draws up to 300–350 wild Asian elephants — the largest temporary concentration of Asian elephants on earth. As the dry season lowers the lake, herds from across the surrounding forests converge to graze on the fresh grass emerging from the receding shoreline. Outside gathering season, the 8,890-hectare park still offers excellent elephant sightings year-round.",
+      "distanceKm": 42.0,
+      "travelTime": "50 min by car",
+      "openingHours": "Daily 06:00–18:30 (two sessions: morning and afternoon)",
+      "entryFee": "Approx. USD 25–35 per person (plus jeep hire)",
+      "hotelNote": "The afternoon session (14:30 departure) is far better than morning for elephant sightings at the tank shore. Our tour desk arranges jeep safaris with naturalist guides — book the evening before.",
       "mapUrl": "https://maps.google.com/?q=Minneriya+National+Park",
       "images": ["https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=600"]
+    },
+    {
+      "id": "polonnaruwa",
+      "name": "Ancient City of Polonnaruwa",
+      "category": "Culture",
+      "description": "Sri Lanka's medieval capital (11th–13th century AD) and a UNESCO World Heritage Site — one of the best-preserved ancient cities in Asia. The 6 km² site encompasses a royal palace, perfectly proportioned moonstone thresholds, the magnificent Gal Vihara rock temple with its colossal carved Buddhas, and extensive Buddhist monasteries. The scale and condition of the ruins rival Angkor Wat.",
+      "distanceKm": 95.0,
+      "travelTime": "1 hr 30 min by car",
+      "openingHours": "Daily 08:00–17:00",
+      "entryFee": "USD 30 per adult foreigner (combined with Polonnaruwa Museum)",
+      "hotelNote": "Hire a bicycle at the entrance gate — it's the best way to explore the 6 km² site. Allow at least half a day. Combine with a sunset visit to Minneriya for a full Cultural Triangle day.",
+      "mapUrl": "https://maps.google.com/?q=Ancient+City+of+Polonnaruwa",
+      "images": []
+    },
+    {
+      "id": "nalanda-gedige",
+      "name": "Nalanda Gedige",
+      "category": "Culture",
+      "description": "A unique and almost forgotten 8th-century architectural gem at the precise geographic centre of Sri Lanka. Nalanda Gedige is a stone shrine built entirely without mortar that blends Hindu (Shaivite) and Buddhist iconography in a style unique in the island — a physical symbol of religious coexistence. The site is largely unvisited by tourists, lending it a mysterious, atmospheric quality.",
+      "distanceKm": 23.0,
+      "travelTime": "30 min by car (south on A9 toward Matale)",
+      "openingHours": "Open daily during daylight hours",
+      "entryFee": "Free (donations appreciated)",
+      "hotelNote": "Combine the visit with a stop at Nalanda tank's birdwatching area. This is one of the Cultural Triangle's most rewarding hidden sites — almost no tour buses come here.",
+      "mapUrl": "https://maps.google.com/?q=Nalanda+Gedige+Matale+Sri+Lanka",
+      "images": []
     }
   ],
 

@@ -4,9 +4,9 @@
     "name": "Thaala Bentota",
     "fullName": "Thaala Bentota Resort & Spa",
     "tagline": "Where the river meets the sea",
-    "address": "Bentota Beach, Southern Coastal Road, Bentota, Sri Lanka",
-    "phone": "+94 34 227 5500",
-    "email": "bentota@brownshotels.com",
+    "address": "No. 20, Hotel Road, Bentota 80500, Galle District, Sri Lanka",
+    "phone": "+94 34 494 7878",
+    "email": "reservations@brownshotels.com",
     "currency": "LKR",
     "currencySymbol": "Rs.",
     "timezone": "Asia/Colombo",
@@ -15,7 +15,7 @@
       "https://images.unsplash.com/photo-1540541338537-fdb4c8e9df90?w=1200",
       "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200"
     ],
-    "facilities": ["Beachfront Pool", "Spa", "Restaurant", "Beach Bar", "Water Sports Centre", "Boat Jetty", "Free WiFi", "Concierge", "Laundry", "Yoga Pavilion"]
+    "facilities": ["2 Outdoor Pools", "Beachfront", "Spa & Massage", "Sauna", "2 Restaurants", "Chatters Bar", "Water Sports Centre", "Boat Jetty", "Free WiFi (100+ Mbps)", "Concierge", "Laundry", "Yoga Classes", "Business Centre"]
   },
 
   "quickActions": [
@@ -381,36 +381,81 @@
 
   "localPlaces": [
     {
-      "id": "bentota-beach",
-      "name": "Bentota Beach",
-      "category": "Nature",
-      "description": "One of Sri Lanka's finest golden sand beaches stretching for kilometres. Perfect for swimming, sunbathing, and water sports.",
-      "distanceKm": 0.1,
-      "travelTime": "1 min walk",
-      "hotelNote": "Best swimming at low tide. Our beach butler can arrange sun loungers and umbrellas.",
-      "mapUrl": "https://maps.google.com/?q=Bentota+Beach+Sri+Lanka",
-      "images": ["https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600"]
-    },
-    {
       "id": "brief-garden",
-      "name": "Brief Garden",
+      "name": "Brief Garden (Bevis Bawa)",
       "category": "Culture",
-      "description": "The enchanting garden estate of Sri Lankan artist Bevis Bawa — a masterpiece of tropical garden design.",
-      "distanceKm": 11.0,
-      "travelTime": "20 min by car",
-      "hotelNote": "Best visited in the morning. Our concierge can arrange transport and tickets.",
-      "mapUrl": "https://maps.google.com/?q=Brief+Garden+Bentota",
+      "description": "The remarkable 2-hectare garden estate of artist and landscape architect Bevis Bawa, elder brother of Geoffrey Bawa, set near Kalawila village. Created over 40 years, the garden is a theatrical labyrinth of sculpture, tropical planting, and surprise vistas that reportedly inspired Geoffrey Bawa to create Lunuganga. The house remains furnished as Bevis left it.",
+      "distanceKm": 8.0,
+      "travelTime": "20 min by car / tuk-tuk",
+      "openingHours": "Daily 08:00–17:00",
+      "entryFee": "LKR 300 (adult foreigners approx. LKR 1,500)",
+      "hotelNote": "Combine with Lunuganga for a full Bawa brothers day. Go in the morning when the light is best for photography.",
+      "mapUrl": "https://maps.google.com/?q=Brief+Garden+Beruwala+Sri+Lanka",
       "images": []
     },
     {
       "id": "lunuganga",
-      "name": "Lunuganga Country Estate",
+      "name": "Lunuganga Country Estate (Geoffrey Bawa)",
       "category": "Culture",
-      "description": "Geoffrey Bawa's private country estate — a pilgrimage site for architecture and garden lovers.",
-      "distanceKm": 14.0,
-      "travelTime": "25 min by car",
-      "hotelNote": "Guided tours available. Book in advance as visitor numbers are limited.",
-      "mapUrl": "https://maps.google.com/?q=Lunuganga+Estate",
+      "description": "Geoffrey Bawa — Asia's most influential architect of the 20th century — purchased this former rubber estate in 1948 and spent the rest of his life reshaping it into a living masterpiece. Guided tours wind through terraced gardens, pavilions, and the beautifully preserved house above Dedduwa Lake. A pilgrimage for anyone with an interest in architecture, landscape, or design.",
+      "distanceKm": 11.0,
+      "travelTime": "22 min by car",
+      "openingHours": "Guided tours daily at 11:00, 14:00, and 15:00",
+      "entryFee": "USD 20 (foreign adults) — book directly with the Geoffrey Bawa Trust",
+      "hotelNote": "Numbers are strictly limited per tour. Our concierge can pre-book on your behalf. Do not miss the Cinnamon Hill viewpoint.",
+      "mapUrl": "https://maps.google.com/?q=Lunuganga+Estate+Bentota",
+      "images": []
+    },
+    {
+      "id": "bentota-river",
+      "name": "Bentota River & Madu Ganga Boat Safari",
+      "category": "Nature",
+      "description": "The Bentota River estuary and Madu Ganga wetland (a UNESCO Ramsar site, 915 hectares) are best explored by local boat. Weave through 64 islands, visit a cinnamon-processing island, enjoy a fish-foot spa in the shallows, and spot water monitor lizards, kingfishers, and occasional crocodiles in the mangrove channels.",
+      "distanceKm": 1.0,
+      "travelTime": "5 min by tuk-tuk to the jetty",
+      "openingHours": "Boats operate 06:00–18:00",
+      "entryFee": "USD 25–35 per person for a 2-hour safari (Buddhist temple and fish spa extra)",
+      "hotelNote": "Book through our boat concierge for a private vessel and skip the larger tour groups. Evening departures catch the best bird activity.",
+      "mapUrl": "https://maps.google.com/?q=Madu+Ganga+Balapitiya+Sri+Lanka",
+      "images": []
+    },
+    {
+      "id": "kosgoda-turtle-hatchery",
+      "name": "Kosgoda Sea Turtle Conservation Project",
+      "category": "Nature",
+      "description": "One of Sri Lanka's most respected sea turtle conservation centres, located where five endangered species — Green, Loggerhead, Olive Ridley, Leatherback, and Hawksbill turtles — come ashore to nest. The hatchery rescues eggs, incubates them safely, and releases hatchlings. Visitors can see turtles at all life stages and, for a small extra fee, release a hatchling into the sea.",
+      "distanceKm": 11.0,
+      "travelTime": "20 min by tuk-tuk (north along A2 highway)",
+      "openingHours": "Daily 08:30–18:30",
+      "entryFee": "LKR 1,000 foreigners; turtle release LKR 1,500 extra",
+      "hotelNote": "Evening visits (after 18:00) can coincide with nesting females coming ashore — ask our concierge to arrange a guided night visit during nesting season (November–April).",
+      "mapUrl": "https://maps.google.com/?q=Kosgoda+Sea+Turtle+Conservation+Project",
+      "images": []
+    },
+    {
+      "id": "hikkaduwa-coral-reef",
+      "name": "Hikkaduwa Coral Reef & Marine Sanctuary",
+      "category": "Adventure",
+      "description": "Hikkaduwa's protected coral reef park, just 200 m offshore, is one of the best accessible snorkel and dive sites on Sri Lanka's south-west coast. The shallow reef (1–5 m) teems with parrotfish, surgeonfish, and resident sea turtles. Glass-bottom boat tours are also available for non-swimmers.",
+      "distanceKm": 34.0,
+      "travelTime": "45 min by car or train",
+      "openingHours": "Best snorkelling 08:00–12:00 (calmer seas)",
+      "entryFee": "Snorkel gear rental from LKR 500; glass-bottom boat approx. USD 10",
+      "hotelNote": "The scenic coastal train from Bentota station to Hikkaduwa takes about 35 minutes and is an experience in itself — our concierge can check the train schedule.",
+      "mapUrl": "https://maps.google.com/?q=Hikkaduwa+Coral+Reef+Sri+Lanka",
+      "images": []
+    },
+    {
+      "id": "bentota-water-sports",
+      "name": "Bentota Water Sports Centre",
+      "category": "Adventure",
+      "description": "The Bentota stretch of beach in front of the resort is Sri Lanka's premier water sports hub, offering jet skiing, windsurfing, banana boat rides, water-skiing, kite surfing, and stand-up paddleboarding in calm, patrolled waters. Experienced international and local instructors are on hand.",
+      "distanceKm": 0.1,
+      "travelTime": "1 min walk",
+      "openingHours": "Daily 08:00–17:30",
+      "entryFee": "From LKR 2,500 per activity",
+      "hotelNote": "The Bentota lagoon (sheltered from the open sea by a sandbar) is ideal for beginners. Best conditions are 09:00–14:00.",
+      "mapUrl": "https://maps.google.com/?q=Bentota+Beach+Water+Sports",
       "images": []
     }
   ],
