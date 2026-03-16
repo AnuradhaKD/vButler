@@ -141,8 +141,8 @@
       const tomorrowStr = tomorrow.toISOString().split('T')[0];
       const todayStr = new Date().toISOString().split('T')[0];
 
-      document.getElementById('wakeup-date').value = tomorrowStr;
-      document.getElementById('wakeup-date').min = todayStr;
+      App.datepicker.date('#wakeup-date', { minDate: todayStr, defaultDate: tomorrowStr });
+      App.datepicker.time('#wakeup-time', { defaultHour: 7, defaultMinute: 0 });
 
       renderCallsList();
     }

@@ -160,8 +160,7 @@
         cur += 30;
       }
 
-      document.getElementById('field-date').min = new Date().toISOString().split('T')[0];
-      document.getElementById('field-date').value = new Date().toISOString().split('T')[0];
+      App.datepicker.date('#field-date', { minDate: 'today', defaultDate: 'today' });
 
       // Menu
       const currency = propData.property.currencySymbol || 'Rs.';

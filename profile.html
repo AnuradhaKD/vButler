@@ -202,6 +202,7 @@
       document.getElementById('f-phone').value = profile.phone || '';
       document.getElementById('f-nationality').value = profile.nationality || '';
       document.getElementById('f-dob').value = profile.dob || '';
+      App.datepicker.date('#f-dob');
       document.getElementById('f-passport').value = profile.passport || '';
       renderAvatar();
     }

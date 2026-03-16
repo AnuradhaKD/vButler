@@ -334,6 +334,15 @@
             <span class="text-sm text-slate-700 dark:text-slate-300">I'd like to receive exclusive offers and updates from Browns Hotels & Resorts. <span class="text-xs text-slate-400">(Optional)</span></span>
           </label>`);
       }
+
+      // Init date pickers for steps that contain date inputs
+      if (step === 1) {
+        App.datepicker.date('#pa-dob');
+      } else if (step === 2) {
+        App.datepicker.date('#pa-doc-expiry', { minDate: 'today' });
+      } else if (step === 3) {
+        App.datepicker.date('#pa-arrival-date', { minDate: reservation.checkIn, maxDate: reservation.checkIn });
+      }
     }
 
     function collectStepData(step) {

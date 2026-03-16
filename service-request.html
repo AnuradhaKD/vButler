@@ -271,6 +271,15 @@
         }
       });
       container.innerHTML = html;
+
+      // Init date/time pickers after DOM is rendered
+      fields.forEach(f => {
+        if (f === 'date') App.datepicker.date('#field-date', { minDate: 'today' });
+        else if (f === 'preferredTime') App.datepicker.time('#field-preferredTime');
+        else if (f === 'time') App.datepicker.time('#field-time');
+        else if (f === 'deliveryTime') App.datepicker.time('#field-deliveryTime');
+        else if (f === 'collectionTime') App.datepicker.time('#field-collectionTime');
+      });
     }
 
     function fieldWrap(label, input) {

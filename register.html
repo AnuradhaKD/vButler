@@ -239,7 +239,7 @@
     // Set max dob date to 18 years ago
     const maxDob = new Date();
     maxDob.setFullYear(maxDob.getFullYear() - 18);
-    document.getElementById('dob').max = maxDob.toISOString().split('T')[0];
+    App.datepicker.date('#dob', { maxDate: maxDob });
 
     // Password toggles
     function makeToggle(btnId, iconId, inputId) {

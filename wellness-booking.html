@@ -204,8 +204,7 @@
         }
       }
 
-      document.getElementById('field-date').min = new Date().toISOString().split('T')[0];
-      document.getElementById('field-date').value = new Date().toISOString().split('T')[0];
+      App.datepicker.date('#field-date', { minDate: 'today', defaultDate: 'today' });
 
       // Therapist preference
       if (type === 'treatment' && wellnessItem.therapistPreference) {

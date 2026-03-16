@@ -612,6 +612,60 @@ const App = (() => {
     }
   };
 
+  // ─── DatePicker (Flatpickr) ──────────────────────────────────────────────────
+  const datepicker = (() => {
+    let _ready = false;
+    const _queue = [];
+
+    function _load() {
+      if (document.getElementById('flatpickr-js')) return;
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css';
+      document.head.appendChild(css);
+      const js = document.createElement('script');
+      js.id = 'flatpickr-js';
+      js.src = 'https://cdn.jsdelivr.net/npm/flatpickr';
+      js.onload = () => {
+        _ready = true;
+        _queue.splice(0).forEach(fn => fn());
+      };
+      document.head.appendChild(js);
+    }
+
+    function _whenReady(fn) {
+      if (_ready && window.flatpickr) { fn(); return; }
+      _queue.push(fn);
+      _load();
+    }
+
+    function _el(s) {
+      return typeof s === 'string' ? document.querySelector(s) : s;
+    }
+
+    return {
+      ready: _whenReady,
+      date(selector, options = {}) {
+        _whenReady(() => {
+          const el = _el(selector);
+          if (!el || el._flatpickr) return;
+          flatpickr(el, { disableMobile: true, dateFormat: 'Y-m-d', ...options });
+        });
+      },
+      time(selector, options = {}) {
+        _whenReady(() => {
+          const el = _el(selector);
+          if (!el || el._flatpickr) return;
+          flatpickr(el, { disableMobile: true, enableTime: true, noCalendar: true, dateFormat: 'H:i', time_24hr: true, ...options });
+        });
+      },
+      destroy(selector) {
+        const el = _el(selector);
+        if (el && el._flatpickr) el._flatpickr.destroy();
+      }
+    };
+  })();
+
   // ─── Init ─────────────────────────────────────────────────────────────────────
   function init() {
     theme.apply();
@@ -626,7 +680,7 @@ const App = (() => {
     init();
   }
 
-  return { storage, auth, reservations, requests, complaints, wishlist, notifications, wakeUpCalls, preArrival, theme, toast, data, header, bottomNav, sidebar, helpers };
+  return { storage, auth, reservations, requests, complaints, wishlist, notifications, wakeUpCalls, preArrival, theme, toast, data, header, bottomNav, sidebar, helpers, datepicker };
 
 })();
 

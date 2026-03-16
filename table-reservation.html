@@ -159,9 +159,8 @@
       if (restaurant.hours.lunch) hd.innerHTML += `<span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400">Lunch ${restaurant.hours.lunch}</span>`;
       if (restaurant.hours.dinner) hd.innerHTML += `<span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400">Dinner ${restaurant.hours.dinner}</span>`;
 
-      // Set min date
-      document.getElementById('field-date').min = new Date().toISOString().split('T')[0];
-      document.getElementById('field-date').value = new Date().toISOString().split('T')[0];
+      // Set min date via datepicker
+      App.datepicker.date('#field-date', { minDate: 'today', defaultDate: 'today' });
 
       // Generate time slots from all meal periods
       const timeSelect = document.getElementById('field-time');

@@ -297,6 +297,15 @@
             <textarea id="field-specialRequirements" rows="3" placeholder="e.g. Extra luggage, early morning pickup…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] placeholder:text-slate-400 resize-none"></textarea>
           </div>`;
       }
+
+      // Init date/time pickers after DOM is set
+      if (isArrival) {
+        App.datepicker.date('#field-arrivalDate', { minDate: today });
+        App.datepicker.time('#field-arrivalTime');
+      } else {
+        App.datepicker.date('#field-departureDate', { minDate: today });
+        App.datepicker.time('#field-departureTime');
+      }
     }
 
     function confirmBooking() {
