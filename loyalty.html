@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Rewards | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+  <style>
+    .fill-icon { font-variation-settings: 'FILL' 1; }
+    .tier-card-shine::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      pointer-events: none;
+    }
+    .tier-card-shine::after {
+      content: '';
+      position: absolute;
+      bottom: -40%;
+      left: -10%;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 pb-24 md:pb-8">
+      <div class="max-w-2xl mx-auto p-4 md:p-8">
+
+        <!-- Page header -->
+        <div class="mb-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Member Benefits</p>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white">My Rewards</h1>
+        </div>
+
+        <!-- No loyalty state -->
+        <div id="no-loyalty-state" class="hidden bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-10 text-center">
+          <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-3 block">workspace_premium</span>
+          <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Not Enrolled in Rewards</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mb-5 max-w-xs mx-auto">Join the Browns Hotels &amp; Resorts loyalty programme to earn points on every stay and unlock exclusive member benefits.</p>
+          <a href="dashboard.html" class="inline-flex items-center gap-2 bg-[#003c52] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#004f6e] transition">
+            <span class="material-symbols-outlined text-base">home</span>
+            Back to Dashboard
+          </a>
+        </div>
+
+        <!-- Loyalty content (hidden until loaded) -->
+        <div id="loyalty-content" class="hidden space-y-5">
+
+          <!-- A. Loyalty Card -->
+          <div id="loyalty-card" class="rounded-2xl p-6 text-white relative overflow-hidden tier-card-shine shadow-lg">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- B. Tier Benefits -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
+            <h2 id="benefits-title" class="font-bold text-slate-900 dark:text-white mb-4 text-base"></h2>
+            <div id="benefits-grid" class="grid grid-cols-1 gap-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- C. Redeem Points -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
+            <div class="flex items-start justify-between mb-1">
+              <h2 class="font-bold text-slate-900 dark:text-white text-base">Redeem Points</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-5">Redemption requests are processed within 24 hours.</p>
+            <div id="redeem-grid" class="grid grid-cols-2 gap-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- D. Points History -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
+            <h2 class="font-bold text-slate-900 dark:text-white mb-4 text-base">Points History</h2>
+            <div id="history-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div><!-- end loyalty-content -->
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'loyalty');
+    App.bottomNav.render('loyalty');
+
+    // ─── Tier configuration ───────────────────────────────────────────────────
+    const TIERS = {
+      Silver:   { color: 'from-slate-600 to-slate-400',   text: 'text-slate-200',  badge: 'bg-slate-400',   icon: 'workspace_premium', min: 0,     max: 9999  },
+      Gold:     { color: 'from-amber-700 to-amber-500',   text: 'text-amber-100',  badge: 'bg-amber-400',   icon: 'stars',             min: 10000, max: 24999 },
+      Platinum: { color: 'from-purple-800 to-indigo-600', text: 'text-purple-100', badge: 'bg-purple-400',  icon: 'diamond',           min: 25000, max: 99999 }
+    };
+
+    // ─── Redeem options ───────────────────────────────────────────────────────
+    const REDEEM_OPTIONS = [
+      { id: 'r1', icon: 'schedule',        name: 'Late Checkout',      desc: 'Extend checkout to 2 PM',               cost: 500   },
+      { id: 'r2', icon: 'local_bar',       name: 'Welcome Drink',      desc: 'Cocktail or mocktail at any bar',        cost: 800   },
+      { id: 'r3', icon: 'free_breakfast',  name: 'Free Breakfast',     desc: 'Complimentary breakfast for two',        cost: 1500  },
+      { id: 'r4', icon: 'upgrade',         name: 'Room Upgrade',       desc: 'Upgrade to next room category',          cost: 2000  },
+      { id: 'r5', icon: 'spa',             name: 'Spa Treatment',      desc: '60-min treatment of your choice',        cost: 3000  },
+      { id: 'r6', icon: 'hotel',           name: 'Free Night Stay',    desc: 'One complimentary night at any property',cost: 10000 }
+    ];
+
+    // ─── Tier benefits ────────────────────────────────────────────────────────
+    const TIER_BENEFITS = {
+      Silver: [
+        { icon: 'percent',          label: '10% dining discount' },
+        { icon: 'schedule',         label: 'Late checkout (subject to availability)' },
+        { icon: 'priority_high',    label: 'Priority check-in' },
+        { icon: 'point_of_sale',    label: '1 point per Rs. 100 spent' }
+      ],
+      Gold: [
+        { icon: 'percent',          label: '15% dining & spa discount' },
+        { icon: 'schedule',         label: 'Guaranteed late checkout (2 PM)' },
+        { icon: 'upgrade',          label: 'Room upgrade (subject to availability)' },
+        { icon: 'card_giftcard',    label: 'Welcome amenity on arrival' },
+        { icon: 'point_of_sale',    label: '1.5 points per Rs. 100 spent' }
+      ],
+      Platinum: [
+        { icon: 'percent',          label: '20% dining & spa discount' },
+        { icon: 'upgrade',          label: 'Guaranteed room upgrade' },
+        { icon: 'login',            label: 'Early check-in + late checkout' },
+        { icon: 'concierge',        label: 'Dedicated butler service' },
+        { icon: 'lounge',           label: 'Exclusive lounge access' },
+        { icon: 'point_of_sale',    label: '2 points per Rs. 100 spent' }
+      ]
+    };
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function formatPoints(n) {
+      return Math.abs(n).toLocaleString('en-US');
+    }
+
+    // ─── Render: Loyalty Card ─────────────────────────────────────────────────
+    function renderLoyaltyCard(loyalty, profile) {
+      const tier = TIERS[loyalty.tier] || TIERS.Silver;
+      const isPlatinum = loyalty.tier === 'Platinum';
+      const guestName = profile.fullName || `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Guest';
+
+      const progressSection = isPlatinum
+        ? `<p class="text-sm font-semibold ${tier.text} opacity-90 mt-3">You've reached our highest tier!</p>`
+        : `<div class="mt-4">
+             <div class="flex items-center justify-between mb-1.5">
+               <span class="text-xs font-semibold text-white/70">${loyalty.tier}</span>
+               <span class="text-xs font-semibold text-white/70">${loyalty.nextTier}</span>
+             </div>
+             <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+               <div class="h-full bg-white/80 rounded-full transition-all duration-500" style="width: ${Math.min(loyalty.tierProgress, 100)}%"></div>
+             </div>
+             <p class="text-xs text-white/70 mt-1.5">${loyalty.pointsToNextTier.toLocaleString('en-US')} more points to ${loyalty.nextTier}</p>
+           </div>`;
+
+      document.getElementById('loyalty-card').className = `rounded-2xl p-6 text-white relative overflow-hidden tier-card-shine shadow-lg bg-gradient-to-br ${tier.color}`;
+      document.getElementById('loyalty-card').innerHTML = `
+        <!-- Top row: icon + tier badge + membership ID -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-2xl fill-icon text-white/90">${tier.icon}</span>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold text-white ${tier.badge}">${loyalty.tier}</span>
+          </div>
+          <span class="text-xs font-mono font-bold text-white/70 tracking-wider">${loyalty.membershipId}</span>
+        </div>
+        <!-- Guest name -->
+        <div class="font-serif text-2xl font-bold text-white mb-4 leading-tight">${guestName}</div>
+        <!-- Points balance -->
+        <div class="flex items-end gap-2 mb-1">
+          <span class="text-4xl font-extrabold text-white leading-none">${loyalty.points.toLocaleString('en-US')}</span>
+          <span class="text-sm font-bold text-white/60 mb-1 tracking-widest uppercase">Points</span>
+        </div>
+        <!-- Progress bar -->
+        ${progressSection}
+      `;
+    }
+
+    // ─── Render: Tier Benefits ────────────────────────────────────────────────
+    function renderBenefits(tierName) {
+      const benefits = TIER_BENEFITS[tierName] || TIER_BENEFITS.Silver;
+      document.getElementById('benefits-title').textContent = `Your ${tierName} Benefits`;
+      document.getElementById('benefits-grid').innerHTML = benefits.map(b => `
+        <div class="flex items-center gap-3 py-2 border-b border-slate-100 dark:border-slate-800 last:border-0">
+          <div class="w-8 h-8 rounded-lg bg-[#003c52]/10 dark:bg-teal-900/20 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[18px] text-[#003c52] dark:text-teal-400">${b.icon}</span>
+          </div>
+          <span class="text-sm text-slate-700 dark:text-slate-300">${b.label}</span>
+        </div>
+      `).join('');
+    }
+
+    // ─── Render: Redeem Options ───────────────────────────────────────────────
+    function renderRedeem(currentPoints) {
+      document.getElementById('redeem-grid').innerHTML = REDEEM_OPTIONS.map(opt => {
+        const canAfford = currentPoints >= opt.cost;
+        const btnClass = canAfford
+          ? 'w-full mt-3 bg-[#003c52] text-white rounded-lg px-3 py-2 text-xs font-semibold hover:bg-[#004f6e] transition'
+          : 'w-full mt-3 bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 rounded-lg px-3 py-2 text-xs font-semibold opacity-50 cursor-not-allowed';
+        return `
+          <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 flex flex-col border border-slate-200 dark:border-slate-700">
+            <div class="w-9 h-9 rounded-lg bg-[#003c52]/10 dark:bg-teal-900/20 flex items-center justify-center mb-2 shrink-0">
+              <span class="material-symbols-outlined text-xl text-[#003c52] dark:text-teal-400">${opt.icon}</span>
+            </div>
+            <div class="font-semibold text-slate-900 dark:text-white text-sm leading-tight">${opt.name}</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 flex-1">${opt.desc}</div>
+            <div class="flex items-center gap-1 mt-2">
+              <span class="material-symbols-outlined text-[14px] text-amber-500 fill-icon">stars</span>
+              <span class="text-xs font-bold text-amber-600 dark:text-amber-400">${opt.cost.toLocaleString('en-US')} pts</span>
+            </div>
+            <button
+              class="${btnClass}"
+              ${canAfford ? `onclick="handleRedeem('${opt.id}', '${opt.name}', ${opt.cost})"` : 'disabled'}
+            >
+              ${canAfford ? 'Redeem' : 'Insufficient points'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ─── Handle Redeem ────────────────────────────────────────────────────────
+    function handleRedeem(optionId, optionName, cost) {
+      App.confirm.show({
+        title: `Redeem: ${optionName}`,
+        message: 'Confirm your redemption request.',
+        items: [
+          { label: 'Reward',      value: optionName },
+          { label: 'Points Cost', value: `${cost.toLocaleString('en-US')} points` }
+        ],
+        confirmText: 'Confirm Redemption',
+        onConfirm: () => {
+          App.toast.show('Redemption request submitted!', 'success');
+        }
+      });
+    }
+
+    // ─── Render: Points History ───────────────────────────────────────────────
+    function renderHistory(transactions) {
+      const container = document.getElementById('history-list');
+      if (!transactions || transactions.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8">
+            <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600 block mb-2">history</span>
+            <p class="text-sm text-slate-500 dark:text-slate-400">No transaction history yet.</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="overflow-x-auto -mx-1">
+          <table class="w-full text-sm min-w-[420px]">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-700">
+                <th class="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider pb-2 pr-3">Date</th>
+                <th class="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider pb-2 pr-3">Description</th>
+                <th class="text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider pb-2 pr-3">Points</th>
+                <th class="text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider pb-2">Balance</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+              ${transactions.map(txn => {
+                const isEarn = txn.type === 'earn' || txn.type === 'bonus';
+                const pointsClass = isEarn
+                  ? 'text-green-600 dark:text-green-400 font-semibold'
+                  : 'text-red-500 dark:text-red-400 font-semibold';
+                const prefix = isEarn ? '+' : '−';
+                const typeIcon = txn.type === 'bonus' ? '🎁 ' : txn.type === 'redeem' ? '' : '';
+                return `
+                  <tr>
+                    <td class="py-3 pr-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">${formatDate(txn.date)}</td>
+                    <td class="py-3 pr-3 text-slate-700 dark:text-slate-300 text-xs">${typeIcon}${txn.description}</td>
+                    <td class="py-3 pr-3 text-right ${pointsClass} text-xs whitespace-nowrap">${prefix}${formatPoints(txn.points)}</td>
+                    <td class="py-3 text-right text-slate-600 dark:text-slate-400 text-xs font-medium whitespace-nowrap">${txn.balance.toLocaleString('en-US')}</td>
+                  </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // ─── Init ─────────────────────────────────────────────────────────────────
+    async function init() {
+      const profile = App.auth.getGuest() || {};
+      const loyalty = profile.loyaltyProgram;
+
+      if (!loyalty) {
+        document.getElementById('no-loyalty-state').classList.remove('hidden');
+        return;
+      }
+
+      const session = App.auth.getSession();
+      const historyData = await App.data.load('data/mock/points-history.json');
+      const transactions = historyData?.pointsHistory?.find(h => h.guestId === session?.guestId)?.transactions || [];
+
+      document.getElementById('loyalty-content').classList.remove('hidden');
+
+      renderLoyaltyCard(loyalty, profile);
+      renderBenefits(loyalty.tier);
+      renderRedeem(loyalty.points);
+      renderHistory(transactions);
+    }
+
+    init();
+  </script>
+</body>
+</html>

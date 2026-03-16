@@ -581,6 +581,7 @@ const App = (() => {
         { id: 'experiences',    label: 'Experiences',    icon: 'hiking',         href: 'experiences.html' },
         { id: 'local-explore',  label: 'Local Explore',  icon: 'explore',        href: 'local-explore.html' },
         { id: 'billing',        label: 'Billing',        icon: 'receipt_long',   href: 'billing.html' },
+        { id: 'loyalty',        label: 'Rewards',        icon: 'stars',          href: 'loyalty.html' },
         { id: 'complaints',     label: 'Feedback',       icon: 'support_agent',  href: 'complaints.html' },
         { id: 'notifications',  label: 'Notifications',  icon: 'notifications',  href: 'notifications.html' }
       ];

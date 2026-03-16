@@ -20,7 +20,7 @@
     "wakeUpCall": true,
     "localExploration": true,
     "wellnessSpa": true,
-    "loyaltyPoints": false,
+    "loyaltyPoints": true,
     "inAppChat": false,
     "tableReservations": true,
     "transportBooking": true,

@@ -1,0 +1,25 @@
+{
+  "pointsHistory": [
+    {
+      "guestId": "guest-001",
+      "transactions": [
+        { "id": "TXN-001", "date": "2026-03-14", "description": "Stay at Newburgh Ella (2 nights)", "type": "earn", "points": 2400, "balance": 18450 },
+        { "id": "TXN-002", "date": "2026-03-14", "description": "Spa Treatment — Deep Tissue Massage", "type": "earn", "points": 350, "balance": 16050 },
+        { "id": "TXN-003", "date": "2026-02-10", "description": "Redeemed — Room Upgrade", "type": "redeem", "points": -2000, "balance": 15700 },
+        { "id": "TXN-004", "date": "2026-01-20", "description": "Stay at Thaala Bentota (3 nights)", "type": "earn", "points": 3600, "balance": 17700 },
+        { "id": "TXN-005", "date": "2025-12-25", "description": "Christmas Bonus Points", "type": "bonus", "points": 500, "balance": 14100 },
+        { "id": "TXN-006", "date": "2025-11-15", "description": "Dining at The Terrace Restaurant", "type": "earn", "points": 180, "balance": 13600 },
+        { "id": "TXN-007", "date": "2025-10-08", "description": "Stay at Browns City Hotel (1 night)", "type": "earn", "points": 1200, "balance": 13420 }
+      ]
+    },
+    {
+      "guestId": "guest-002",
+      "transactions": [
+        { "id": "TXN-101", "date": "2026-01-15", "description": "Stay at Club Hotel Dolphin (4 nights)", "type": "earn", "points": 1800, "balance": 4200 },
+        { "id": "TXN-102", "date": "2025-12-20", "description": "Spa Package — Wellness Retreat", "type": "earn", "points": 600, "balance": 2400 },
+        { "id": "TXN-103", "date": "2025-11-05", "description": "Redeemed — Free Breakfast", "type": "redeem", "points": -1500, "balance": 1800 },
+        { "id": "TXN-104", "date": "2025-10-20", "description": "Stay at Newburgh Ella (2 nights)", "type": "earn", "points": 1800, "balance": 3300 }
+      ]
+    }
+  ]
+}
