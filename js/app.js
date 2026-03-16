@@ -580,18 +580,19 @@ const App = (() => {
         { id: 'notifications',  label: 'Notifications',  icon: 'notifications',  href: 'notifications.html' }
       ];
       el.innerHTML = `
-        <aside id="desktop-sidebar" data-active="${active}" class="hidden md:flex flex-col h-full shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 ${isCollapsed ? 'vb-sidebar-collapsed' : ''}">
-          <nav class="flex-1 overflow-y-auto p-2 space-y-1">
+        <aside id="desktop-sidebar" data-active="${active}" class="hidden md:flex flex-col h-full shrink-0 bg-[#003c52] border-r border-[#004f6e] ${isCollapsed ? 'vb-sidebar-collapsed' : ''}">
+          <nav class="flex-1 overflow-y-auto p-2 space-y-0.5">
             ${items.map(item => `
-            <a href="${item.href}" title="${item.label}" class="sidebar-nav-item flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors ${active === item.id
-              ? 'bg-[#003c52]/10 text-[#003c52] dark:bg-teal-900/30 dark:text-teal-400'
-              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'}">
-              <span class="material-symbols-outlined text-xl shrink-0">${item.icon}</span>
+            <a href="${item.href}" title="${item.label}" class="sidebar-nav-item relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${active === item.id
+              ? 'bg-white text-[#003c52] font-semibold shadow-sm'
+              : 'text-white/70 hover:bg-white/10 hover:text-white'}">
+              ${active === item.id ? '<span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full"></span>' : ''}
+              <span class="material-symbols-outlined text-xl shrink-0 ${active === item.id ? 'fill-icon' : ''}">${item.icon}</span>
               <span class="sidebar-label">${item.label}</span>
             </a>`).join('')}
           </nav>
-          <div class="p-2 border-t border-slate-200 dark:border-slate-700">
-            <button onclick="App.auth.logout()" title="Sign Out" class="sidebar-nav-item flex items-center gap-3 w-full px-3 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+          <div class="p-2 border-t border-white/10">
+            <button onclick="App.auth.logout()" title="Sign Out" class="sidebar-nav-item flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-red-300 hover:bg-white/10 hover:text-red-200 transition">
               <span class="material-symbols-outlined text-xl shrink-0">logout</span>
               <span class="sidebar-label">Sign Out</span>
             </button>
