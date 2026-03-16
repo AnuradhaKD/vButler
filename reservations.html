@@ -43,6 +43,17 @@
     <div id="app-sidebar"></div>
     <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl overflow-x-hidden">
 
+      <!-- Selection mode banner (shown when coming from login) -->
+      <div id="select-banner" class="hidden mb-6 rounded-2xl bg-[#003c52] dark:bg-teal-900 p-5 flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-xl text-white fill-icon">touch_app</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-white font-bold text-base mb-0.5">Select your reservation to continue</p>
+          <p class="text-white/70 text-sm">All service requests, dining, transport, and bookings will be linked to the reservation you choose. You can switch at any time.</p>
+        </div>
+      </div>
+
       <!-- Page header -->
       <div class="mb-6">
         <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">Your Stays</p>
@@ -92,9 +103,20 @@
     App.sidebar.render('reservations');
     App.bottomNav.render('reservations');
 
+    const params = new URLSearchParams(window.location.search);
+    const selectMode = params.get('select') === '1';   // coming from login
+    const returnTo   = params.get('from') || 'dashboard.html'; // where to go after selection
+
     let allReservations = [];
 
     async function init() {
+      // Show selection banner if coming from login
+      if (selectMode) {
+        const banner = document.getElementById('select-banner');
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+      }
+
       const session = App.auth.getSession();
       allReservations = App.reservations.getAll();
 
@@ -103,9 +125,6 @@
         if (data) {
           allReservations = data.reservations.filter(r => r.guestEmail === session.email);
           App.reservations.save(allReservations);
-          // Auto-set active: prefer inhouse, then nearest confirmed
-          const active = App.reservations.getActive();
-          if (active) App.reservations.setActive(active.id);
         }
       }
 
@@ -352,8 +371,9 @@
 
               ${canSetAct ? `
               <button onclick="setActive('${res.id}')"
-                class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 border border-[#003c52] text-[#003c52] dark:border-teal-500 dark:text-teal-400 rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#003c52]/5 transition">
-                <span class="material-symbols-outlined text-base">check_circle</span> Set as Active
+                class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 ${selectMode ? 'bg-[#003c52] text-white hover:bg-[#004f6e]' : 'border border-[#003c52] text-[#003c52] dark:border-teal-500 dark:text-teal-400 hover:bg-[#003c52]/5'} rounded-xl px-4 py-2.5 text-sm font-semibold transition">
+                <span class="material-symbols-outlined text-base">check_circle</span>
+                ${selectMode ? 'Select this Reservation' : 'Set as Active'}
               </button>` : ''}
 
               ${!isCanceled ? `
@@ -378,9 +398,17 @@
     // ─── Set active reservation ───────────────────────────────────────────────────
     function setActive(id) {
       App.reservations.setActive(id);
-      App.toast.show('Active reservation updated. All services will now be linked to this stay.', 'success');
-      App.header.render('app-header');
-      renderTabs(allReservations);
+      if (selectMode) {
+        // Coming from login — go to dashboard (or the page they were trying to reach)
+        const dest = returnTo.includes('.html') ? returnTo : 'dashboard.html';
+        App.toast.show('Reservation selected. Taking you to your dashboard…', 'success');
+        setTimeout(() => { window.location.href = dest; }, 700);
+      } else {
+        // Normal mode — stay on page, just update UI
+        App.toast.show('Active reservation updated. All services are now linked to this stay.', 'success');
+        App.header.render('app-header');
+        renderTabs(allReservations);
+      }
     }
 
     init();

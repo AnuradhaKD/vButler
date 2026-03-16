@@ -103,6 +103,15 @@ const App = (() => {
       return res && (res.status === 'inhouse' || res.status === 'confirmed');
     },
     setActive(id) { storage.set('vb:activeReservation', id); },
+    // Call on any service page — redirects to reservation selection if nothing is active
+    requireReservation() {
+      if (!reservations.getActive()) {
+        const from = encodeURIComponent(window.location.pathname.split('/').pop());
+        window.location.href = 'reservations.html?select=1&from=' + from;
+        return false;
+      }
+      return true;
+    },
     save(list) { storage.set('vb:reservations', list); },
     update(id, updates) {
       const all = reservations.getAll();

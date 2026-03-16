@@ -176,23 +176,26 @@
         App.auth.createSession(guest, rememberMe);
         App.storage.session.remove('vb:pendingAuth');
 
-        // Load reservations for this guest
+        // Load and save reservations — but do NOT auto-select one.
+        // Guest must choose their active reservation on the reservations page.
         try {
           const data = await App.data.loadReservations();
           if (data) {
             const guestRes = data.reservations.filter(r => r.guestEmail === guest.email);
             App.reservations.save(guestRes);
-            if (guestRes.length > 0) App.reservations.setActive(guestRes[0].id);
           }
         } catch(e) { /* non-fatal */ }
+
+        // Clear any previously active reservation so guest must select fresh
+        App.storage.remove('vb:activeReservation');
 
         // Success visual feedback
         inputs.forEach(i => {
           i.classList.remove('border-slate-200', 'dark:border-slate-600');
           i.classList.add('border-green-500');
         });
-        App.toast.show('Verified! Welcome, ' + guest.firstName + '.', 'success');
-        setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+        App.toast.show('Verified! Welcome, ' + guest.firstName + '. Please select your reservation.', 'success');
+        setTimeout(() => { window.location.href = 'reservations.html?select=1'; }, 800);
 
       } else {
         btn.disabled = false;
