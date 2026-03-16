@@ -55,12 +55,30 @@
       </section>
 
       <!-- Promotions -->
-      <section class="mt-8 overflow-hidden">
-        <div class="px-4 md:px-8 mb-4">
-          <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">For You</p>
-          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Exclusive Offers</h2>
+      <section class="mt-8">
+        <div class="px-4 md:px-8 mb-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">For You</p>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Exclusive Offers</h2>
+          </div>
+          <div class="hidden md:flex items-center gap-2">
+            <button id="promo-prev" onclick="scrollPromo(-1)" class="w-9 h-9 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-sm" aria-label="Scroll left">
+              <span class="material-symbols-outlined text-xl">chevron_left</span>
+            </button>
+            <button id="promo-next" onclick="scrollPromo(1)" class="w-9 h-9 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-sm" aria-label="Scroll right">
+              <span class="material-symbols-outlined text-xl">chevron_right</span>
+            </button>
+          </div>
         </div>
-        <div id="promotions-carousel" class="flex gap-4 overflow-x-auto px-4 md:px-8 pb-4 hide-scrollbar"></div>
+        <div class="relative">
+          <button onclick="scrollPromo(-1)" class="md:hidden absolute left-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-md" aria-label="Scroll left">
+            <span class="material-symbols-outlined text-lg text-slate-600 dark:text-slate-300">chevron_left</span>
+          </button>
+          <div id="promotions-carousel" class="flex gap-4 overflow-x-auto px-4 md:px-8 pb-4 hide-scrollbar scroll-smooth"></div>
+          <button onclick="scrollPromo(1)" class="md:hidden absolute right-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-md" aria-label="Scroll right">
+            <span class="material-symbols-outlined text-lg text-slate-600 dark:text-slate-300">chevron_right</span>
+          </button>
+        </div>
       </section>
 
       <!-- Recent Requests -->
@@ -280,6 +298,11 @@
             ${App.helpers.statusBadge(req.status)}
           </div>`).join('')}
       </div>`;
+    }
+
+    function scrollPromo(dir) {
+      const el = document.getElementById('promotions-carousel');
+      el.scrollBy({ left: dir * 320, behavior: 'smooth' });
     }
 
     init();
