@@ -176,15 +176,10 @@
         App.auth.createSession(guest, rememberMe);
         App.storage.session.remove('vb:pendingAuth');
 
-        // Load and save reservations — but do NOT auto-select one.
-        // Guest must choose their active reservation on the reservations page.
-        try {
-          const data = await App.data.loadReservations();
-          if (data) {
-            const guestRes = data.reservations.filter(r => r.guestEmail === guest.email);
-            App.reservations.save(guestRes);
-          }
-        } catch(e) { /* non-fatal */ }
+        // Seed all localStorage data from JSON files (requests, complaints,
+        // wake-up calls, notifications, pre-arrival, reservations).
+        // Only seeds keys that are empty — never overwrites live guest data.
+        await App.data.seed(guest.email);
 
         // Clear any previously active reservation so guest must select fresh
         App.storage.remove('vb:activeReservation');

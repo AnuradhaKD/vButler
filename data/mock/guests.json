@@ -8,11 +8,59 @@
       "fullName": "Anuradha Bandara",
       "firstName": "Anuradha",
       "lastName": "Bandara",
-      "phone": "+94771234567",
+      "phone": "+94 77 123 4567",
       "nationality": "Sri Lankan",
       "passportNumber": "N12345678",
       "dateOfBirth": "1990-06-15",
-      "linkedReservationIds": ["RES-20260401-001", "RES-20260501-002"]
+      "gender": "male",
+      "languagePreference": "en",
+      "memberSince": "2024-08-01",
+      "loyaltyProgram": {
+        "membershipId": "BHR-GOLD-00142",
+        "tier": "Gold",
+        "points": 18450,
+        "pointsToNextTier": 6550,
+        "nextTier": "Platinum",
+        "tierProgress": 74
+      },
+      "preferences": {
+        "roomFloor": "high",
+        "bedType": "king",
+        "pillowType": "firm",
+        "roomTemperature": "cool",
+        "smokingRoom": false,
+        "viewPreference": "sea-or-pool",
+        "extraBlanket": false,
+        "wakeUpCall": "06:30"
+      },
+      "dietaryRequirements": {
+        "vegetarian": false,
+        "vegan": false,
+        "glutenFree": false,
+        "nutAllergy": false,
+        "seafoodAllergy": false,
+        "dairyFree": false,
+        "halal": false,
+        "other": ""
+      },
+      "communicationPreferences": {
+        "emailNotifications": true,
+        "smsNotifications": true,
+        "pushNotifications": true,
+        "marketingEmails": false
+      },
+      "emergencyContact": {
+        "name": "Sanduni Bandara",
+        "relationship": "Spouse",
+        "phone": "+94 77 987 6543"
+      },
+      "linkedReservationIds": [
+        "RES-20260314-001",
+        "RES-20260405-002",
+        "RES-20260510-003",
+        "RES-20260210-004",
+        "RES-20260320-005"
+      ]
     },
     {
       "id": "guest-002",
@@ -22,11 +70,55 @@
       "fullName": "Jane Doe",
       "firstName": "Jane",
       "lastName": "Doe",
-      "phone": "+447700900123",
+      "phone": "+44 7700 900123",
       "nationality": "British",
       "passportNumber": "GB8765432",
       "dateOfBirth": "1985-03-22",
-      "linkedReservationIds": ["RES-20260601-003"]
+      "gender": "female",
+      "languagePreference": "en",
+      "memberSince": "2025-01-10",
+      "loyaltyProgram": {
+        "membershipId": "BHR-SILV-00289",
+        "tier": "Silver",
+        "points": 4200,
+        "pointsToNextTier": 5800,
+        "nextTier": "Gold",
+        "tierProgress": 42
+      },
+      "preferences": {
+        "roomFloor": "low",
+        "bedType": "twin",
+        "pillowType": "soft",
+        "roomTemperature": "warm",
+        "smokingRoom": false,
+        "viewPreference": "garden",
+        "extraBlanket": true,
+        "wakeUpCall": null
+      },
+      "dietaryRequirements": {
+        "vegetarian": true,
+        "vegan": false,
+        "glutenFree": false,
+        "nutAllergy": false,
+        "seafoodAllergy": false,
+        "dairyFree": false,
+        "halal": false,
+        "other": "No red meat"
+      },
+      "communicationPreferences": {
+        "emailNotifications": true,
+        "smsNotifications": false,
+        "pushNotifications": true,
+        "marketingEmails": true
+      },
+      "emergencyContact": {
+        "name": "John Doe",
+        "relationship": "Husband",
+        "phone": "+44 7700 900456"
+      },
+      "linkedReservationIds": [
+        "RES-20260601-006"
+      ]
     }
   ]
 }

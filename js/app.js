@@ -49,10 +49,9 @@ const App = (() => {
         : Date.now() + 24 * 60 * 60 * 1000;          // 24 hours
       const session = { guestId: guest.id, email: guest.email, expiresAt };
       storage.set('vb:session', session);
-      // Save profile
-      const profile = storage.get('vb:profile') || {};
+      // Save full profile — preserve any photo the guest has already uploaded
+      const existing = storage.get('vb:profile') || {};
       storage.set('vb:profile', {
-        ...profile,
         id: guest.id,
         email: guest.email,
         fullName: guest.fullName,
@@ -60,7 +59,17 @@ const App = (() => {
         lastName: guest.lastName,
         phone: guest.phone || '',
         nationality: guest.nationality || '',
-        photoBase64: profile.photoBase64 || null
+        passportNumber: guest.passportNumber || '',
+        dateOfBirth: guest.dateOfBirth || '',
+        gender: guest.gender || '',
+        languagePreference: guest.languagePreference || 'en',
+        loyaltyProgram: guest.loyaltyProgram || null,
+        preferences: guest.preferences || {},
+        dietaryRequirements: guest.dietaryRequirements || {},
+        communicationPreferences: guest.communicationPreferences || {},
+        emergencyContact: guest.emergencyContact || {},
+        memberSince: guest.memberSince || '',
+        photoBase64: existing.photoBase64 || null   // keep any uploaded photo
       });
     },
     logout() {
@@ -346,9 +355,80 @@ const App = (() => {
       const propFlags  = chainData?.properties?.find(p => p.id === propertyId)?.featureFlags || {};
       return { ...chainFlags, ...propFlags };
     },
-    async loadChain()        { return data.load('data/chain.json'); },
-    async loadGuests()       { return data.load('data/mock/guests.json'); },
-    async loadReservations() { return data.load('data/mock/reservations.json'); }
+    async loadChain()           { return data.load('data/chain.json'); },
+    async loadGuests()          { return data.load('data/mock/guests.json'); },
+    async loadReservations()    { return data.load('data/mock/reservations.json'); },
+    async loadServiceRequests() { return data.load('data/mock/service-requests.json'); },
+    async loadComplaints()      { return data.load('data/mock/complaints.json'); },
+    async loadWakeUpCalls()     { return data.load('data/mock/wake-up-calls.json'); },
+    async loadNotifications()   { return data.load('data/mock/notifications.json'); },
+    async loadPreArrivals()     { return data.load('data/mock/pre-arrival.json'); },
+
+    // Seed all localStorage data from JSON files for a given guest.
+    // Each key is only seeded if it does not already exist in localStorage,
+    // so live guest actions are never overwritten.
+    async seed(guestEmail) {
+      try {
+        // Reservations
+        if (!(storage.get('vb:reservations') || []).length) {
+          const d = await data.loadReservations();
+          if (d) {
+            const guestRes = d.reservations.filter(r => r.guestEmail === guestEmail);
+            reservations.save(guestRes);
+          }
+        }
+
+        // Service requests
+        if (!(storage.get('vb:requests') || []).length) {
+          const d = await data.loadServiceRequests();
+          if (d) {
+            const items = d.requests.filter(r => r.guestEmail === guestEmail);
+            storage.set('vb:requests', items);
+          }
+        }
+
+        // Complaints
+        if (!(storage.get('vb:complaints') || []).length) {
+          const d = await data.loadComplaints();
+          if (d) {
+            const items = d.complaints.filter(c => c.guestEmail === guestEmail);
+            storage.set('vb:complaints', items);
+          }
+        }
+
+        // Wake-up calls
+        if (!(storage.get('vb:wakeupCalls') || []).length) {
+          const d = await data.loadWakeUpCalls();
+          if (d) {
+            const items = d.wakeUpCalls.filter(w => w.guestEmail === guestEmail);
+            storage.set('vb:wakeupCalls', items);
+          }
+        }
+
+        // Notifications
+        if (!(storage.get('vb:notifications') || []).length) {
+          const d = await data.loadNotifications();
+          if (d) {
+            const items = d.notifications.filter(n => n.guestEmail === guestEmail);
+            storage.set('vb:notifications', items);
+          }
+        }
+
+        // Pre-arrival data (stored per reservationId)
+        const d = await data.loadPreArrivals();
+        if (d) {
+          d.preArrivals
+            .filter(p => p.guestEmail === guestEmail)
+            .forEach(p => {
+              const key = `vb:preArrival:${p.reservationId}`;
+              if (!storage.get(key)) storage.set(key, p.data);
+            });
+        }
+
+      } catch(e) {
+        console.warn('Data seeding partial failure:', e);
+      }
+    }
   };
 
   // ─── Header ───────────────────────────────────────────────────────────────────

@@ -1,0 +1,44 @@
+{
+  "preArrivals": [
+    {
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "completedAt": "2026-03-10T08:30:00.000Z",
+      "data": {
+        "estimatedArrivalTime": "14:00",
+        "transportMode": "hotel-transfer",
+        "flightNumber": "UL 224",
+        "dietaryRequirements": "No specific requirements",
+        "pillowPreference": "firm",
+        "extraBlanket": false,
+        "specialOccasion": "Anniversary",
+        "specialOccasionNote": "5th wedding anniversary. A small room surprise would be appreciated.",
+        "roomSetupRequests": "Romantic setup with petals if possible.",
+        "medicalRequirements": "",
+        "accessibilityNeeds": "",
+        "conciergePrepRequests": "Book The Summit restaurant for dinner on 15th at 19:30 for 2.",
+        "completedAt": "2026-03-10T08:30:00.000Z"
+      }
+    },
+    {
+      "reservationId": "RES-20260210-004",
+      "guestEmail": "demo@guest.com",
+      "completedAt": "2026-02-06T10:00:00.000Z",
+      "data": {
+        "estimatedArrivalTime": "15:00",
+        "transportMode": "own-vehicle",
+        "flightNumber": "",
+        "dietaryRequirements": "No specific requirements",
+        "pillowPreference": "firm",
+        "extraBlanket": false,
+        "specialOccasion": "",
+        "specialOccasionNote": "",
+        "roomSetupRequests": "",
+        "medicalRequirements": "",
+        "accessibilityNeeds": "",
+        "conciergePrepRequests": "Please arrange dolphin watching catamaran for morning of 11th.",
+        "completedAt": "2026-02-06T10:00:00.000Z"
+      }
+    }
+  ]
+}

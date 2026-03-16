@@ -1,0 +1,146 @@
+{
+  "requests": [
+    {
+      "id": "REQ-SEED-001",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "serviceName": "Airport Transfer — Arrival",
+      "serviceCategory": "Transport",
+      "serviceId": "airport-arrival",
+      "icon": "directions_car",
+      "status": "completed",
+      "details": {
+        "flightNumber": "UL 224",
+        "arrivalDate": "2026-03-14",
+        "arrivalTime": "11:45",
+        "vehicleType": "suv",
+        "passengerCount": 2
+      },
+      "notes": "Flight arriving from Dubai. 2 passengers, 3 large bags.",
+      "createdAt": "2026-03-10T09:15:00.000Z",
+      "updatedAt": "2026-03-14T12:30:00.000Z",
+      "completedAt": "2026-03-14T14:00:00.000Z",
+      "staffNote": "Guest collected from BIA at 12:30. Arrived hotel 14:00."
+    },
+    {
+      "id": "REQ-SEED-002",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "serviceName": "Room Makeup",
+      "serviceCategory": "Housekeeping",
+      "serviceId": "room-makeup",
+      "icon": "cleaning_services",
+      "status": "completed",
+      "details": {
+        "preferredTime": "10:00"
+      },
+      "notes": "Preferred time 10:00 AM.",
+      "createdAt": "2026-03-14T20:00:00.000Z",
+      "updatedAt": "2026-03-15T10:45:00.000Z",
+      "completedAt": "2026-03-15T10:45:00.000Z",
+      "staffNote": "Room serviced. Fresh flowers arranged as per anniversary note."
+    },
+    {
+      "id": "REQ-SEED-003",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "serviceName": "Extra Towels",
+      "serviceCategory": "Housekeeping",
+      "serviceId": "extra-towels",
+      "icon": "cleaning_services",
+      "status": "completed",
+      "details": {
+        "quantity": 4,
+        "towelType": "pool"
+      },
+      "notes": "4 pool towels requested.",
+      "createdAt": "2026-03-15T08:30:00.000Z",
+      "updatedAt": "2026-03-15T08:50:00.000Z",
+      "completedAt": "2026-03-15T08:50:00.000Z",
+      "staffNote": null
+    },
+    {
+      "id": "REQ-SEED-004",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "serviceName": "Deep Tissue Massage",
+      "serviceCategory": "Wellness",
+      "serviceId": "deep-tissue",
+      "icon": "spa",
+      "status": "completed",
+      "details": {
+        "date": "2026-03-15",
+        "time": "15:00",
+        "therapistGender": "male",
+        "specialRequests": "Focus on lower back and shoulders."
+      },
+      "notes": "60-minute deep tissue for 2 guests.",
+      "createdAt": "2026-03-14T18:00:00.000Z",
+      "updatedAt": "2026-03-15T16:05:00.000Z",
+      "completedAt": "2026-03-15T16:05:00.000Z",
+      "staffNote": "Both guests treated. Very positive feedback received."
+    },
+    {
+      "id": "REQ-SEED-005",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "serviceName": "In-Room Dining — Breakfast",
+      "serviceCategory": "Dining",
+      "serviceId": "inroom-dining",
+      "icon": "room_service",
+      "status": "completed",
+      "details": {
+        "deliveryTime": "08:00",
+        "specialInstructions": "Extra Ceylon tea, no sugar please."
+      },
+      "notes": "Breakfast for 2, with Ceylon tea.",
+      "createdAt": "2026-03-15T22:00:00.000Z",
+      "updatedAt": "2026-03-16T08:15:00.000Z",
+      "completedAt": "2026-03-16T08:15:00.000Z",
+      "staffNote": null
+    },
+    {
+      "id": "REQ-SEED-006",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "serviceName": "Laundry — 6 items",
+      "serviceCategory": "Laundry",
+      "serviceId": "laundry",
+      "icon": "local_laundry_service",
+      "status": "inprogress",
+      "details": {
+        "items": [
+          { "id": "shirt",   "name": "Shirt / Blouse",  "quantity": 2, "serviceType": "wash" },
+          { "id": "trouser", "name": "Trousers / Pants", "quantity": 2, "serviceType": "wash" },
+          { "id": "dress",   "name": "Dress / Skirt",   "quantity": 1, "serviceType": "wash" },
+          { "id": "jacket",  "name": "Jacket / Blazer", "quantity": 1, "serviceType": "ironOnly" }
+        ],
+        "express": false,
+        "collectionTime": "10:00"
+      },
+      "notes": "Standard laundry. Collected from room at 10:00.",
+      "createdAt": "2026-03-16T09:45:00.000Z",
+      "updatedAt": "2026-03-16T10:05:00.000Z",
+      "completedAt": null,
+      "staffNote": "Collected. ETA: 2026-03-17 by 18:00."
+    },
+    {
+      "id": "REQ-SEED-007",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "serviceName": "Turndown Service",
+      "serviceCategory": "Housekeeping",
+      "serviceId": "turndown",
+      "icon": "bed",
+      "status": "pending",
+      "details": {
+        "preferredTime": "20:00"
+      },
+      "notes": "Tonight's turndown at 20:00.",
+      "createdAt": "2026-03-16T11:00:00.000Z",
+      "updatedAt": "2026-03-16T11:00:00.000Z",
+      "completedAt": null,
+      "staffNote": null
+    }
+  ]
+}

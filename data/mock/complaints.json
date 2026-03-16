@@ -1,0 +1,74 @@
+{
+  "complaints": [
+    {
+      "id": "CMP-SEED-001",
+      "ref": "CMP-SEED-001",
+      "reservationId": "RES-20260210-004",
+      "guestEmail": "demo@guest.com",
+      "propertyId": "club-dolphin",
+      "propertyName": "Club Hotel Dolphin",
+      "category": "room",
+      "subcategory": "Noise",
+      "description": "The room next door had a very loud party until 02:00 AM on the second night. We called the front desk but it took over an hour for the noise to stop. It significantly affected our sleep.",
+      "status": "resolved",
+      "priority": "medium",
+      "createdAt": "2026-02-11T23:45:00.000Z",
+      "resolvedAt": "2026-02-12T09:00:00.000Z",
+      "timeline": [
+        {
+          "status": "open",
+          "label": "Complaint Received",
+          "timestamp": "2026-02-11T23:45:00.000Z",
+          "note": "Your complaint has been logged and assigned to our Duty Manager."
+        },
+        {
+          "status": "inprogress",
+          "label": "Under Investigation",
+          "timestamp": "2026-02-12T00:10:00.000Z",
+          "note": "Duty Manager has spoken with guests in the adjacent room. The noise has been addressed."
+        },
+        {
+          "status": "inprogress",
+          "label": "Compensation Offered",
+          "timestamp": "2026-02-12T08:30:00.000Z",
+          "note": "We sincerely apologise for the disturbance. A complimentary breakfast and spa credit of LKR 5,000 has been applied to your folio."
+        },
+        {
+          "status": "resolved",
+          "label": "Resolved",
+          "timestamp": "2026-02-12T09:00:00.000Z",
+          "note": "Guest confirmed satisfaction with the resolution. Marked as resolved."
+        }
+      ]
+    },
+    {
+      "id": "CMP-SEED-002",
+      "ref": "CMP-SEED-002",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "propertyId": "newburge-ella",
+      "propertyName": "Newburgh Ella",
+      "category": "dining",
+      "subcategory": "Service Speed",
+      "description": "Waited over 45 minutes for breakfast to be delivered despite ordering at 07:30. No updates were given during the wait.",
+      "status": "inprogress",
+      "priority": "low",
+      "createdAt": "2026-03-15T08:20:00.000Z",
+      "resolvedAt": null,
+      "timeline": [
+        {
+          "status": "open",
+          "label": "Complaint Received",
+          "timestamp": "2026-03-15T08:20:00.000Z",
+          "note": "Your feedback has been logged and shared with our F&B Manager."
+        },
+        {
+          "status": "inprogress",
+          "label": "Being Reviewed",
+          "timestamp": "2026-03-15T09:00:00.000Z",
+          "note": "F&B Manager is reviewing kitchen logs for this morning. We will respond within 2 hours."
+        }
+      ]
+    }
+  ]
+}

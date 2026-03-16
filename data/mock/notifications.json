@@ -1,0 +1,104 @@
+{
+  "notifications": [
+    {
+      "id": "NOTIF-SEED-001",
+      "guestEmail": "demo@guest.com",
+      "type": "welcome",
+      "icon": "hotel",
+      "title": "Welcome to Newburgh Ella!",
+      "message": "Your room 205 is ready. We hope you have a wonderful stay. Let us know if there is anything we can do to make your anniversary extra special.",
+      "read": true,
+      "timestamp": "2026-03-14T14:05:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-002",
+      "guestEmail": "demo@guest.com",
+      "type": "request",
+      "icon": "check_circle",
+      "title": "Transfer Completed",
+      "message": "Your airport transfer has been completed. Welcome to Newburgh Ella!",
+      "read": true,
+      "timestamp": "2026-03-14T14:02:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-003",
+      "guestEmail": "demo@guest.com",
+      "type": "request",
+      "icon": "check_circle",
+      "title": "Room Makeup Completed",
+      "message": "Your room has been freshened up and is ready for you. We also left a small anniversary surprise.",
+      "read": true,
+      "timestamp": "2026-03-15T10:48:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-004",
+      "guestEmail": "demo@guest.com",
+      "type": "request",
+      "icon": "spa",
+      "title": "Spa Booking Confirmed",
+      "message": "Your Deep Tissue Massage for 2 is confirmed for today at 15:00. Please arrive 10 minutes early.",
+      "read": true,
+      "timestamp": "2026-03-15T09:00:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-005",
+      "guestEmail": "demo@guest.com",
+      "type": "request",
+      "icon": "check_circle",
+      "title": "Spa Treatment Completed",
+      "message": "We hope you enjoyed your Deep Tissue Massage. Your feedback is always welcome.",
+      "read": true,
+      "timestamp": "2026-03-15T16:10:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-006",
+      "guestEmail": "demo@guest.com",
+      "type": "complaint",
+      "icon": "support_agent",
+      "title": "Complaint Update — CMP-SEED-002",
+      "message": "Our F&B Manager is reviewing your feedback about breakfast delivery. We will respond within 2 hours.",
+      "read": false,
+      "timestamp": "2026-03-15T09:00:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-007",
+      "guestEmail": "demo@guest.com",
+      "type": "billing",
+      "icon": "receipt_long",
+      "title": "Folio Update",
+      "message": "Your in-room dining order of Rs. 5,600 has been added to your folio. Current balance: Rs. 45,700.",
+      "read": false,
+      "timestamp": "2026-03-16T08:20:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-008",
+      "guestEmail": "demo@guest.com",
+      "type": "request",
+      "icon": "local_laundry_service",
+      "title": "Laundry Collected",
+      "message": "Your laundry (6 items) has been collected and is being processed. Expected return: tomorrow by 18:00.",
+      "read": false,
+      "timestamp": "2026-03-16T10:05:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-009",
+      "guestEmail": "demo@guest.com",
+      "type": "wakeup",
+      "icon": "alarm",
+      "title": "Wake-Up Call Scheduled",
+      "message": "Your wake-up call is set for tomorrow (17 Mar) at 06:30. Good night!",
+      "read": false,
+      "timestamp": "2026-03-15T21:02:00.000Z"
+    },
+    {
+      "id": "NOTIF-SEED-010",
+      "guestEmail": "demo@guest.com",
+      "type": "promo",
+      "icon": "local_offer",
+      "title": "Exclusive Offer — Ella Wellness Escape",
+      "message": "Enjoy 20% off all spa treatments this April. Book before checkout to lock in the rate.",
+      "read": false,
+      "timestamp": "2026-03-16T08:00:00.000Z"
+    }
+  ]
+}

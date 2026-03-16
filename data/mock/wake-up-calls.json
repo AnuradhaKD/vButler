@@ -1,0 +1,24 @@
+{
+  "wakeUpCalls": [
+    {
+      "id": "WKP-SEED-001",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "date": "2026-03-17",
+      "time": "06:30",
+      "message": "Good morning! Sunrise yoga starts at 06:30 by the pool.",
+      "status": "scheduled",
+      "createdAt": "2026-03-15T21:00:00.000Z"
+    },
+    {
+      "id": "WKP-SEED-002",
+      "reservationId": "RES-20260314-001",
+      "guestEmail": "demo@guest.com",
+      "date": "2026-03-15",
+      "time": "07:00",
+      "message": "Good morning! Have a wonderful day.",
+      "status": "completed",
+      "createdAt": "2026-03-14T21:30:00.000Z"
+    }
+  ]
+}
