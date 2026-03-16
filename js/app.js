@@ -483,7 +483,8 @@ const App = (() => {
       el.innerHTML = `
         <header class="z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
           <div class="h-16 flex items-stretch justify-between">
-            <div class="flex items-center gap-3 bg-[#003c52] px-4 shrink-0 transition-all duration-250" id="header-brand-block">
+            <!-- Dark brand block: logo + text only, no hamburger -->
+            <div class="flex items-center gap-3 bg-[#003c52] px-4 shrink-0 overflow-hidden ${storage.get('vb:sidebarCollapsed') ? 'vb-brand-collapsed' : ''}" id="header-brand-block">
               <a href="dashboard.html" class="flex items-center gap-2 shrink-0">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/20 p-1">
                   <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
@@ -493,22 +494,24 @@ const App = (() => {
                 <div class="text-xs font-bold text-white/60 uppercase tracking-wider">Destinity vButler</div>
                 <div class="text-xs font-semibold text-teal-300 truncate max-w-[160px]">${propertyName}</div>
               </div>
+            </div>
+            <!-- White header area: hamburger on left, icons on right -->
+            <div class="flex items-center gap-3 px-4 flex-1 justify-between">
+              <!-- Hamburger: always on white background -->
               <div class="relative group hidden md:block shrink-0">
-                <button onclick="App.sidebar.toggleMenu()" class="w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white transition" aria-label="Toggle sidebar">
+                <button onclick="App.sidebar.toggleMenu()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle sidebar">
                   <span class="material-symbols-outlined text-[22px]">menu</span>
                 </button>
                 <div class="absolute left-1/2 -translate-x-1/2 top-11 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                  <div class="bg-slate-800 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg shadow-lg">
-                    Collapse / expand menu
-                  </div>
+                  <div class="bg-slate-800 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg shadow-lg">Collapse / expand menu</div>
                   <div class="w-2 h-2 bg-slate-800 rotate-45 mx-auto -mt-1"></div>
                 </div>
               </div>
-              <button onclick="App.sidebar.toggleMenu()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white transition shrink-0" aria-label="Open menu">
+              <button onclick="App.sidebar.toggleMenu()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shrink-0" aria-label="Open menu">
                 <span class="material-symbols-outlined text-[22px]">menu</span>
               </button>
-            </div>
-            <div class="flex items-center gap-3 px-4">
+              <!-- Right icons -->
+              <div class="flex items-center gap-3 ml-auto">
               <button onclick="App.theme.toggle()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle theme">
                 <span id="theme-toggle-icon" class="material-symbols-outlined text-xl">${theme.get() === 'dark' ? 'light_mode' : 'dark_mode'}</span>
               </button>
@@ -522,7 +525,8 @@ const App = (() => {
                   : `<div class="w-9 h-9 rounded-full bg-[#003c52] flex items-center justify-center text-white text-sm font-bold">${initials}</div>`
                 }
               </a>
-            </div>
+              </div><!-- end right icons -->
+            </div><!-- end white header area -->
           </div>
         </header>`;
 
@@ -559,7 +563,8 @@ const App = (() => {
 
   // ─── Sidebar (Desktop) ────────────────────────────────────────────────────────
   const sidebar = {
-    render(active = '') {
+    render(first = '', second = '') {
+      const active = second || first;
       const el = document.getElementById('app-sidebar');
       if (!el) return;
       const isCollapsed = storage.get('vb:sidebarCollapsed') || false;
@@ -665,7 +670,10 @@ const App = (() => {
       storage.set('vb:sidebarCollapsed', next);
       const aside = document.getElementById('desktop-sidebar');
       if (aside) aside.classList.toggle('vb-sidebar-collapsed', next);
-      // Sync header brand — only hide the text, logo always stays
+      // Sync header brand block width with sidebar
+      const brandBlock = document.getElementById('header-brand-block');
+      if (brandBlock) brandBlock.classList.toggle('vb-brand-collapsed', next);
+      // Only hide the text, logo always stays
       const brandText = document.querySelector('.sidebar-brand-text');
       if (brandText) brandText.classList.toggle('sidebar-brand-hidden', next);
     },
@@ -818,9 +826,13 @@ const App = (() => {
       body.vb-app > .vb-layout  { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; }
       body.vb-app > .vb-layout > main { flex: 1 1 0; overflow-y: auto; min-height: 0; }
 
-      /* Desktop sidebar collapse */
+      /* Desktop sidebar + header brand block — keep widths in sync */
       #desktop-sidebar { width: 18rem; transition: width 0.25s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
       #desktop-sidebar.vb-sidebar-collapsed { width: 4rem; }
+      @media (min-width: 768px) {
+        #header-brand-block { width: 18rem; transition: width 0.25s cubic-bezier(0.4,0,0.2,1); }
+        #header-brand-block.vb-brand-collapsed { width: 4rem; }
+      }
       #desktop-sidebar .sidebar-label { transition: opacity 0.15s ease, max-width 0.25s cubic-bezier(0.4,0,0.2,1); max-width: 16rem; overflow: hidden; white-space: nowrap; }
       #desktop-sidebar.vb-sidebar-collapsed .sidebar-label { opacity: 0; max-width: 0; }
       #desktop-sidebar .sidebar-nav-item { transition: justify-content 0s, gap 0.25s; }
