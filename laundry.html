@@ -87,11 +87,11 @@
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Select service type and quantity for each item</p>
               </div>
               <!-- Column headers -->
-              <div class="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-5 py-2.5 bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
+              <div class="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-4 md:px-5 py-2.5 bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
                 <span>Item</span>
-                <span class="w-24 text-center">Wash</span>
-                <span class="w-24 text-center">Iron Only</span>
-                <span class="w-20 text-center">Qty</span>
+                <span class="w-[72px] md:w-24 text-center">Wash</span>
+                <span class="w-[72px] md:w-24 text-center">Iron Only</span>
+                <span class="w-16 md:w-20 text-center">Qty</span>
               </div>
               <div id="price-list" class="divide-y divide-slate-100 dark:divide-slate-800"></div>
             </div>
@@ -194,15 +194,15 @@
         const svc = o ? o.service : 'wash';
 
         return `
-          <div id="row-${item.id}" class="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-5 py-3 items-center ${qty > 0 ? 'bg-[#003c52]/5 dark:bg-teal-900/10' : ''}">
+          <div id="row-${item.id}" class="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-4 md:px-5 py-3 items-center ${qty > 0 ? 'bg-[#003c52]/5 dark:bg-teal-900/10' : ''}">
             <span class="text-sm font-medium text-slate-900 dark:text-white">${item.name}</span>
-            <button onclick="setService('${item.id}', 'wash')" class="w-24 px-2 py-1.5 rounded-lg text-xs font-semibold border transition text-center ${svc==='wash' && qty>0 ? 'bg-[#003c52] text-white border-[#003c52]' : 'border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-[#003c52] hover:text-[#003c52]'}">
+            <button onclick="setService('${item.id}', 'wash')" class="w-[72px] md:w-24 px-1 md:px-2 py-1.5 rounded-lg text-[10px] md:text-xs font-semibold border transition text-center ${svc==='wash' && qty>0 ? 'bg-[#003c52] text-white border-[#003c52]' : 'border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-[#003c52] hover:text-[#003c52]'}">
               ${App.helpers.formatCurrency(washPrice, currency)}
             </button>
-            <button onclick="${ironPrice ? `setService('${item.id}', 'ironOnly')` : 'void 0'}" class="w-24 px-2 py-1.5 rounded-lg text-xs font-semibold border transition text-center ${!ironPrice ? 'opacity-30 cursor-not-allowed border-slate-200 dark:border-slate-600 text-slate-500' : svc==='ironOnly' && qty>0 ? 'bg-[#003c52] text-white border-[#003c52]' : 'border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-[#003c52] hover:text-[#003c52]'}">
+            <button onclick="${ironPrice ? `setService('${item.id}', 'ironOnly')` : 'void 0'}" class="w-[72px] md:w-24 px-1 md:px-2 py-1.5 rounded-lg text-[10px] md:text-xs font-semibold border transition text-center ${!ironPrice ? 'opacity-30 cursor-not-allowed border-slate-200 dark:border-slate-600 text-slate-500' : svc==='ironOnly' && qty>0 ? 'bg-[#003c52] text-white border-[#003c52]' : 'border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-[#003c52] hover:text-[#003c52]'}">
               ${ironPrice ? App.helpers.formatCurrency(ironPrice, currency) : 'N/A'}
             </button>
-            <div class="flex items-center gap-1 w-20 justify-center">
+            <div class="flex items-center gap-1 w-16 md:w-20 justify-center">
               <button onclick="adjustItem('${item.id}',-1)" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
                 <span class="material-symbols-outlined text-sm">remove</span>
               </button>
