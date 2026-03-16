@@ -488,6 +488,7 @@ const App = (() => {
   function init() {
     theme.apply();
     toast.init();
+    document.documentElement.style.overflowX = 'hidden';
   }
 
   // Run on load
