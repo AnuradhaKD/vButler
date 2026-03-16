@@ -308,24 +308,31 @@
       const total = items.reduce((s,e) => s + e.item.price * e.quantity, 0);
       const deliveryTime = document.getElementById(`delivery-time-${source}`).value;
       const instructions = document.getElementById(`instructions-${source}`).value.trim();
-
       const orderSummary = items.map(({item,quantity}) => `${item.name} ×${quantity}`).join(', ');
 
-      App.requests.add({
-        reservationId: reservation.id,
-        serviceName: 'In-Room Dining Order',
-        serviceId: 'inroom-dining',
-        category: 'Dining',
-        details: {
-          items: orderSummary,
-          total: App.helpers.formatCurrency(total, currency),
-          deliveryTime
-        },
-        notes: instructions
+      App.confirm.show({
+        title: 'Confirm Order',
+        message: 'Your order will be delivered to your room (30–45 min). Charges added to folio.',
+        items: [
+          { label: 'Items', value: orderSummary },
+          { label: 'Total', value: App.helpers.formatCurrency(total, currency) },
+          { label: 'Delivery', value: deliveryTime },
+          ...(instructions ? [{ label: 'Instructions', value: instructions }] : [])
+        ],
+        confirmText: 'Place Order',
+        onConfirm() {
+          App.requests.add({
+            reservationId: reservation.id,
+            serviceName: 'In-Room Dining Order',
+            serviceId: 'inroom-dining',
+            category: 'Dining',
+            details: { items: orderSummary, total: App.helpers.formatCurrency(total, currency), deliveryTime },
+            notes: instructions
+          });
+          App.toast.show('Order placed! Estimated delivery 30–45 minutes.', 'success');
+          setTimeout(() => window.location.href = 'my-requests.html', 1400);
+        }
       });
-
-      App.toast.show('Order placed! Estimated delivery 30–45 minutes.', 'success');
-      setTimeout(() => window.location.href = 'my-requests.html', 1400);
     }
 
     init();

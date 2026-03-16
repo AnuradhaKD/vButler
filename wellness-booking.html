@@ -229,8 +229,10 @@
         const requests = document.getElementById('field-requests').value.trim();
         const therapist = document.querySelector('input[name="therapistGender"]:checked')?.value || null;
 
-        const total = itemPrice * guests;
+        if (!date) { App.toast.show('Please select a date.', 'warning'); return; }
+        if (!time) { App.toast.show('Please select a time.', 'warning'); return; }
 
+        const total = itemPrice * guests;
         const details = {
           date, time,
           guests: `${guests} guest${guests!==1?'s':''}`,
@@ -239,17 +241,31 @@
         if (therapist && therapist !== 'No Preference') details.therapistPreference = therapist;
         if (type === 'class' && wellnessItem.schedule) details.schedule = wellnessItem.schedule.join(', ');
 
-        App.requests.add({
-          reservationId: reservation.id,
-          serviceName: wellnessItem.name,
-          serviceId: id,
-          category: type === 'treatment' ? 'Spa Treatment' : type === 'class' ? 'Wellness Class' : 'Spa Package',
-          details,
-          notes: requests
+        App.confirm.show({
+          title: `Confirm: ${wellnessItem.name}`,
+          message: 'Please review your booking before confirming.',
+          items: [
+            { label: 'Date', value: date },
+            { label: 'Time', value: time },
+            { label: 'Guests', value: `${guests}` },
+            { label: 'Total', value: App.helpers.formatCurrency(total, currency) },
+            ...(therapist && therapist !== 'No Preference' ? [{ label: 'Therapist', value: therapist }] : []),
+            ...(requests ? [{ label: 'Requests', value: requests }] : [])
+          ],
+          confirmText: 'Confirm Booking',
+          onConfirm() {
+            App.requests.add({
+              reservationId: reservation.id,
+              serviceName: wellnessItem.name,
+              serviceId: id,
+              category: type === 'treatment' ? 'Spa Treatment' : type === 'class' ? 'Wellness Class' : 'Spa Package',
+              details,
+              notes: requests
+            });
+            App.toast.show('Wellness booking confirmed!', 'success');
+            setTimeout(() => window.location.href = 'my-requests.html', 1200);
+          }
         });
-
-        App.toast.show('Wellness booking confirmed!', 'success');
-        setTimeout(() => window.location.href = 'my-requests.html', 1200);
       });
     }
 

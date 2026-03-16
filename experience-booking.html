@@ -182,6 +182,8 @@
         selectedAddons.push({ id: cb.value, name: cb.dataset.name, price: parseInt(cb.dataset.price) });
       });
 
+      const totalAmount = currentExp.price * parseInt(guests) + selectedAddons.reduce((sum, a) => sum + a.price, 0);
+
       const details = {
         experienceId: currentExp.id,
         experienceName: currentExp.name,
@@ -190,19 +192,33 @@
         startTime: currentExp.startTime,
         addOns: selectedAddons,
         specialRequests: specialReqs,
-        totalAmount: currentExp.price * parseInt(guests) + selectedAddons.reduce((sum, a) => sum + a.price, 0)
+        totalAmount
       };
 
-      App.requests.add({
-        reservationId: activeRes?.id,
-        serviceName: `Experience: ${currentExp.name}`,
-        serviceId: currentExp.id,
-        category: 'Experience',
-        details
+      App.confirm.show({
+        title: `Confirm: ${currentExp.name}`,
+        message: 'Please review your experience booking.',
+        items: [
+          { label: 'Date', value: date },
+          { label: 'Guests', value: guests },
+          { label: 'Start time', value: currentExp.startTime || 'TBC' },
+          { label: 'Total', value: `Rs. ${totalAmount.toLocaleString()}` },
+          ...(selectedAddons.length ? [{ label: 'Add-ons', value: selectedAddons.map(a => a.name).join(', ') }] : []),
+          ...(specialReqs ? [{ label: 'Requests', value: specialReqs }] : [])
+        ],
+        confirmText: 'Confirm Booking',
+        onConfirm() {
+          App.requests.add({
+            reservationId: activeRes?.id,
+            serviceName: `Experience: ${currentExp.name}`,
+            serviceId: currentExp.id,
+            category: 'Experience',
+            details
+          });
+          App.toast.show('Experience booked successfully!', 'success');
+          setTimeout(() => { window.location.href = 'my-requests.html'; }, 1500);
+        }
       });
-
-      App.toast.show('Experience booked successfully!', 'success');
-      setTimeout(() => { window.location.href = 'my-requests.html'; }, 1500);
     }
 
     (async () => {

@@ -80,7 +80,7 @@
           </div>
           <div class="flex items-end gap-3">
             <div class="flex-1">
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Preferred Time</label>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Preferred Time <span class="font-normal text-slate-400">(optional)</span></label>
               <input type="time" id="room-makeup-time" min="08:00" max="17:00" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
             </div>
             <button onclick="requestRoomMakeup()" class="flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
@@ -104,7 +104,7 @@
           </div>
           <div class="flex items-end gap-3">
             <div class="flex-1">
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Preferred Time</label>
+              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Preferred Time <span class="font-normal text-slate-400">(optional)</span></label>
               <input type="time" id="turndown-time" min="17:00" max="21:00" value="19:00" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
             </div>
             <button onclick="requestTurndown()" class="flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
@@ -128,11 +128,18 @@
           </div>
           <div class="space-y-3">
             <div class="flex flex-wrap gap-x-4 gap-y-2">
-              ${['Bath Towel','Pool Towel','Hand Towel'].map((t,i)=>`
               <label class="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="towelType" value="${t}" ${i===0?'checked':''} class="accent-[#003c52]">
-                <span class="text-sm text-slate-700 dark:text-slate-300">${t}</span>
-              </label>`).join('')}
+                <input type="radio" name="towelType" value="Bath Towel" checked class="accent-[#003c52]">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Bath Towel</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="towelType" value="Pool Towel" class="accent-[#003c52]">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Pool Towel</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="towelType" value="Hand Towel" class="accent-[#003c52]">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Hand Towel</span>
+              </label>
             </div>
             <div class="flex items-center gap-3">
               <div class="flex items-center gap-2 border border-slate-200 dark:border-slate-600 rounded-lg overflow-hidden">
@@ -166,11 +173,18 @@
           </div>
           <div class="space-y-3">
             <div class="flex flex-wrap gap-x-4 gap-y-2">
-              ${['Pillow','Blanket','Both'].map((t,i)=>`
               <label class="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="bedding" value="${t}" ${i===0?'checked':''} class="accent-[#003c52]">
-                <span class="text-sm text-slate-700 dark:text-slate-300">${t}</span>
-              </label>`).join('')}
+                <input type="radio" name="bedding" value="Pillow" checked class="accent-[#003c52]">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Pillow</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="bedding" value="Blanket" class="accent-[#003c52]">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Blanket</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="bedding" value="Both" class="accent-[#003c52]">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Both</span>
+              </label>
             </div>
             <div class="flex items-center gap-3">
               <div class="flex items-center gap-2 border border-slate-200 dark:border-slate-600 rounded-lg overflow-hidden">
@@ -276,33 +290,71 @@
     function requestRoomMakeup() {
       const r = getReservation(); if (!r) return;
       const time = document.getElementById('room-makeup-time').value;
-      App.requests.add({ reservationId: r.id, serviceName: 'Room Makeup', serviceId: 'room-makeup', category: 'Housekeeping', details: { preferredTime: time || 'Any time' }, notes: '' });
-      App.toast.show('Room makeup requested!', 'success');
-      renderRecentRequests();
+      App.confirm.show({
+        title: 'Confirm Room Makeup',
+        message: 'Our housekeeping team will clean and make up your room.',
+        items: [{ label: 'Preferred time', value: time || 'Any time (08:00–17:00)' }],
+        confirmText: 'Send Request',
+        onConfirm() {
+          App.requests.add({ reservationId: r.id, serviceName: 'Room Makeup', serviceId: 'room-makeup', category: 'Housekeeping', details: { preferredTime: time || 'Any time' }, notes: '' });
+          App.toast.show('Room makeup requested!', 'success');
+          renderRecentRequests();
+        }
+      });
     }
 
     function requestTurndown() {
       const r = getReservation(); if (!r) return;
       const time = document.getElementById('turndown-time').value;
-      App.requests.add({ reservationId: r.id, serviceName: 'Turndown Service', serviceId: 'turndown', category: 'Housekeeping', details: { preferredTime: time || '19:00' }, notes: '' });
-      App.toast.show('Turndown service requested!', 'success');
-      renderRecentRequests();
+      App.confirm.show({
+        title: 'Confirm Turndown Service',
+        message: 'Evening turndown with chocolates and soft lighting.',
+        items: [{ label: 'Preferred time', value: time || '19:00 (17:00–21:00)' }],
+        confirmText: 'Send Request',
+        onConfirm() {
+          App.requests.add({ reservationId: r.id, serviceName: 'Turndown Service', serviceId: 'turndown', category: 'Housekeeping', details: { preferredTime: time || '19:00' }, notes: '' });
+          App.toast.show('Turndown service requested!', 'success');
+          renderRecentRequests();
+        }
+      });
     }
 
     function requestTowels() {
       const r = getReservation(); if (!r) return;
       const towelType = document.querySelector('input[name="towelType"]:checked')?.value || 'Bath Towel';
-      App.requests.add({ reservationId: r.id, serviceName: 'Extra Towels', serviceId: 'extra-towels', category: 'Housekeeping', details: { quantity: qtys.towel, towelType }, notes: '' });
-      App.toast.show(`${qtys.towel} ${towelType}(s) requested!`, 'success');
-      renderRecentRequests();
+      App.confirm.show({
+        title: 'Confirm Towel Request',
+        message: 'Fresh towels will be delivered to your room in ~15 minutes.',
+        items: [
+          { label: 'Type', value: towelType },
+          { label: 'Quantity', value: `${qtys.towel}` }
+        ],
+        confirmText: 'Send Request',
+        onConfirm() {
+          App.requests.add({ reservationId: r.id, serviceName: 'Extra Towels', serviceId: 'extra-towels', category: 'Housekeeping', details: { quantity: qtys.towel, towelType }, notes: '' });
+          App.toast.show(`${qtys.towel} ${towelType}(s) requested!`, 'success');
+          renderRecentRequests();
+        }
+      });
     }
 
     function requestBedding() {
       const r = getReservation(); if (!r) return;
       const itemType = document.querySelector('input[name="bedding"]:checked')?.value || 'Pillow';
-      App.requests.add({ reservationId: r.id, serviceName: 'Extra Pillows / Blankets', serviceId: 'extra-pillows', category: 'Housekeeping', details: { quantity: qtys.bedding, itemType }, notes: '' });
-      App.toast.show(`${qtys.bedding} ${itemType}(s) requested!`, 'success');
-      renderRecentRequests();
+      App.confirm.show({
+        title: 'Confirm Bedding Request',
+        message: 'Additional bedding items will be delivered in ~15 minutes.',
+        items: [
+          { label: 'Item', value: itemType },
+          { label: 'Quantity', value: `${qtys.bedding}` }
+        ],
+        confirmText: 'Send Request',
+        onConfirm() {
+          App.requests.add({ reservationId: r.id, serviceName: 'Extra Pillows / Blankets', serviceId: 'extra-pillows', category: 'Housekeeping', details: { quantity: qtys.bedding, itemType }, notes: '' });
+          App.toast.show(`${qtys.bedding} ${itemType}(s) requested!`, 'success');
+          renderRecentRequests();
+        }
+      });
     }
 
     function renderRecentRequests() {

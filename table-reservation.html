@@ -197,17 +197,29 @@
 
         if (!date || !time) { App.toast.show('Please select date and time.', 'warning'); return; }
 
-        App.requests.add({
-          reservationId: reservation.id,
-          serviceName: `Table Reservation — ${restaurant.name}`,
-          serviceId: 'table-reservation',
-          category: 'Dining',
-          details: { date, time, partySize: `${partySize} guests`, restaurant: restaurant.name },
-          notes: specialRequests
+        App.confirm.show({
+          title: `Reserve Table — ${restaurant.name}`,
+          message: 'Please confirm your reservation details.',
+          items: [
+            { label: 'Date', value: date },
+            { label: 'Time', value: time },
+            { label: 'Party size', value: `${partySize} guests` },
+            ...(specialRequests ? [{ label: 'Requests', value: specialRequests }] : [])
+          ],
+          confirmText: 'Confirm Reservation',
+          onConfirm() {
+            App.requests.add({
+              reservationId: reservation.id,
+              serviceName: `Table Reservation — ${restaurant.name}`,
+              serviceId: 'table-reservation',
+              category: 'Dining',
+              details: { date, time, partySize: `${partySize} guests`, restaurant: restaurant.name },
+              notes: specialRequests
+            });
+            App.toast.show('Table reserved successfully!', 'success');
+            setTimeout(() => window.location.href = 'my-requests.html', 1200);
+          }
         });
-
-        App.toast.show('Table reserved successfully!', 'success');
-        setTimeout(() => window.location.href = 'my-requests.html', 1200);
       });
     }
 

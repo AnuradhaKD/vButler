@@ -352,24 +352,41 @@
 
       const specialRequirements = getValue('field-specialRequirements');
       const direction = isArrival ? 'Arrival' : 'Departure';
+      const currency = propData.property?.currencySymbol || 'Rs.';
 
-      const btn = document.getElementById('confirm-btn');
-      btn.disabled = true;
-      btn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Confirming…`;
+      const summaryItems = [
+        { label: 'Transfer', value: `${direction} — ${selectedVehicle.label}` },
+        { label: 'Flight', value: details.flightNumber },
+        { label: isArrival ? 'Arrival date' : 'Departure date', value: isArrival ? details.arrivalDate : details.departureDate },
+        { label: isArrival ? 'Arrival time' : 'Pickup time', value: isArrival ? details.arrivalTime : details.departureTime },
+        { label: 'Passengers', value: `${details.passengerCount}` },
+        { label: 'Total', value: `${currency} ${selectedVehicle.price.toLocaleString()}` },
+        ...(specialRequirements ? [{ label: 'Requirements', value: specialRequirements }] : [])
+      ];
 
-      App.requests.add({
-        reservationId: reservation.id,
-        serviceName: `Airport Transfer — ${direction}`,
-        serviceId: transportOption.id,
-        category: 'Transport',
-        details,
-        notes: specialRequirements
+      App.confirm.show({
+        title: 'Confirm Transfer Booking',
+        message: 'Please review your booking details before confirming.',
+        items: summaryItems,
+        confirmText: 'Confirm Booking',
+        onConfirm() {
+          const btn = document.getElementById('confirm-btn');
+          btn.disabled = true;
+          btn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Confirming…`;
+          App.requests.add({
+            reservationId: reservation.id,
+            serviceName: `Airport Transfer — ${direction}`,
+            serviceId: transportOption.id,
+            category: 'Transport',
+            details,
+            notes: specialRequirements
+          });
+          setTimeout(() => {
+            App.toast.show(`${transportOption.name} booked successfully!`, 'success');
+            setTimeout(() => { window.location.href = 'my-requests.html'; }, 1200);
+          }, 600);
+        }
       });
-
-      setTimeout(() => {
-        App.toast.show(`${transportOption.name} booked successfully!`, 'success');
-        setTimeout(() => { window.location.href = 'my-requests.html'; }, 1200);
-      }, 600);
     }
 
     init();

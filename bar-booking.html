@@ -187,17 +187,32 @@
         const partySize = document.getElementById('field-partySize').value;
         const requests = document.getElementById('field-requests').value.trim();
 
-        App.requests.add({
-          reservationId: reservation.id,
-          serviceName: `Bar Table — ${bar.name}`,
-          serviceId: 'bar-table',
-          category: 'Dining & Bars',
-          details: { date, time, partySize: `${partySize} guests`, bar: bar.name },
-          notes: requests
-        });
+        if (!date) { App.toast.show('Please select a date.', 'warning'); return; }
+        if (!time) { App.toast.show('Please select a time.', 'warning'); return; }
 
-        App.toast.show('Table reserved at ' + bar.name + '!', 'success');
-        setTimeout(() => window.location.href = 'my-requests.html', 1200);
+        App.confirm.show({
+          title: `Reserve Table — ${bar.name}`,
+          message: 'Please confirm your table reservation details.',
+          items: [
+            { label: 'Date', value: date },
+            { label: 'Time', value: time },
+            { label: 'Party size', value: `${partySize} guests` },
+            ...(requests ? [{ label: 'Requests', value: requests }] : [])
+          ],
+          confirmText: 'Confirm Reservation',
+          onConfirm() {
+            App.requests.add({
+              reservationId: reservation.id,
+              serviceName: `Bar Table — ${bar.name}`,
+              serviceId: 'bar-table',
+              category: 'Dining & Bars',
+              details: { date, time, partySize: `${partySize} guests`, bar: bar.name },
+              notes: requests
+            });
+            App.toast.show('Table reserved at ' + bar.name + '!', 'success');
+            setTimeout(() => window.location.href = 'my-requests.html', 1200);
+          }
+        });
       });
     }
 

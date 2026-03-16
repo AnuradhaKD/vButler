@@ -315,25 +315,37 @@
       const total = entries.reduce((s, e) => s + getItemPrice(e) * e.qty, 0);
       const collectionTime = document.getElementById('collection-time').value;
       const instructions = document.getElementById('laundry-instructions').value.trim();
-
       const orderSummary = entries.map(e => `${e.item.name} ×${e.qty} (${e.service === 'ironOnly' ? 'Iron Only' : 'Wash'})`).join(', ');
 
-      App.requests.add({
-        reservationId: reservation.id,
-        serviceName: 'Laundry Service',
-        serviceId: 'laundry',
-        category: 'Housekeeping',
-        details: {
-          items: orderSummary,
-          total: App.helpers.formatCurrency(total, currency),
-          express: expressOn ? 'Yes (1 business day)' : 'No (2 business days)',
-          collectionTime: collectionTime || 'Not specified'
-        },
-        notes: instructions
+      App.confirm.show({
+        title: 'Confirm Laundry Order',
+        message: 'Your laundry will be collected and returned as scheduled.',
+        items: [
+          { label: 'Items', value: orderSummary },
+          { label: 'Total', value: App.helpers.formatCurrency(total, currency) },
+          { label: 'Express', value: expressOn ? 'Yes — ready in 1 day' : 'No — ready in 2 days' },
+          { label: 'Collection', value: collectionTime || 'Not specified' },
+          ...(instructions ? [{ label: 'Instructions', value: instructions }] : [])
+        ],
+        confirmText: 'Place Order',
+        onConfirm() {
+          App.requests.add({
+            reservationId: reservation.id,
+            serviceName: 'Laundry Service',
+            serviceId: 'laundry',
+            category: 'Housekeeping',
+            details: {
+              items: orderSummary,
+              total: App.helpers.formatCurrency(total, currency),
+              express: expressOn ? 'Yes (1 business day)' : 'No (2 business days)',
+              collectionTime: collectionTime || 'Not specified'
+            },
+            notes: instructions
+          });
+          App.toast.show('Laundry order submitted!', 'success');
+          setTimeout(() => window.location.href = 'my-requests.html', 1200);
+        }
       });
-
-      App.toast.show('Laundry order submitted!', 'success');
-      setTimeout(() => window.location.href = 'my-requests.html', 1200);
     }
 
     init();

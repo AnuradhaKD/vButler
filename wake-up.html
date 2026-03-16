@@ -395,16 +395,26 @@
         return;
       }
 
-      App.wakeUpCalls.add({ reservationId: reservation.id, date, time, repeat, notes });
-
-      // Format date for toast
+      const repeatLabels = { once: 'Once', daily: 'Daily (rest of stay)', weekdays: 'Weekdays only' };
       const formatted = App.helpers.formatDate ? App.helpers.formatDate(date) : date;
-      App.toast.show(`Wake-up call set for ${time} on ${formatted}.`, 'success');
 
-      // Reset notes, keep date/time for convenience
-      document.getElementById('wakeup-notes').value = '';
-
-      renderCallsList();
+      App.confirm.show({
+        title: 'Confirm Wake-Up Call',
+        message: 'Our team will call your room at the requested time.',
+        items: [
+          { label: 'Date', value: formatted },
+          { label: 'Time', value: time },
+          { label: 'Repeat', value: repeatLabels[repeat] || repeat },
+          ...(notes ? [{ label: 'Notes', value: notes }] : [])
+        ],
+        confirmText: 'Set Alarm',
+        onConfirm() {
+          App.wakeUpCalls.add({ reservationId: reservation.id, date, time, repeat, notes });
+          App.toast.show(`Wake-up call set for ${time} on ${formatted}.`, 'success');
+          document.getElementById('wakeup-notes').value = '';
+          renderCallsList();
+        }
+      });
     }
 
     function renderCallsList() {

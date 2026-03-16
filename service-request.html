@@ -162,20 +162,55 @@
           App.toast.show('No active reservation found.', 'error');
           return;
         }
+
+        // Validate required text fields
+        const requiredTextFields = { destination: 'Destination', treatment: 'Treatment Type', restaurantName: 'Restaurant Name' };
+        for (const [fieldId, label] of Object.entries(requiredTextFields)) {
+          if ((service.fields || []).includes(fieldId)) {
+            const el = document.getElementById(`field-${fieldId}`);
+            if (el && !el.value.trim()) {
+              App.toast.show(`${label} is required.`, 'warning');
+              el.focus();
+              return;
+            }
+          }
+        }
+        // Validate date if present
+        if ((service.fields || []).includes('date') && !document.getElementById('field-date')?.value) {
+          App.toast.show('Please select a date.', 'warning');
+          return;
+        }
+
         const details = collectFieldValues(service.fields || []);
         const notes = document.getElementById('field-notes').value.trim();
 
-        App.requests.add({
-          reservationId: reservation.id,
-          serviceName: service.name,
-          serviceId: service.id,
-          category: category.label,
-          details,
-          notes
-        });
+        // Build summary items for confirm dialog
+        const summaryItems = [];
+        if (details.date)         summaryItems.push({ label: 'Date', value: details.date });
+        if (details.preferredTime || details.time) summaryItems.push({ label: 'Time', value: details.preferredTime || details.time });
+        if (details.destination)  summaryItems.push({ label: 'Destination', value: details.destination });
+        if (details.treatment)    summaryItems.push({ label: 'Treatment', value: details.treatment });
+        if (details.quantity)     summaryItems.push({ label: 'Quantity', value: details.quantity });
+        if (notes)                summaryItems.push({ label: 'Notes', value: notes });
 
-        App.toast.show('Request submitted successfully!', 'success');
-        setTimeout(() => window.location.href = 'my-requests.html', 1200);
+        App.confirm.show({
+          title: `Confirm: ${service.name}`,
+          message: 'Please review your request before sending.',
+          items: summaryItems,
+          confirmText: 'Submit Request',
+          onConfirm() {
+            App.requests.add({
+              reservationId: reservation.id,
+              serviceName: service.name,
+              serviceId: service.id,
+              category: category.label,
+              details,
+              notes
+            });
+            App.toast.show('Request submitted successfully!', 'success');
+            setTimeout(() => window.location.href = 'my-requests.html', 1200);
+          }
+        });
       });
     }
 
@@ -221,7 +256,7 @@
             html += fieldWrap('Flight Number', `<input type="text" id="field-flightNumber" placeholder="e.g. UL 202" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
             break;
           case 'destination':
-            html += fieldWrap('Destination', `<input type="text" id="field-destination" placeholder="e.g. Ella Town" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            html += fieldWrap('Destination <span class="text-red-500">*</span>', `<input type="text" id="field-destination" placeholder="e.g. Ella Town" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
             break;
           case 'specialInstructions':
           case 'specialRequests':
@@ -253,10 +288,10 @@
             html += fieldWrap('Collection Time', `<input type="time" id="field-collectionTime" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
             break;
           case 'restaurantName':
-            html += fieldWrap('Restaurant Name', `<input type="text" id="field-restaurantName" placeholder="Name of the restaurant" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            html += fieldWrap('Restaurant Name <span class="text-red-500">*</span>', `<input type="text" id="field-restaurantName" placeholder="Name of the restaurant" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
             break;
           case 'treatment':
-            html += fieldWrap('Treatment Type', `<input type="text" id="field-treatment" placeholder="e.g. Swedish Massage" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
+            html += fieldWrap('Treatment Type <span class="text-red-500">*</span>', `<input type="text" id="field-treatment" placeholder="e.g. Swedish Massage" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">`);
             break;
           case 'therapistGender':
             html += fieldWrap('Therapist Preference', `

@@ -318,6 +318,42 @@ const App = (() => {
     }
   };
 
+  // ─── Confirm Dialog ──────────────────────────────────────────────────────────
+  const confirm = {
+    show({ title, message, items = [], confirmText = 'Confirm', onConfirm }) {
+      const existing = document.getElementById('vb-confirm-modal');
+      if (existing) existing.remove();
+      const modal = document.createElement('div');
+      modal.id = 'vb-confirm-modal';
+      modal.className = 'fixed inset-0 z-[200] flex items-end md:items-center justify-center p-4';
+      const itemsHtml = items.length
+        ? `<div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 mb-4 space-y-1.5">${items.map(i =>
+            `<div class="flex items-start gap-2 text-xs"><span class="font-semibold text-slate-500 dark:text-slate-400 shrink-0 w-28">${i.label}:</span><span class="text-slate-700 dark:text-slate-300">${i.value}</span></div>`
+          ).join('')}</div>` : '';
+      modal.innerHTML = `
+        <div class="absolute inset-0 bg-black/50" onclick="App.confirm.close()"></div>
+        <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 z-10">
+          <div class="flex items-start gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-[#003c52]/10 dark:bg-teal-900/20 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-xl text-[#003c52] dark:text-teal-400">help</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 dark:text-white">${title}</h3>
+              <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">${message}</p>
+            </div>
+          </div>
+          ${itemsHtml}
+          <div class="flex gap-3">
+            <button onclick="App.confirm.close()" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl px-4 py-2.5 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition text-sm">Cancel</button>
+            <button id="vb-confirm-btn" class="flex-1 bg-[#003c52] text-white rounded-xl px-4 py-2.5 font-semibold hover:bg-[#004f6e] transition text-sm">${confirmText}</button>
+          </div>
+        </div>`;
+      document.body.appendChild(modal);
+      document.getElementById('vb-confirm-btn').onclick = () => { App.confirm.close(); onConfirm(); };
+    },
+    close() { const el = document.getElementById('vb-confirm-modal'); if (el) el.remove(); }
+  };
+
   // ─── Data Loader ─────────────────────────────────────────────────────────────
   const _cache = {};
   const data = {
@@ -773,7 +809,7 @@ const App = (() => {
     init();
   }
 
-  return { storage, auth, reservations, requests, complaints, wishlist, notifications, wakeUpCalls, preArrival, theme, toast, data, header, bottomNav, sidebar, helpers, datepicker };
+  return { storage, auth, reservations, requests, complaints, wishlist, notifications, wakeUpCalls, preArrival, theme, toast, confirm, data, header, bottomNav, sidebar, helpers, datepicker };
 
 })();
 
