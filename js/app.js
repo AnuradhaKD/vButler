@@ -527,7 +527,7 @@ const App = (() => {
         { id: 'notifications',  label: 'Notifications',  icon: 'notifications',  href: 'notifications.html' }
       ];
       el.innerHTML = `
-        <aside class="hidden md:flex flex-col w-72 min-h-screen bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
+        <aside class="hidden md:flex flex-col w-72 sticky top-16 h-[calc(100vh-4rem)] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
           <div class="p-6 border-b border-slate-200 dark:border-slate-700">
             <a href="dashboard.html" class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-slate-200 p-1.5">
