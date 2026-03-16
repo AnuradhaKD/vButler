@@ -482,33 +482,33 @@ const App = (() => {
 
       el.innerHTML = `
         <header class="z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
-          <div class="px-4 h-16 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3 min-w-0 shrink-0 transition-all duration-250" id="header-brand-block">
-              <a href="dashboard.html" class="flex items-center gap-2 shrink-0 sidebar-brand-logo${storage.get('vb:sidebarCollapsed') ? ' sidebar-brand-hidden' : ''}">
-                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-slate-200 p-1">
+          <div class="h-16 flex items-stretch justify-between">
+            <div class="flex items-center gap-3 bg-[#003c52] px-4 shrink-0 transition-all duration-250" id="header-brand-block">
+              <a href="dashboard.html" class="flex items-center gap-2 shrink-0">
+                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/20 p-1">
                   <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
                 </div>
               </a>
               <div class="min-w-0 sidebar-brand-text${storage.get('vb:sidebarCollapsed') ? ' sidebar-brand-hidden' : ''}">
-                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Destinity vButler</div>
-                <div class="text-xs font-semibold text-[#003c52] dark:text-teal-400 truncate max-w-[180px]">${propertyName}</div>
+                <div class="text-xs font-bold text-white/60 uppercase tracking-wider">Destinity vButler</div>
+                <div class="text-xs font-semibold text-teal-300 truncate max-w-[160px]">${propertyName}</div>
               </div>
               <div class="relative group hidden md:block shrink-0">
-                <button onclick="App.sidebar.toggleMenu()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle sidebar">
+                <button onclick="App.sidebar.toggleMenu()" class="w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white transition" aria-label="Toggle sidebar">
                   <span class="material-symbols-outlined text-[22px]">menu</span>
                 </button>
                 <div class="absolute left-1/2 -translate-x-1/2 top-11 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                  <div class="bg-slate-800 dark:bg-slate-700 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg shadow-lg">
+                  <div class="bg-slate-800 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg shadow-lg">
                     Collapse / expand menu
                   </div>
-                  <div class="w-2 h-2 bg-slate-800 dark:bg-slate-700 rotate-45 mx-auto -mt-1"></div>
+                  <div class="w-2 h-2 bg-slate-800 rotate-45 mx-auto -mt-1"></div>
                 </div>
               </div>
-              <button onclick="App.sidebar.toggleMenu()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shrink-0" aria-label="Open menu">
+              <button onclick="App.sidebar.toggleMenu()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white transition shrink-0" aria-label="Open menu">
                 <span class="material-symbols-outlined text-[22px]">menu</span>
               </button>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 px-4">
               <button onclick="App.theme.toggle()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle theme">
                 <span id="theme-toggle-icon" class="material-symbols-outlined text-xl">${theme.get() === 'dark' ? 'light_mode' : 'dark_mode'}</span>
               </button>
@@ -584,9 +584,9 @@ const App = (() => {
           <nav class="flex-1 overflow-y-auto p-2 space-y-0.5">
             ${items.map(item => `
             <a href="${item.href}" title="${item.label}" class="sidebar-nav-item relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${active === item.id
-              ? 'bg-white text-[#003c52] font-semibold shadow-sm'
+              ? 'bg-white/15 text-white font-semibold'
               : 'text-white/70 hover:bg-white/10 hover:text-white'}">
-              ${active === item.id ? '<span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full"></span>' : ''}
+              ${active === item.id ? '<span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-teal-300 rounded-r-full"></span>' : ''}
               <span class="material-symbols-outlined text-xl shrink-0 ${active === item.id ? 'fill-icon' : ''}">${item.icon}</span>
               <span class="sidebar-label">${item.label}</span>
             </a>`).join('')}
@@ -665,10 +665,8 @@ const App = (() => {
       storage.set('vb:sidebarCollapsed', next);
       const aside = document.getElementById('desktop-sidebar');
       if (aside) aside.classList.toggle('vb-sidebar-collapsed', next);
-      // Sync header brand visibility
-      const brandLogo = document.querySelector('.sidebar-brand-logo');
+      // Sync header brand — only hide the text, logo always stays
       const brandText = document.querySelector('.sidebar-brand-text');
-      if (brandLogo) brandLogo.classList.toggle('sidebar-brand-hidden', next);
       if (brandText) brandText.classList.toggle('sidebar-brand-hidden', next);
     },
 
