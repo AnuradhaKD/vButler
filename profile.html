@@ -86,9 +86,127 @@
           <input id="f-dob" type="date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
         </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Passport / NIC <span class="text-red-500">*</span></label>
-          <input id="f-passport" type="text" placeholder="Passport number or NIC" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+        <!-- Document Type + Scan -->
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Document Type <span class="text-red-500">*</span></label>
+            <select id="f-docType" onchange="handleDocTypeChange()" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+              <option value="">Select document type...</option>
+              <option value="passport">Passport</option>
+              <option value="nic">National Identity Card (NIC)</option>
+              <option value="driving">Driving Licence</option>
+            </select>
+          </div>
+
+          <!-- Upload & Scan Section -->
+          <div id="doc-scan-section" class="hidden space-y-3">
+
+            <!-- Passport: single upload -->
+            <div id="upload-passport-area" class="hidden">
+              <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Photo Page</p>
+              <div onclick="document.getElementById('passport-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-5 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
+                <img id="passport-preview" src="" alt="" class="hidden w-full max-h-40 object-contain rounded-lg mb-2 mx-auto">
+                <div id="passport-placeholder">
+                  <span class="material-symbols-outlined text-3xl text-slate-300 dark:text-slate-600 block mb-1">upload_file</span>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Tap to upload passport photo page</p>
+                  <p class="text-xs text-slate-400 mt-0.5">Clear photo, no glare or shadows</p>
+                </div>
+                <input id="passport-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('passport-file','passport-preview','passport-placeholder')">
+              </div>
+            </div>
+
+            <!-- NIC: front + back -->
+            <div id="upload-nic-area" class="hidden">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Front Side</p>
+                  <div onclick="document.getElementById('nic-front-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-4 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
+                    <img id="nic-front-preview" src="" alt="" class="hidden w-full max-h-28 object-contain rounded-lg mb-1 mx-auto">
+                    <div id="nic-front-placeholder">
+                      <span class="material-symbols-outlined text-2xl text-slate-300 dark:text-slate-600 block">id_card</span>
+                      <p class="text-xs text-slate-400 mt-1">Front</p>
+                    </div>
+                    <input id="nic-front-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('nic-front-file','nic-front-preview','nic-front-placeholder')">
+                  </div>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Back Side</p>
+                  <div onclick="document.getElementById('nic-back-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-4 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
+                    <img id="nic-back-preview" src="" alt="" class="hidden w-full max-h-28 object-contain rounded-lg mb-1 mx-auto">
+                    <div id="nic-back-placeholder">
+                      <span class="material-symbols-outlined text-2xl text-slate-300 dark:text-slate-600 block">id_card</span>
+                      <p class="text-xs text-slate-400 mt-1">Back</p>
+                    </div>
+                    <input id="nic-back-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('nic-back-file','nic-back-preview','nic-back-placeholder')">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Driving Licence: single upload -->
+            <div id="upload-driving-area" class="hidden">
+              <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Licence (front side)</p>
+              <div onclick="document.getElementById('driving-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-5 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
+                <img id="driving-preview" src="" alt="" class="hidden w-full max-h-40 object-contain rounded-lg mb-2 mx-auto">
+                <div id="driving-placeholder">
+                  <span class="material-symbols-outlined text-3xl text-slate-300 dark:text-slate-600 block mb-1">drive_eta</span>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Tap to upload driving licence</p>
+                  <p class="text-xs text-slate-400 mt-0.5">Clear photo, no glare or shadows</p>
+                </div>
+                <input id="driving-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('driving-file','driving-preview','driving-placeholder')">
+              </div>
+            </div>
+
+            <!-- Scan button -->
+            <button id="scan-btn" onclick="startScan()" class="hidden w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-base">document_scanner</span>
+              Scan & Extract Details
+            </button>
+
+            <!-- Processing state -->
+            <div id="scan-processing" class="hidden bg-slate-50 dark:bg-slate-800 rounded-xl p-5 text-center">
+              <span class="material-symbols-outlined text-3xl text-[#003c52] dark:text-teal-400 animate-spin block mb-2">refresh</span>
+              <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Reading document...</p>
+              <p id="scan-progress" class="text-xs text-slate-400 mt-1">Initializing OCR engine...</p>
+            </div>
+          </div>
+
+          <!-- Document Number (shown after type is selected) -->
+          <div id="doc-number-field" class="hidden">
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Document Number <span class="text-red-500">*</span></label>
+            <input id="f-passport" type="text" placeholder="Auto-filled from scan, or enter manually" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+
+          <!-- Scan Result Confirmation -->
+          <div id="scan-result" class="hidden bg-[#003c52]/5 dark:bg-teal-900/20 border border-[#003c52]/20 dark:border-teal-700 rounded-xl p-4 space-y-3">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">fact_check</span>
+              <span class="text-sm font-bold text-slate-800 dark:text-white">Confirm Extracted Details</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Review and correct if needed, then tap Apply to update your profile.</p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">First Name</label>
+                <input id="scan-firstName" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Last Name</label>
+                <input id="scan-lastName" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Document Number</label>
+              <input id="scan-docNumber" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Address</label>
+              <input id="scan-address" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+            <div class="flex gap-3 pt-1">
+              <button onclick="discardScan()" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">Discard</button>
+              <button onclick="applyScanResult()" class="flex-1 bg-[#003c52] text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">Apply to Profile</button>
+            </div>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -207,9 +325,15 @@
       document.getElementById('f-phone').value = profile.phone || '';
       document.getElementById('f-dob').value = profile.dob || '';
       App.datepicker.date('#f-dob');
-      document.getElementById('f-passport').value = profile.passport || '';
       document.getElementById('f-country').value = profile.country || '';
       document.getElementById('f-nationality').value = profile.nationality || '';
+      // Document type + number
+      const savedDocType = profile.docType || '';
+      document.getElementById('f-docType').value = savedDocType;
+      if (savedDocType) {
+        document.getElementById('doc-number-field').classList.remove('hidden');
+        document.getElementById('f-passport').value = profile.passport || '';
+      }
       renderAvatar();
     }
 
@@ -233,6 +357,7 @@
       const lastName   = document.getElementById('f-lastName').value.trim();
       const phone      = document.getElementById('f-phone').value.trim();
       const dob        = document.getElementById('f-dob').value;
+      const docType    = document.getElementById('f-docType').value;
       const passport   = document.getElementById('f-passport').value.trim();
       const country    = document.getElementById('f-country').value.trim();
       const nationality = document.getElementById('f-nationality').value.trim();
@@ -241,7 +366,8 @@
       if (!lastName)    { App.toast.show('Last name is required', 'warning'); document.getElementById('f-lastName').focus(); return; }
       if (!phone)       { App.toast.show('Phone number is required', 'warning'); document.getElementById('f-phone').focus(); return; }
       if (!dob)         { App.toast.show('Date of birth is required', 'warning'); document.getElementById('f-dob').focus(); return; }
-      if (!passport)    { App.toast.show('Passport / NIC is required', 'warning'); document.getElementById('f-passport').focus(); return; }
+      if (!docType)     { App.toast.show('Please select a document type', 'warning'); document.getElementById('f-docType').focus(); return; }
+      if (!passport)    { App.toast.show('Document number is required', 'warning'); document.getElementById('f-passport').focus(); return; }
       if (!country)     { App.toast.show('Country is required', 'warning'); document.getElementById('f-country').focus(); return; }
       if (!nationality) { App.toast.show('Nationality is required', 'warning'); document.getElementById('f-nationality').focus(); return; }
 
@@ -252,6 +378,7 @@
         fullName: `${firstName} ${lastName}`,
         phone,
         dob,
+        docType,
         passport,
         country,
         nationality
@@ -273,6 +400,181 @@
     function requestDeletion() {
       document.getElementById('delete-modal').classList.add('hidden');
       App.toast.show('Account deletion request submitted', 'info');
+    }
+
+    // ─── Document Scanning ────────────────────────────────────────────────────
+    let currentDocType = '';
+
+    function handleDocTypeChange() {
+      currentDocType = document.getElementById('f-docType').value;
+      ['passport', 'nic', 'driving'].forEach(t => document.getElementById('upload-' + t + '-area').classList.add('hidden'));
+      document.getElementById('scan-result').classList.add('hidden');
+      document.getElementById('scan-btn').classList.add('hidden');
+      document.getElementById('scan-processing').classList.add('hidden');
+      if (!currentDocType) {
+        document.getElementById('doc-scan-section').classList.add('hidden');
+        document.getElementById('doc-number-field').classList.add('hidden');
+        return;
+      }
+      document.getElementById('doc-scan-section').classList.remove('hidden');
+      document.getElementById('doc-number-field').classList.remove('hidden');
+      document.getElementById('f-passport').value = '';
+      const areaMap = { passport: 'upload-passport-area', nic: 'upload-nic-area', driving: 'upload-driving-area' };
+      document.getElementById(areaMap[currentDocType]).classList.remove('hidden');
+    }
+
+    function handleFileSelect(inputId, previewId, placeholderId) {
+      const file = document.getElementById(inputId).files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const preview = document.getElementById(previewId);
+        preview.src = e.target.result;
+        preview.classList.remove('hidden');
+        document.getElementById(placeholderId).classList.add('hidden');
+        checkUploadsReady();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function checkUploadsReady() {
+      let ready = false;
+      if (currentDocType === 'nic') {
+        ready = !!(document.getElementById('nic-front-file').files[0] && document.getElementById('nic-back-file').files[0]);
+      } else if (currentDocType === 'passport') {
+        ready = !!document.getElementById('passport-file').files[0];
+      } else if (currentDocType === 'driving') {
+        ready = !!document.getElementById('driving-file').files[0];
+      }
+      document.getElementById('scan-btn').classList.toggle('hidden', !ready);
+    }
+
+    function loadTesseract() {
+      return new Promise((resolve, reject) => {
+        if (window.Tesseract) { resolve(); return; }
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function runOCR(file) {
+      await loadTesseract();
+      const result = await Tesseract.recognize(file, 'eng', {
+        logger: m => {
+          if (m.status === 'recognizing text') {
+            const pct = Math.round((m.progress || 0) * 100);
+            document.getElementById('scan-progress').textContent = `Reading document... ${pct}%`;
+          }
+        }
+      });
+      return result.data.text;
+    }
+
+    async function startScan() {
+      document.getElementById('scan-btn').classList.add('hidden');
+      document.getElementById('scan-processing').classList.remove('hidden');
+      document.getElementById('scan-result').classList.add('hidden');
+      try {
+        let extracted = {};
+        document.getElementById('scan-progress').textContent = 'Loading OCR engine...';
+        if (currentDocType === 'passport') {
+          const text = await runOCR(document.getElementById('passport-file').files[0]);
+          extracted = parsePassportText(text);
+        } else if (currentDocType === 'nic') {
+          const frontText = await runOCR(document.getElementById('nic-front-file').files[0]);
+          document.getElementById('scan-progress').textContent = 'Reading back side...';
+          const backText  = await runOCR(document.getElementById('nic-back-file').files[0]);
+          extracted = parseNICText(frontText, backText);
+        } else if (currentDocType === 'driving') {
+          const text = await runOCR(document.getElementById('driving-file').files[0]);
+          extracted = parseDrivingText(text);
+        }
+        document.getElementById('scan-processing').classList.add('hidden');
+        showScanResult(extracted);
+      } catch (err) {
+        document.getElementById('scan-processing').classList.add('hidden');
+        document.getElementById('scan-btn').classList.remove('hidden');
+        App.toast.show('Could not read document. Please try a clearer photo.', 'error');
+      }
+    }
+
+    function parsePassportText(text) {
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+      let firstName = '', lastName = '', docNumber = '';
+      // Try MRZ (Machine Readable Zone) — lines of 44 chars with < chars
+      const mrzLines = lines.filter(l => /^[A-Z0-9<]{30,}$/.test(l.replace(/\s/g, '')));
+      if (mrzLines.length >= 1) {
+        const line1 = mrzLines[0].replace(/\s/g, '');
+        if (line1.startsWith('P')) {
+          const namePart = line1.substring(5);
+          const parts = namePart.split('<<');
+          if (parts[0]) lastName  = parts[0].replace(/</g, ' ').trim();
+          if (parts[1]) firstName = parts[1].replace(/</g, ' ').trim();
+        }
+        if (mrzLines[1]) docNumber = mrzLines[1].replace(/\s/g, '').substring(0, 9).replace(/</g, '');
+      }
+      if (!docNumber) { const m = text.match(/\b[A-Z]\d{7,8}\b/); if (m) docNumber = m[0]; }
+      return { firstName, lastName, docNumber, address: '' };
+    }
+
+    function parseNICText(frontText, backText) {
+      const all = frontText + '\n' + backText;
+      let docNumber = '';
+      const oldNIC = all.match(/\b\d{9}[VvXx]\b/);
+      const newNIC = all.match(/\b\d{12}\b/);
+      if (oldNIC) docNumber = oldNIC[0].toUpperCase();
+      else if (newNIC) docNumber = newNIC[0];
+      let firstName = '', lastName = '';
+      const nameLines = frontText.split('\n').map(l => l.trim()).filter(l => /^[A-Z][A-Z\s]{3,}$/.test(l) && !['REPUBLIC','IDENTITY','CARD','SRI','LANKA'].includes(l.trim()));
+      if (nameLines[0]) lastName  = nameLines[0];
+      if (nameLines[1]) firstName = nameLines[1];
+      const addrLines = backText.split('\n').map(l => l.trim()).filter(l => l.length > 5 && !/^\d{9}/.test(l));
+      const address = addrLines.slice(0, 2).join(', ');
+      return { firstName, lastName, docNumber, address };
+    }
+
+    function parseDrivingText(text) {
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+      let firstName = '', lastName = '', docNumber = '';
+      const numMatch = text.match(/\b[A-Z0-9]{6,15}\b/g);
+      if (numMatch) docNumber = numMatch[0];
+      for (const line of lines) {
+        if (/^[A-Z][A-Z\s]{3,30}$/.test(line) && !['DRIVING','LICENCE','LICENSE','REPUBLIC','SRI','LANKA'].includes(line.trim())) {
+          if (!lastName) lastName = line;
+          else if (!firstName) { firstName = line; break; }
+        }
+      }
+      return { firstName, lastName, docNumber, address: '' };
+    }
+
+    function showScanResult(data) {
+      document.getElementById('scan-firstName').value = data.firstName || '';
+      document.getElementById('scan-lastName').value  = data.lastName  || '';
+      document.getElementById('scan-docNumber').value = data.docNumber || '';
+      document.getElementById('scan-address').value   = data.address   || '';
+      document.getElementById('scan-result').classList.remove('hidden');
+      document.getElementById('scan-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function discardScan() {
+      document.getElementById('scan-result').classList.add('hidden');
+      document.getElementById('scan-btn').classList.remove('hidden');
+    }
+
+    function applyScanResult() {
+      const firstName = document.getElementById('scan-firstName').value.trim();
+      const lastName  = document.getElementById('scan-lastName').value.trim();
+      const docNumber = document.getElementById('scan-docNumber').value.trim();
+      if (!docNumber) { App.toast.show('Document number is required', 'warning'); return; }
+      if (firstName) document.getElementById('f-firstName').value = firstName;
+      if (lastName)  document.getElementById('f-lastName').value  = lastName;
+      document.getElementById('f-passport').value = docNumber;
+      document.getElementById('scan-result').classList.add('hidden');
+      const typeLabels = { passport: 'Passport', nic: 'NIC', driving: 'Driving Licence' };
+      App.toast.show(`${typeLabels[currentDocType] || 'Document'} details applied. Don't forget to save your profile.`, 'success');
     }
 
     loadProfile();

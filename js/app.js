@@ -483,24 +483,24 @@ const App = (() => {
       el.innerHTML = `
         <header class="z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
           <div class="h-16 flex items-stretch justify-between">
-            <!-- Dark brand block: logo + text only, no hamburger -->
-            <div class="flex items-center gap-3 bg-[#003c52] px-4 shrink-0 overflow-hidden ${storage.get('vb:sidebarCollapsed') ? 'vb-brand-collapsed' : ''}" id="header-brand-block">
+            <!-- Dark brand block (desktop only): logo + text -->
+            <div class="flex items-center gap-3 md:bg-[#003c52] px-4 shrink-0 overflow-hidden ${storage.get('vb:sidebarCollapsed') ? 'vb-brand-collapsed' : ''}" id="header-brand-block">
               <a href="dashboard.html" class="flex items-center gap-2 shrink-0">
-                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/20 p-1">
+                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-slate-200 md:border-white/20 p-1">
                   <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
                 </div>
               </a>
               <div class="min-w-0 sidebar-brand-text${storage.get('vb:sidebarCollapsed') ? ' sidebar-brand-hidden' : ''}">
-                <div class="text-xs font-bold text-white/60 uppercase tracking-wider">Destinity vButler</div>
-                <div class="text-xs font-semibold text-teal-300 truncate max-w-[160px]">${propertyName}</div>
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 md:text-white/60 uppercase tracking-wider">Destinity vButler</div>
+                <div class="text-xs font-semibold text-[#003c52] dark:text-teal-400 md:text-teal-300 truncate max-w-[160px]">${propertyName}</div>
               </div>
             </div>
             <!-- White header area: hamburger on left, icons on right -->
             <div class="flex items-center gap-3 px-4 flex-1 justify-between">
-              <!-- Hamburger: always on white background -->
+              <!-- Hamburger (desktop): icon changes based on collapsed state -->
               <div class="relative group hidden md:block shrink-0">
                 <button onclick="App.sidebar.toggleMenu()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle sidebar">
-                  <span class="material-symbols-outlined text-[22px]">menu</span>
+                  <span id="header-menu-icon" class="material-symbols-outlined text-[22px]">${storage.get('vb:sidebarCollapsed') ? 'chevron_right' : 'menu'}</span>
                 </button>
                 <div class="absolute left-1/2 -translate-x-1/2 top-11 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                   <div class="bg-slate-800 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg shadow-lg">Collapse / expand menu</div>
@@ -676,6 +676,9 @@ const App = (() => {
       // Only hide the text, logo always stays
       const brandText = document.querySelector('.sidebar-brand-text');
       if (brandText) brandText.classList.toggle('sidebar-brand-hidden', next);
+      // Swap hamburger icon: menu ↔ chevron_right
+      const menuIcon = document.getElementById('header-menu-icon');
+      if (menuIcon) menuIcon.textContent = next ? 'chevron_right' : 'menu';
     },
 
     openMobile() {
