@@ -24,6 +24,37 @@
       }
     }
   </script>
+  <style>
+    /* ── Clock picker theme tokens ── */
+    :root {
+      --ck-outer:    #e2e8f0;
+      --ck-face:     #ffffff;
+      --ck-inner:    #f8fafc;
+      --ck-border:   #cbd5e1;
+      --ck-maj:      #94a3b8;
+      --ck-min:      #e2e8f0;
+      --ck-num:      #475569;
+      --ck-arc-glow: rgba(20,184,166,.18);
+    }
+    html.dark {
+      --ck-outer:    #08131b;
+      --ck-face:     #0f2535;
+      --ck-inner:    #08131b;
+      --ck-border:   #1b3a4f;
+      --ck-maj:      #2a5060;
+      --ck-min:      #193040;
+      --ck-num:      #3d6878;
+      --ck-arc-glow: #0d4a42;
+    }
+    #clock-svg .ck-outer { fill: var(--ck-outer); }
+    #clock-svg .ck-face  { fill: var(--ck-face);  stroke: var(--ck-border); }
+    #clock-svg .ck-inner { fill: var(--ck-inner); stroke: var(--ck-border); }
+    #clock-ticks .ck-maj { stroke: var(--ck-maj); }
+    #clock-ticks .ck-min { stroke: var(--ck-min); }
+    #clock-numbers text          { fill: var(--ck-num); font-weight: 600; }
+    #clock-numbers text.ck-sel   { fill: #14b8a6;       font-weight: 800; }
+    #clock-arc-glow              { stroke: var(--ck-arc-glow); }
+  </style>
 </head>
 <body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
   <div id="app-header"></div>
@@ -68,7 +99,7 @@
               <div class="flex items-center justify-center gap-2">
 
                 <!-- Step back -->
-                <button type="button" onclick="stepClockTime(-30)"
+                <button type="button" onclick="stepClockTime(-1)"
                         class="w-9 h-9 md:w-11 md:h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:border-[#003c52] hover:text-[#003c52] dark:hover:border-teal-500 dark:hover:text-teal-400 transition-all shrink-0">
                   <span class="material-symbols-outlined text-xl">chevron_left</span>
                 </button>
@@ -77,14 +108,14 @@
                 <div class="relative shrink-0 w-48 h-48 md:w-[220px] md:h-[220px]">
                   <svg id="clock-svg" viewBox="0 0 300 300" class="w-full h-full select-none cursor-pointer"
                        onclick="handleClockFaceClick(event)">
-                    <!-- Outer glow ring -->
-                    <circle cx="150" cy="150" r="149" fill="#08131b"/>
-                    <!-- Main dark face -->
-                    <circle cx="150" cy="150" r="145" fill="#0f2535" stroke="#1b3a4f" stroke-width="1.5"/>
+                    <!-- Outer shadow ring -->
+                    <circle class="ck-outer" cx="150" cy="150" r="149"/>
+                    <!-- Main face -->
+                    <circle class="ck-face" cx="150" cy="150" r="145" stroke-width="1.5"/>
                     <!-- Tick marks — JS generated -->
                     <g id="clock-ticks"></g>
                     <!-- Arc glow (wide, dim) -->
-                    <path id="clock-arc-glow" d="" fill="none" stroke="#0d4a42" stroke-width="12" stroke-linecap="round"/>
+                    <path id="clock-arc-glow" d="" fill="none" stroke-width="12" stroke-linecap="round"/>
                     <!-- Arc bright -->
                     <path id="clock-arc" d="" fill="none" stroke="#14b8a6" stroke-width="5" stroke-linecap="round"/>
                     <!-- Dot at arc tip -->
@@ -93,7 +124,7 @@
                     <!-- Hour numbers — JS generated -->
                     <g id="clock-numbers"></g>
                     <!-- Inner face -->
-                    <circle cx="150" cy="150" r="84" fill="#08131b" stroke="#1b3a4f" stroke-width="1"/>
+                    <circle class="ck-inner" cx="150" cy="150" r="84" stroke-width="1"/>
                   </svg>
 
                   <!-- Digital overlay (HTML over SVG) -->
@@ -101,7 +132,7 @@
                     <span class="material-symbols-outlined fill-icon text-teal-400 text-[1.6rem] leading-none">alarm</span>
                     <div class="flex items-end gap-0.5 mt-1">
                       <span id="clock-display-time"
-                            class="font-black leading-none text-slate-100"
+                            class="font-black leading-none text-slate-900 dark:text-slate-100"
                             style="font-size:clamp(1.5rem,4vw,2rem);letter-spacing:-1px">07:00</span>
                       <button id="clock-ampm-btn" type="button" onclick="toggleClockAmPm()"
                               class="pointer-events-auto text-[11px] font-bold text-teal-400 hover:text-teal-300 transition-colors pb-0.5 ml-1">AM</button>
@@ -110,7 +141,7 @@
                 </div>
 
                 <!-- Step forward -->
-                <button type="button" onclick="stepClockTime(30)"
+                <button type="button" onclick="stepClockTime(1)"
                         class="w-9 h-9 md:w-11 md:h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:border-[#003c52] hover:text-[#003c52] dark:hover:border-teal-500 dark:hover:text-teal-400 transition-all shrink-0">
                   <span class="material-symbols-outlined text-xl">chevron_right</span>
                 </button>
@@ -228,7 +259,7 @@
         line.setAttribute('y1', (CLOCK_CY + r1 * Math.sin(angle)).toFixed(2));
         line.setAttribute('x2', (CLOCK_CX + r2 * Math.cos(angle)).toFixed(2));
         line.setAttribute('y2', (CLOCK_CY + r2 * Math.sin(angle)).toFixed(2));
-        line.setAttribute('stroke', major ? '#2a5060' : '#193040');
+        line.setAttribute('class', major ? 'ck-maj' : 'ck-min');
         line.setAttribute('stroke-width', major ? '2' : '1');
         line.setAttribute('stroke-linecap', 'round');
         ticksG.appendChild(line);
@@ -244,8 +275,6 @@
         text.setAttribute('text-anchor', 'middle');
         text.setAttribute('font-family', 'Inter, sans-serif');
         text.setAttribute('font-size', '15');
-        text.setAttribute('font-weight', '600');
-        text.setAttribute('fill', '#3d6878');
         text.setAttribute('data-hour', h);
         text.textContent = h;
         numsG.appendChild(text);
@@ -273,9 +302,7 @@
       // Highlight selected hour number
       const selHour = clock.hour % 12 || 12;
       document.querySelectorAll('#clock-numbers text').forEach(t => {
-        const active = parseInt(t.getAttribute('data-hour')) === selHour;
-        t.setAttribute('fill', active ? '#14b8a6' : '#3d6878');
-        t.setAttribute('font-weight', active ? '800' : '600');
+        t.classList.toggle('ck-sel', parseInt(t.getAttribute('data-hour')) === selHour);
       });
 
       // Digital display
