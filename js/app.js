@@ -85,7 +85,22 @@ const App = (() => {
     getAll() { return storage.get('vb:reservations') || []; },
     getActive() {
       const id = storage.get('vb:activeReservation');
-      return reservations.getAll().find(r => r.id === id) || reservations.getAll()[0] || null;
+      const all = reservations.getAll();
+      // If saved ID still points to a valid inhouse/confirmed reservation, use it
+      if (id) {
+        const saved = all.find(r => r.id === id && (r.status === 'inhouse' || r.status === 'confirmed'));
+        if (saved) return saved;
+      }
+      // Auto-select: prefer inhouse first, then nearest confirmed upcoming
+      const inhouse = all.find(r => r.status === 'inhouse');
+      if (inhouse) return inhouse;
+      const upcoming = all
+        .filter(r => r.status === 'confirmed')
+        .sort((a, b) => new Date(a.checkIn) - new Date(b.checkIn));
+      return upcoming[0] || null;
+    },
+    canSetActive(res) {
+      return res && (res.status === 'inhouse' || res.status === 'confirmed');
     },
     setActive(id) { storage.set('vb:activeReservation', id); },
     save(list) { storage.set('vb:reservations', list); },
@@ -461,16 +476,20 @@ const App = (() => {
     },
     statusBadge(status) {
       const map = {
-        pending:    { bg: 'bg-amber-50  dark:bg-amber-900/20',  text: 'text-amber-700  dark:text-amber-400',  label: 'Pending' },
-        confirmed:  { bg: 'bg-blue-50   dark:bg-blue-900/20',   text: 'text-blue-700   dark:text-blue-400',   label: 'Confirmed' },
-        inprogress: { bg: 'bg-blue-50   dark:bg-blue-900/20',   text: 'text-blue-700   dark:text-blue-400',   label: 'In Progress' },
-        completed:  { bg: 'bg-green-50  dark:bg-green-900/20',  text: 'text-green-700  dark:text-green-400',  label: 'Completed' },
-        cancelled:  { bg: 'bg-slate-100 dark:bg-slate-800',     text: 'text-slate-600  dark:text-slate-400',  label: 'Cancelled' },
-        open:       { bg: 'bg-red-50    dark:bg-red-900/20',    text: 'text-red-700    dark:text-red-400',    label: 'Open' },
-        resolved:   { bg: 'bg-green-50  dark:bg-green-900/20',  text: 'text-green-700  dark:text-green-400',  label: 'Resolved' },
-        upcoming:   { bg: 'bg-blue-50   dark:bg-blue-900/20',   text: 'text-blue-700   dark:text-blue-400',   label: 'Upcoming' },
-        active:     { bg: 'bg-green-50  dark:bg-green-900/20',  text: 'text-green-700  dark:text-green-400',  label: 'Active' },
-        scheduled:  { bg: 'bg-teal-50   dark:bg-teal-900/20',   text: 'text-teal-700   dark:text-teal-400',   label: 'Scheduled' }
+        pending:     { bg: 'bg-amber-50  dark:bg-amber-900/20',  text: 'text-amber-700  dark:text-amber-400',  label: 'Pending' },
+        confirmed:   { bg: 'bg-blue-50   dark:bg-blue-900/20',   text: 'text-blue-700   dark:text-blue-400',   label: 'Confirmed' },
+        tentative:   { bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-700 dark:text-purple-400', label: 'Tentative' },
+        inhouse:     { bg: 'bg-teal-50   dark:bg-teal-900/20',   text: 'text-teal-700   dark:text-teal-400',   label: 'In House' },
+        checked_out: { bg: 'bg-slate-100 dark:bg-slate-800',     text: 'text-slate-600  dark:text-slate-400',  label: 'Checked Out' },
+        canceled:    { bg: 'bg-red-50    dark:bg-red-900/20',    text: 'text-red-600    dark:text-red-400',    label: 'Canceled' },
+        inprogress:  { bg: 'bg-blue-50   dark:bg-blue-900/20',   text: 'text-blue-700   dark:text-blue-400',   label: 'In Progress' },
+        completed:   { bg: 'bg-green-50  dark:bg-green-900/20',  text: 'text-green-700  dark:text-green-400',  label: 'Completed' },
+        cancelled:   { bg: 'bg-slate-100 dark:bg-slate-800',     text: 'text-slate-600  dark:text-slate-400',  label: 'Cancelled' },
+        open:        { bg: 'bg-red-50    dark:bg-red-900/20',    text: 'text-red-700    dark:text-red-400',    label: 'Open' },
+        resolved:    { bg: 'bg-green-50  dark:bg-green-900/20',  text: 'text-green-700  dark:text-green-400',  label: 'Resolved' },
+        upcoming:    { bg: 'bg-blue-50   dark:bg-blue-900/20',   text: 'text-blue-700   dark:text-blue-400',   label: 'Upcoming' },
+        active:      { bg: 'bg-green-50  dark:bg-green-900/20',  text: 'text-green-700  dark:text-green-400',  label: 'Active' },
+        scheduled:   { bg: 'bg-teal-50   dark:bg-teal-900/20',   text: 'text-teal-700   dark:text-teal-400',   label: 'Scheduled' }
       };
       const s = map[status] || map.pending;
       return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${s.bg} ${s.text}">${s.label}</span>`;

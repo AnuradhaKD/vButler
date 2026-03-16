@@ -19,7 +19,19 @@
       }
     }
   </script>
-  <style>.fill-icon { font-variation-settings: 'FILL' 1; }</style>
+  <style>
+    .fill-icon { font-variation-settings: 'FILL' 1; }
+    .tab-btn.active-tab {
+      color: #003c52;
+      border-bottom-color: #003c52;
+    }
+    .dark .tab-btn.active-tab {
+      color: #2dd4bf;
+      border-bottom-color: #2dd4bf;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active-panel { display: block; }
+  </style>
 </head>
 <body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
   <script>
@@ -29,20 +41,46 @@
   <div id="app-header"></div>
   <div class="flex">
     <div id="app-sidebar"></div>
-    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl">
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl overflow-x-hidden">
 
       <!-- Page header -->
-      <div class="mb-8">
+      <div class="mb-6">
         <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">Your Stays</p>
         <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">My Reservations</h1>
-        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage all your current and upcoming bookings.</p>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">All your stays across Browns Hotels & Resorts properties.</p>
       </div>
 
       <!-- Stats row -->
-      <div id="stats-row" class="grid grid-cols-3 gap-3 mb-8"></div>
+      <div id="stats-row" class="grid grid-cols-3 gap-3 mb-6"></div>
 
-      <!-- Reservation list -->
-      <div id="reservation-list" class="space-y-4"></div>
+      <!-- Tabs -->
+      <div class="border-b border-slate-200 dark:border-slate-700 mb-6">
+        <div class="flex gap-0 -mb-px overflow-x-auto hide-scrollbar">
+          <button onclick="switchTab('active')" id="tab-active"
+            class="tab-btn active-tab flex-shrink-0 flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 border-transparent transition-colors text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
+            <span class="material-symbols-outlined text-base">hotel</span>
+            Active
+            <span id="badge-active" class="hidden min-w-[20px] h-5 rounded-full bg-[#003c52] dark:bg-teal-600 text-white text-[10px] font-bold flex items-center justify-center px-1.5"></span>
+          </button>
+          <button onclick="switchTab('past')" id="tab-past"
+            class="tab-btn flex-shrink-0 flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 border-transparent transition-colors text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
+            <span class="material-symbols-outlined text-base">history</span>
+            Past
+            <span id="badge-past" class="hidden min-w-[20px] h-5 rounded-full bg-slate-400 dark:bg-slate-600 text-white text-[10px] font-bold flex items-center justify-center px-1.5"></span>
+          </button>
+          <button onclick="switchTab('canceled')" id="tab-canceled"
+            class="tab-btn flex-shrink-0 flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 border-transparent transition-colors text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
+            <span class="material-symbols-outlined text-base">cancel</span>
+            Canceled
+            <span id="badge-canceled" class="hidden min-w-[20px] h-5 rounded-full bg-red-400 dark:bg-red-700 text-white text-[10px] font-bold flex items-center justify-center px-1.5"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab panels -->
+      <div id="panel-active"   class="tab-panel active-panel space-y-6"></div>
+      <div id="panel-past"     class="tab-panel space-y-4"></div>
+      <div id="panel-canceled" class="tab-panel space-y-4"></div>
 
     </main>
   </div>
@@ -51,37 +89,41 @@
   <script>
     App.auth.requireAuth();
     App.header.render('app-header');
-    App.sidebar.render('app-sidebar', 'reservations');
+    App.sidebar.render('reservations');
     App.bottomNav.render('reservations');
+
+    let allReservations = [];
 
     async function init() {
       const session = App.auth.getSession();
-      let reservations = App.reservations.getAll();
+      allReservations = App.reservations.getAll();
 
-      if (!reservations.length) {
+      if (!allReservations.length) {
         const data = await App.data.loadReservations();
         if (data) {
-          reservations = data.reservations.filter(r => r.guestEmail === session.email);
-          App.reservations.save(reservations);
-          if (reservations.length > 0) App.reservations.setActive(reservations[0].id);
+          allReservations = data.reservations.filter(r => r.guestEmail === session.email);
+          App.reservations.save(allReservations);
+          // Auto-set active: prefer inhouse, then nearest confirmed
+          const active = App.reservations.getActive();
+          if (active) App.reservations.setActive(active.id);
         }
       }
 
-      renderStats(reservations);
-      renderList(reservations);
+      renderStats(allReservations);
+      renderTabs(allReservations);
     }
 
+    // ─── Stats ───────────────────────────────────────────────────────────────────
     function renderStats(reservations) {
       const el = document.getElementById('stats-row');
-      const total = reservations.length;
-      const upcoming = reservations.filter(r => r.status === 'upcoming').length;
-      const active = reservations.filter(r => r.status === 'active').length;
-      const totalBalance = reservations.reduce((sum, r) => sum + (r.balance || 0), 0);
+      const activeRes = reservations.filter(r => r.status === 'inhouse' || r.status === 'confirmed' || r.status === 'tentative');
+      const pastRes   = reservations.filter(r => r.status === 'checked_out');
+      const balanceDue = activeRes.reduce((sum, r) => sum + (r.balance || 0), 0);
 
       el.innerHTML = [
-        { label: 'Total Stays', value: total, icon: 'hotel', color: 'text-[#003c52] dark:text-teal-400', bg: 'bg-[#003c52]/8 dark:bg-teal-900/20' },
-        { label: 'Upcoming', value: upcoming + active, icon: 'schedule', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-900/20' },
-        { label: 'Balance Due', value: 'Rs. ' + totalBalance.toLocaleString(), icon: 'receipt_long', color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-900/20' }
+        { label: 'Active Stays',  value: activeRes.length, icon: 'hotel',        color: 'text-[#003c52] dark:text-teal-400', bg: 'bg-[#003c52]/8 dark:bg-teal-900/20' },
+        { label: 'Past Stays',    value: pastRes.length,   icon: 'history',      color: 'text-slate-500 dark:text-slate-400', bg: 'bg-slate-100 dark:bg-slate-800' },
+        { label: 'Balance Due',   value: 'Rs. ' + balanceDue.toLocaleString(), icon: 'receipt_long', color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-900/20' }
       ].map(s => `
         <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-center">
           <div class="w-9 h-9 rounded-lg ${s.bg} flex items-center justify-center mx-auto mb-2">
@@ -92,116 +134,260 @@
         </div>`).join('');
     }
 
-    function renderList(reservations) {
-      const el = document.getElementById('reservation-list');
-      const activeId = App.storage.get('vb:activeReservation');
+    // ─── Tab switching ────────────────────────────────────────────────────────────
+    function switchTab(tab) {
+      ['active','past','canceled'].forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('active-tab', t === tab);
+        document.getElementById('panel-' + t).classList.toggle('active-panel', t === tab);
+      });
+    }
 
-      if (!reservations.length) {
-        el.innerHTML = `
-          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-12 text-center">
-            <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-4 block">hotel</span>
-            <p class="text-slate-700 dark:text-slate-300 font-semibold mb-1">No reservations found</p>
-            <p class="text-slate-400 dark:text-slate-500 text-sm">Your reservations will appear here once linked to your account.</p>
-          </div>`;
+    // ─── Render all tabs ─────────────────────────────────────────────────────────
+    function renderTabs(reservations) {
+      const inhouse   = reservations.filter(r => r.status === 'inhouse');
+      const upcoming  = reservations.filter(r => r.status === 'confirmed' || r.status === 'tentative')
+                                    .sort((a, b) => new Date(a.checkIn) - new Date(b.checkIn));
+      const past      = reservations.filter(r => r.status === 'checked_out')
+                                    .sort((a, b) => new Date(b.checkOut) - new Date(a.checkOut));
+      const canceled  = reservations.filter(r => r.status === 'canceled')
+                                    .sort((a, b) => new Date(b.checkIn) - new Date(a.checkIn));
+
+      // Tab badges
+      const activeCount = inhouse.length + upcoming.length;
+      setBadge('active',   activeCount);
+      setBadge('past',     past.length);
+      setBadge('canceled', canceled.length);
+
+      renderActivePanel(inhouse, upcoming);
+      renderSimplePanel('panel-past',     past,     'No past stays found.', 'history');
+      renderSimplePanel('panel-canceled', canceled, 'No canceled reservations.', 'cancel');
+    }
+
+    function setBadge(tab, count) {
+      const el = document.getElementById('badge-' + tab);
+      if (count > 0) {
+        el.textContent = count;
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      }
+    }
+
+    // ─── Active panel (inhouse + upcoming sub-grouped) ────────────────────────────
+    function renderActivePanel(inhouse, upcoming) {
+      const el = document.getElementById('panel-active');
+      if (!inhouse.length && !upcoming.length) {
+        el.innerHTML = emptyState('No active or upcoming reservations.', 'hotel');
         return;
       }
 
-      el.innerHTML = reservations.map(res => {
-        const isActive = res.id === activeId;
-        const nights = Math.round((new Date(res.checkOut) - new Date(res.checkIn)) / 86400000);
-        const preArrival = App.preArrival.get(res.id);
-        const preArrivalDone = res.preArrivalComplete || Object.keys(preArrival).length > 3;
+      let html = '';
 
-        return `
-          <div class="bg-white dark:bg-slate-900 rounded-2xl border ${isActive ? 'border-[#003c52] dark:border-teal-500 ring-1 ring-[#003c52]/20 dark:ring-teal-500/20' : 'border-slate-200 dark:border-slate-700'} overflow-hidden hover:shadow-md transition-shadow">
-            <!-- Active indicator -->
-            ${isActive ? `<div class="bg-[#003c52] dark:bg-teal-600 px-4 py-2 flex items-center gap-2">
-              <span class="material-symbols-outlined text-sm text-white fill-icon">check_circle</span>
-              <span class="text-white text-xs font-semibold uppercase tracking-wider">Active Stay</span>
-            </div>` : ''}
+      if (inhouse.length) {
+        html += sectionHeader('Currently Staying', 'sensors', 'text-teal-600 dark:text-teal-400', 'bg-teal-50 dark:bg-teal-900/20');
+        html += `<div class="space-y-4">${inhouse.map(r => reservationCard(r)).join('')}</div>`;
+      }
 
-            <div class="p-5 md:p-6">
-              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start gap-3 mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-[#003c52]/8 dark:bg-teal-900/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span class="material-symbols-outlined text-xl text-[#003c52] dark:text-teal-400">hotel</span>
-                    </div>
-                    <div>
-                      <h3 class="font-bold text-slate-900 dark:text-white text-base leading-tight">${res.propertyName}</h3>
-                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${res.propertyCity}</p>
-                    </div>
-                    <div class="ml-auto">${App.helpers.statusBadge(res.status)}</div>
+      if (upcoming.length) {
+        if (inhouse.length) html += '<div class="mt-6"></div>';
+        html += sectionHeader('Upcoming Stays', 'calendar_month', 'text-blue-600 dark:text-blue-400', 'bg-blue-50 dark:bg-blue-900/20');
+        html += `<div class="space-y-4">${upcoming.map(r => reservationCard(r)).join('')}</div>`;
+      }
+
+      el.innerHTML = html;
+    }
+
+    function sectionHeader(label, icon, textColor, bgColor) {
+      return `
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-7 h-7 rounded-lg ${bgColor} flex items-center justify-center">
+            <span class="material-symbols-outlined text-sm ${textColor} fill-icon">${icon}</span>
+          </div>
+          <h2 class="text-sm font-bold uppercase tracking-wider ${textColor}">${label}</h2>
+        </div>`;
+    }
+
+    // ─── Simple panel (past / canceled) ──────────────────────────────────────────
+    function renderSimplePanel(panelId, reservations, emptyMsg, emptyIcon) {
+      const el = document.getElementById(panelId);
+      el.innerHTML = reservations.length
+        ? reservations.map(r => reservationCard(r)).join('')
+        : emptyState(emptyMsg, emptyIcon);
+    }
+
+    // ─── Reservation card ─────────────────────────────────────────────────────────
+    function reservationCard(res) {
+      const activeId  = App.storage.get('vb:activeReservation');
+      const isActive  = res.id === activeId;
+      const canSetAct = App.reservations.canSetActive(res) && !isActive;
+      const nights    = Math.round((new Date(res.checkOut) - new Date(res.checkIn)) / 86400000);
+      const isPast    = res.status === 'checked_out';
+      const isCanceled = res.status === 'canceled';
+      const isInhouse  = res.status === 'inhouse';
+      const isTentative = res.status === 'tentative';
+
+      // Pre-arrival: only show for active/upcoming, not past/canceled
+      const showPreArrival = !isPast && !isCanceled;
+      const preArrivalData = App.preArrival.get(res.id);
+      const preArrivalDone = res.preArrivalComplete || Object.keys(preArrivalData).length > 3;
+
+      // Balance: only show if > 0
+      const showBalance = (res.balance || 0) > 0;
+
+      // Card border highlight
+      let cardBorder = 'border-slate-200 dark:border-slate-700';
+      if (isActive)   cardBorder = 'border-[#003c52] dark:border-teal-500 ring-1 ring-[#003c52]/20 dark:ring-teal-500/20';
+      if (isPast)     cardBorder = 'border-slate-200 dark:border-slate-700 opacity-80';
+      if (isCanceled) cardBorder = 'border-red-200 dark:border-red-900/40 opacity-75';
+
+      // Countdown / stay info
+      let stayInfo = '';
+      if (isInhouse) {
+        const daysLeft = Math.ceil((new Date(res.checkOut) - Date.now()) / 86400000);
+        stayInfo = `<span class="inline-flex items-center gap-1 text-xs font-semibold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 px-2 py-1 rounded-full">
+          <span class="material-symbols-outlined text-xs fill-icon">sensors</span>
+          ${daysLeft} night${daysLeft !== 1 ? 's' : ''} remaining
+        </span>`;
+      } else if (!isPast && !isCanceled) {
+        const countdown = App.helpers.stayCountdown(res.checkIn);
+        stayInfo = `<span class="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-full">
+          <span class="material-symbols-outlined text-xs">schedule</span>
+          Check-in ${countdown}
+        </span>`;
+      }
+
+      return `
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border ${cardBorder} overflow-hidden hover:shadow-md transition-shadow">
+
+          <!-- Active stay banner -->
+          ${isActive ? `
+          <div class="bg-[#003c52] dark:bg-teal-700 px-4 py-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-white fill-icon">check_circle</span>
+            <span class="text-white text-xs font-bold uppercase tracking-wider">Active Stay — Services linked to this reservation</span>
+          </div>` : ''}
+
+          <!-- Tentative notice -->
+          ${isTentative ? `
+          <div class="bg-purple-50 dark:bg-purple-900/30 border-b border-purple-200 dark:border-purple-800 px-4 py-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-purple-600 dark:text-purple-400">info</span>
+            <span class="text-purple-700 dark:text-purple-300 text-xs font-medium">This reservation is tentative and pending final confirmation. Service bookings are not available until confirmed.</span>
+          </div>` : ''}
+
+          <!-- Canceled notice -->
+          ${isCanceled ? `
+          <div class="bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-900/40 px-4 py-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-red-500">cancel</span>
+            <span class="text-red-600 dark:text-red-400 text-xs font-medium">This reservation has been canceled.</span>
+          </div>` : ''}
+
+          <div class="p-5 md:p-6">
+            <!-- Property + status -->
+            <div class="flex items-start gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-[#003c52]/8 dark:bg-teal-900/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="material-symbols-outlined text-xl text-[#003c52] dark:text-teal-400">hotel</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-2 flex-wrap">
+                  <div class="min-w-0">
+                    <h3 class="font-bold text-slate-900 dark:text-white text-base leading-tight">${res.propertyName}</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${res.propertyCity}</p>
                   </div>
-
-                  <!-- Dates + room -->
-                  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                    <div>
-                      <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5">Check-in</p>
-                      <p class="text-sm font-semibold text-slate-900 dark:text-white">${App.helpers.formatDate(res.checkIn)}</p>
-                    </div>
-                    <div>
-                      <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5">Check-out</p>
-                      <p class="text-sm font-semibold text-slate-900 dark:text-white">${App.helpers.formatDate(res.checkOut)}</p>
-                    </div>
-                    <div>
-                      <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5">Duration</p>
-                      <p class="text-sm font-semibold text-slate-900 dark:text-white">${nights} night${nights !== 1 ? 's' : ''}</p>
-                    </div>
-                    <div>
-                      <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5">Room</p>
-                      <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">${res.roomNumber ? 'Room ' + res.roomNumber : '—'}</p>
-                    </div>
-                  </div>
-
-                  <!-- Room type -->
-                  <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-1.5">
-                    <span class="material-symbols-outlined text-sm">bed</span> ${res.roomType}
-                    <span class="mx-1 text-slate-300 dark:text-slate-600">·</span>
-                    <span class="material-symbols-outlined text-sm">person</span> ${res.adults} Adult${res.adults !== 1 ? 's' : ''}${res.children ? ', ' + res.children + ' Child' : ''}
-                    <span class="mx-1 text-slate-300 dark:text-slate-600">·</span>
-                    Ref: <span class="font-semibold text-[#003c52] dark:text-teal-400">${res.bookingReference}</span>
-                  </p>
-
-                  <!-- Pre-arrival status -->
-                  <div class="flex items-center gap-2 p-3 rounded-lg ${preArrivalDone ? 'bg-green-50 dark:bg-green-900/20' : 'bg-amber-50 dark:bg-amber-900/20'}">
-                    <span class="material-symbols-outlined text-sm ${preArrivalDone ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}">${preArrivalDone ? 'check_circle' : 'pending'}</span>
-                    <span class="text-xs font-medium ${preArrivalDone ? 'text-green-700 dark:text-green-400' : 'text-amber-700 dark:text-amber-400'}">
-                      Pre-arrival checklist ${preArrivalDone ? 'complete' : 'not yet completed'}
-                    </span>
-                    ${!preArrivalDone ? `<a href="pre-arrival.html?id=${res.id}" class="ml-auto text-xs font-semibold text-amber-700 dark:text-amber-400 underline">Complete now</a>` : ''}
+                  <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                    ${App.helpers.statusBadge(res.status)}
+                    ${stayInfo}
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Actions -->
-              <div class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <a href="reservation-detail.html?id=${res.id}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-2 bg-[#003c52] text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
-                  <span class="material-symbols-outlined text-base">info</span> View Details
-                </a>
-                ${!isActive ? `
-                <button onclick="setActive('${res.id}')" class="flex-1 md:flex-none inline-flex items-center justify-center gap-2 border border-[#003c52] text-[#003c52] dark:border-teal-500 dark:text-teal-400 rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#003c52]/5 transition">
-                  <span class="material-symbols-outlined text-base">check_circle</span> Set as Active
-                </button>` : ''}
-                <a href="billing.html?id=${res.id}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                  <span class="material-symbols-outlined text-base">receipt_long</span> View Bill
-                </a>
+            <!-- Dates + room grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5">Check-in</p>
+                <p class="text-sm font-semibold text-slate-900 dark:text-white">${App.helpers.formatDate(res.checkIn)}</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5">Check-out</p>
+                <p class="text-sm font-semibold text-slate-900 dark:text-white">${App.helpers.formatDate(res.checkOut)}</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5">Duration</p>
+                <p class="text-sm font-semibold text-slate-900 dark:text-white">${nights} night${nights !== 1 ? 's' : ''}</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mb-0.5">Room</p>
+                <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">${res.roomNumber ? 'Room ' + res.roomNumber : '—'}</p>
               </div>
             </div>
-          </div>`;
-      }).join('');
+
+            <!-- Room type + guests + ref -->
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 dark:text-slate-400 mb-4">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">bed</span>${res.roomType}</span>
+              <span class="text-slate-300 dark:text-slate-600">·</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span>${res.adults} Adult${res.adults !== 1 ? 's' : ''}${res.children ? ', ' + res.children + ' Child' : ''}</span>
+              <span class="text-slate-300 dark:text-slate-600">·</span>
+              <span>Ref: <span class="font-semibold text-[#003c52] dark:text-teal-400">${res.bookingReference}</span></span>
+              ${showBalance ? `
+              <span class="text-slate-300 dark:text-slate-600">·</span>
+              <span class="flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400">
+                <span class="material-symbols-outlined text-sm">receipt_long</span>Balance: Rs. ${res.balance.toLocaleString()}
+              </span>` : ''}
+            </div>
+
+            <!-- Pre-arrival status (active/upcoming only) -->
+            ${showPreArrival && !isTentative ? `
+            <div class="flex items-center gap-2 p-3 rounded-xl mb-4 ${preArrivalDone ? 'bg-green-50 dark:bg-green-900/20' : 'bg-amber-50 dark:bg-amber-900/20'}">
+              <span class="material-symbols-outlined text-sm fill-icon ${preArrivalDone ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}">${preArrivalDone ? 'check_circle' : 'pending'}</span>
+              <span class="text-xs font-medium ${preArrivalDone ? 'text-green-700 dark:text-green-400' : 'text-amber-700 dark:text-amber-400'} flex-1">
+                Pre-arrival checklist ${preArrivalDone ? 'completed' : 'not yet completed'}
+              </span>
+              ${!preArrivalDone ? `<a href="pre-arrival.html?id=${res.id}" class="text-xs font-bold text-amber-700 dark:text-amber-400 underline whitespace-nowrap">Complete now →</a>` : ''}
+            </div>` : ''}
+
+            <!-- Actions -->
+            <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <a href="reservation-detail.html?id=${res.id}"
+                class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
+                <span class="material-symbols-outlined text-base">info</span> View Details
+              </a>
+
+              ${canSetAct ? `
+              <button onclick="setActive('${res.id}')"
+                class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 border border-[#003c52] text-[#003c52] dark:border-teal-500 dark:text-teal-400 rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#003c52]/5 transition">
+                <span class="material-symbols-outlined text-base">check_circle</span> Set as Active
+              </button>` : ''}
+
+              ${!isCanceled ? `
+              <a href="billing.html?id=${res.id}"
+                class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                <span class="material-symbols-outlined text-base">receipt_long</span> View Bill
+              </a>` : ''}
+            </div>
+          </div>
+        </div>`;
     }
 
+    // ─── Empty state ─────────────────────────────────────────────────────────────
+    function emptyState(msg, icon) {
+      return `
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-12 text-center">
+          <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-4 block">${icon}</span>
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">${msg}</p>
+        </div>`;
+    }
+
+    // ─── Set active reservation ───────────────────────────────────────────────────
     function setActive(id) {
       App.reservations.setActive(id);
-      App.toast.show('Active reservation updated.', 'success');
-      // Re-render
+      App.toast.show('Active reservation updated. All services will now be linked to this stay.', 'success');
       App.header.render('app-header');
-      renderList(App.reservations.getAll());
-      renderStats(App.reservations.getAll());
+      renderTabs(allReservations);
     }
 
     init();
   </script>
+  <style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </body>
 </html>
