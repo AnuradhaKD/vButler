@@ -445,7 +445,7 @@ const App = (() => {
       const unread = notifications.getUnreadCount();
 
       el.innerHTML = `
-        <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
+        <header class="z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
           <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3 min-w-0">
               <button onclick="App.sidebar.openMobile()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Open menu">
@@ -478,6 +478,11 @@ const App = (() => {
             </div>
           </div>
         </header>`;
+
+      // Activate the fixed-header / scrollable-content layout
+      document.body.classList.add('vb-app');
+      const layoutDiv = el.nextElementSibling;
+      if (layoutDiv) layoutDiv.classList.add('vb-layout');
     }
   };
 
@@ -527,7 +532,7 @@ const App = (() => {
         { id: 'notifications',  label: 'Notifications',  icon: 'notifications',  href: 'notifications.html' }
       ];
       el.innerHTML = `
-        <aside class="hidden md:flex flex-col w-72 sticky top-16 h-[calc(100vh-4rem)] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
+        <aside class="hidden md:flex flex-col w-72 h-full shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
           <nav class="flex-1 overflow-y-auto p-4 space-y-1">
             ${items.map(item => `
             <a href="${item.href}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${active === item.id
@@ -735,7 +740,17 @@ const App = (() => {
   function init() {
     theme.apply();
     toast.init();
-    document.documentElement.style.overflowX = 'hidden';
+
+    // Inject layout CSS — only active on pages that call header.render() (adds body.vb-app)
+    const s = document.createElement('style');
+    s.textContent = `
+      body.vb-app { height: 100%; overflow: hidden; display: flex; flex-direction: column; }
+      html:has(body.vb-app) { height: 100%; overflow: hidden; }
+      body.vb-app > #app-header { flex-shrink: 0; }
+      body.vb-app > .vb-layout  { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; }
+      body.vb-app > .vb-layout > main { flex: 1 1 0; overflow-y: auto; min-height: 0; }
+    `;
+    document.head.appendChild(s);
   }
 
   // Run on load
