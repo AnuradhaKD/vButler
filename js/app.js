@@ -448,6 +448,9 @@ const App = (() => {
         <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
           <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3 min-w-0">
+              <button onclick="App.sidebar.openMobile()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Open menu">
+                <span class="material-symbols-outlined text-[22px]">menu</span>
+              </button>
               <a href="dashboard.html" class="flex items-center gap-2 shrink-0">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-slate-200 p-1">
                   <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
@@ -552,6 +555,79 @@ const App = (() => {
             </button>
           </div>
         </aside>`;
+
+      // ── Mobile drawer (slide-in) ───────────────────────────────────────────
+      if (!document.getElementById('mobile-menu-drawer')) {
+        const frag = document.createElement('div');
+        frag.innerHTML = `
+          <div id="mobile-menu-overlay"
+               class="md:hidden fixed inset-0 z-40 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300"
+               onclick="App.sidebar.closeMobile()"></div>
+          <div id="mobile-menu-drawer"
+               class="md:hidden fixed inset-y-0 left-0 z-50 w-72 flex flex-col bg-white dark:bg-slate-900 shadow-2xl
+                      -translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-700 shrink-0">
+              <a href="dashboard.html" class="flex items-center gap-3" onclick="App.sidebar.closeMobile()">
+                <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200 p-1.5 shrink-0">
+                  <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
+                </div>
+                <div>
+                  <div class="font-bold text-slate-900 dark:text-white text-sm leading-tight">Destinity vButler</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">Browns Hotels & Resorts</div>
+                </div>
+              </a>
+              <button onclick="App.sidebar.closeMobile()"
+                      class="w-9 h-9 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition shrink-0"
+                      aria-label="Close menu">
+                <span class="material-symbols-outlined text-xl">close</span>
+              </button>
+            </div>
+            <nav id="mobile-menu-nav" class="flex-1 overflow-y-auto p-4 space-y-1"></nav>
+            <div class="p-4 border-t border-slate-200 dark:border-slate-700 shrink-0">
+              <button onclick="App.auth.logout()"
+                      class="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                Sign Out
+              </button>
+            </div>
+          </div>`;
+        while (frag.firstChild) document.body.appendChild(frag.firstChild);
+      }
+
+      // Update mobile nav items (keeps active state in sync)
+      const mobileNav = document.getElementById('mobile-menu-nav');
+      if (mobileNav) {
+        mobileNav.innerHTML = items.map(item => `
+          <a href="${item.href}" onclick="App.sidebar.closeMobile()"
+             class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${active === item.id
+               ? 'bg-[#003c52]/10 text-[#003c52] dark:bg-teal-900/30 dark:text-teal-400'
+               : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'}">
+            <span class="material-symbols-outlined text-xl">${item.icon}</span>
+            ${item.label}
+          </a>`).join('');
+      }
+    },
+
+    openMobile() {
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const drawer  = document.getElementById('mobile-menu-drawer');
+      if (!overlay || !drawer) return;
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      overlay.classList.add('opacity-100', 'pointer-events-auto');
+      drawer.classList.remove('-translate-x-full');
+      drawer.classList.add('translate-x-0');
+      document.body.style.overflow = 'hidden';
+    },
+
+    closeMobile() {
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const drawer  = document.getElementById('mobile-menu-drawer');
+      if (!overlay || !drawer) return;
+      overlay.classList.remove('opacity-100', 'pointer-events-auto');
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      drawer.classList.remove('translate-x-0');
+      drawer.classList.add('-translate-x-full');
+      document.body.style.overflow = '';
     }
   };
 
