@@ -1,0 +1,502 @@
+{
+  "property": {
+    "id": "colombo-city",
+    "name": "Browns City Hotel Colombo",
+    "fullName": "Browns City Hotel Colombo",
+    "tagline": "Colombo's premier address for business and leisure",
+    "address": "No. 27, Sir James Peiris Mawatha, Colombo 02, Sri Lanka",
+    "phone": "+94 11 230 1234",
+    "email": "colombo@brownshotels.com",
+    "currency": "LKR",
+    "currencySymbol": "Rs.",
+    "timezone": "Asia/Colombo",
+    "heroImages": [
+      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1200",
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200",
+      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200"
+    ],
+    "facilities": ["Rooftop Pool", "Full-Service Spa", "3 Restaurants", "Business Centre", "Fitness Centre", "Valet Parking", "Concierge", "24-hr Room Service", "Free WiFi", "Airport Transfers"]
+  },
+
+  "quickActions": [
+    { "id": "services",    "label": "Services",     "icon": "room_service",   "route": "services.html" },
+    { "id": "dining",      "label": "Dining",        "icon": "restaurant",     "route": "dining.html" },
+    { "id": "wellness",    "label": "Spa & Wellness","icon": "spa",            "route": "wellness.html" },
+    { "id": "my-bill",     "label": "My Bill",       "icon": "receipt_long",   "route": "billing.html" },
+    { "id": "transport",   "label": "Transport",     "icon": "directions_car", "route": "transport.html" },
+    { "id": "experiences", "label": "City Guide",    "icon": "location_city",  "route": "experiences.html" },
+    { "id": "complaints",  "label": "Feedback",      "icon": "support_agent",  "route": "complaints.html" },
+    { "id": "housekeeping","label": "Room Requests", "icon": "bed",            "route": "housekeeping.html" }
+  ],
+
+  "services": {
+    "categories": [
+      {
+        "id": "housekeeping",
+        "label": "Housekeeping",
+        "icon": "cleaning_services",
+        "items": [
+          {
+            "id": "room-makeup",
+            "name": "Room Makeup",
+            "description": "Full room cleaning and bed making at your preferred time.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "08:00", "to": "18:00" },
+            "estimatedTime": "45 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "turndown",
+            "name": "Turndown Service",
+            "description": "Evening turndown with bed preparation and chocolates.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "18:00", "to": "22:00" },
+            "estimatedTime": "20 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "extra-amenities",
+            "name": "Extra Amenities",
+            "description": "Request additional pillows, blankets, or toiletry items.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "15 minutes",
+            "requiresBooking": false,
+            "fields": ["itemType", "quantity"]
+          }
+        ]
+      },
+      {
+        "id": "dining",
+        "label": "In-Room Dining",
+        "icon": "restaurant",
+        "items": [
+          {
+            "id": "inroom-dining",
+            "name": "24-Hour In-Room Dining",
+            "description": "Full restaurant menu delivered to your room at any hour.",
+            "price": null,
+            "priceNote": "Charges added to folio",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "25–40 minutes",
+            "requiresBooking": false,
+            "fields": ["deliveryTime", "specialInstructions"]
+          }
+        ]
+      },
+      {
+        "id": "transport",
+        "label": "Transport",
+        "icon": "directions_car",
+        "items": [
+          {
+            "id": "airport-transfer",
+            "name": "Airport Transfer (BIA)",
+            "description": "Chauffeur-driven transfer to/from Bandaranaike International Airport.",
+            "price": 6000,
+            "priceNote": "From LKR 6,000",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "45–60 minutes",
+            "requiresBooking": true,
+            "fields": ["flightNumber", "date", "time", "direction", "passengerCount", "vehicleType"]
+          },
+          {
+            "id": "city-transfer",
+            "name": "Colombo City Chauffeur (Half Day)",
+            "description": "Chauffeur-driven car available for half a day for meetings, shopping, or sightseeing.",
+            "price": 12000,
+            "priceNote": "LKR 12,000 per half day",
+            "availableHours": { "from": "06:00", "to": "22:00" },
+            "estimatedTime": "4 hours",
+            "requiresBooking": true,
+            "fields": ["date", "startTime", "vehicleType", "passengerCount"]
+          }
+        ]
+      },
+      {
+        "id": "business",
+        "label": "Business Services",
+        "icon": "business_center",
+        "items": [
+          {
+            "id": "meeting-room",
+            "name": "Meeting Room Booking",
+            "description": "Book one of our fully equipped meeting rooms — projector, AV, and catering available.",
+            "price": 15000,
+            "priceNote": "From LKR 15,000 per session",
+            "availableHours": { "from": "07:00", "to": "22:00" },
+            "estimatedTime": "Setup 1 hour before",
+            "requiresBooking": true,
+            "fields": ["date", "startTime", "endTime", "attendees", "cateringRequired"]
+          },
+          {
+            "id": "printing",
+            "name": "Printing & Secretarial",
+            "description": "Print, scan, fax, or use our business centre for document services.",
+            "price": null,
+            "priceNote": "From LKR 50 per page",
+            "availableHours": { "from": "07:00", "to": "21:00" },
+            "estimatedTime": "15 minutes",
+            "requiresBooking": false,
+            "fields": ["serviceType", "pages"]
+          }
+        ]
+      },
+      {
+        "id": "concierge",
+        "label": "Concierge",
+        "icon": "concierge",
+        "items": [
+          {
+            "id": "luggage-storage",
+            "name": "Luggage Storage",
+            "description": "Secure storage before check-in or after check-out.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "5 minutes",
+            "requiresBooking": false,
+            "fields": ["bagCount", "collectionTime"]
+          },
+          {
+            "id": "valet-parking",
+            "name": "Valet Parking",
+            "description": "Valet parking service for your vehicle during your stay.",
+            "price": 2000,
+            "priceNote": "LKR 2,000 per day",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "10 minutes",
+            "requiresBooking": false,
+            "fields": ["vehicleType", "vehicleNumber"]
+          }
+        ]
+      }
+    ]
+  },
+
+  "laundryPriceList": [
+    { "id": "shirt",     "name": "Shirt / Blouse",   "wash": 400,  "ironOnly": 230, "expressMultiplier": 1.5 },
+    { "id": "trouser",   "name": "Trousers / Pants",  "wash": 450,  "ironOnly": 280, "expressMultiplier": 1.5 },
+    { "id": "dress",     "name": "Dress / Skirt",     "wash": 550,  "ironOnly": 330, "expressMultiplier": 1.5 },
+    { "id": "suit",      "name": "Suit (2 piece)",    "wash": 1400, "ironOnly": 700, "expressMultiplier": 1.5 },
+    { "id": "saree",     "name": "Saree",             "wash": 900,  "ironOnly": 450, "expressMultiplier": 1.5 },
+    { "id": "underwear", "name": "Underwear",          "wash": 220,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "socks",     "name": "Socks (pair)",      "wash": 170,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "t-shirt",   "name": "T-Shirt",           "wash": 330,  "ironOnly": 180, "expressMultiplier": 1.5 },
+    { "id": "jacket",    "name": "Jacket / Blazer",   "wash": 1100, "ironOnly": 550, "expressMultiplier": 1.5 },
+    { "id": "tie",       "name": "Tie / Scarf",       "wash": 300,  "ironOnly": 150, "expressMultiplier": 1.5 }
+  ],
+
+  "dining": {
+    "restaurants": [
+      {
+        "id": "the-colombo-brasserie",
+        "name": "The Colombo Brasserie",
+        "cuisine": "International & Sri Lankan",
+        "description": "Our signature all-day dining restaurant on the lobby level. A sophisticated menu blending international favourites with bold Sri Lankan flavours.",
+        "hours": { "breakfast": "06:30–10:30", "lunch": "12:00–15:00", "dinner": "18:30–23:00" },
+        "images": [
+          "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800"
+        ],
+        "acceptsReservations": true,
+        "cancellationCutoffHours": 1,
+        "maxPartySize": 50,
+        "menu": [
+          {
+            "category": "Starters",
+            "items": [
+              { "id": "cb-001", "name": "Burrata & Heirloom Tomato",  "description": "Imported burrata, heritage tomatoes, basil oil, aged balsamic.", "price": 2800, "tags": ["vegetarian"] },
+              { "id": "cb-002", "name": "Devilled Prawns",            "description": "Sri Lankan-style spiced tiger prawns, butter, garlic, chilli.", "price": 3200, "tags": ["seafood", "local", "signature"] }
+            ]
+          },
+          {
+            "category": "Mains",
+            "items": [
+              { "id": "cb-003", "name": "Grilled Wagyu Striploin",   "description": "200g Wagyu MB4, truffle pomme purée, red wine reduction.", "price": 12000, "tags": ["signature"] },
+              { "id": "cb-004", "name": "Colombo Lobster Thermidor", "description": "Local lobster, classic thermidor sauce, herb crust.", "price": 9500, "tags": ["seafood", "signature"] },
+              { "id": "cb-005", "name": "Vegetarian Tasting Plate",  "description": "Four-item seasonal vegetarian selection, chef's choice.", "price": 4200, "tags": ["vegetarian"] }
+            ]
+          },
+          {
+            "category": "Desserts",
+            "items": [
+              { "id": "cb-006", "name": "Ceylon Cinnamon Crème Brûlée", "description": "Classic crème brûlée infused with Ceylon cinnamon.", "price": 1600, "tags": ["local", "signature"] },
+              { "id": "cb-007", "name": "Valrhona Chocolate Mousse",    "description": "Dark chocolate mousse, praline crumble, vanilla ice cream.", "price": 1800, "tags": [] }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "rooftop-grill",
+        "name": "Sky Grill — Rooftop",
+        "cuisine": "Grill & Barbecue",
+        "description": "Open-air rooftop grill with sweeping views of Colombo. Premium cuts, fresh seafood, and cocktails under the city sky.",
+        "hours": { "dinner": "18:30–23:30" },
+        "images": [
+          "https://images.unsplash.com/photo-1574966739987-2ade97d6a3e4?w=800"
+        ],
+        "acceptsReservations": true,
+        "cancellationCutoffHours": 2,
+        "maxPartySize": 40,
+        "menu": [
+          {
+            "category": "From the Grill",
+            "items": [
+              { "id": "sg-001", "name": "T-Bone Steak (500g)",     "description": "45-day dry-aged T-bone, herb butter, grilled vegetables.", "price": 16000, "tags": ["signature"] },
+              { "id": "sg-002", "name": "Tiger Prawn Skewers (6)", "description": "Marinated tiger prawns, chimichurri, lemon.", "price": 5500, "tags": ["seafood", "gluten-free"] }
+            ]
+          }
+        ]
+      }
+    ],
+    "bars": [
+      {
+        "id": "lobby-bar",
+        "name": "The Lobby Bar",
+        "description": "A sophisticated bar at the heart of the lobby. Curated cocktail list, extensive wine cellar, and light bites. Perfect for business meetings or pre-dinner drinks.",
+        "hours": { "open": "11:00", "close": "01:00" },
+        "images": [],
+        "acceptsReservations": false,
+        "menu": [
+          {
+            "category": "Signature Cocktails",
+            "items": [
+              { "id": "lb-001", "name": "Colombo Sling",        "description": "Gin, pineapple, cherry brandy, bitters — our twist on the classic.", "price": 2800 },
+              { "id": "lb-002", "name": "Ceylon Old Fashioned", "description": "Single malt whisky, Ceylon cinnamon, bitters, orange.", "price": 3200 },
+              { "id": "lb-003", "name": "Mocktail Royale",      "description": "Elderflower, lime, cucumber, soda, rose.",                         "price": 1800 }
+            ]
+          },
+          {
+            "category": "Wine (by the glass)",
+            "items": [
+              { "id": "lb-004", "name": "Champagne (Moët & Chandon)", "description": "NV Brut Imperial.", "price": 4500 },
+              { "id": "lb-005", "name": "Sauvignon Blanc",            "description": "Marlborough, New Zealand.", "price": 2200 },
+              { "id": "lb-006", "name": "Pinot Noir",                 "description": "Central Otago, New Zealand.", "price": 2400 }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "wellness": {
+    "treatments": [
+      {
+        "id": "swedish-massage",
+        "name": "Swedish Relaxation Massage",
+        "description": "A full-body relaxation massage to restore balance after travel or a busy day in the city.",
+        "duration": 60,
+        "price": 9500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600"
+      },
+      {
+        "id": "deep-tissue",
+        "name": "Deep Tissue Massage",
+        "description": "Targets deep muscle layers for chronic tension relief. Recommended for business travellers.",
+        "duration": 60,
+        "price": 10500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600"
+      },
+      {
+        "id": "executive-ritual",
+        "name": "Executive Revive Ritual",
+        "description": "Designed for the business traveller — express facial, scalp massage, and foot reflexology in a focused 90-minute session.",
+        "duration": 90,
+        "price": 18000,
+        "therapistPreference": false,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600"
+      },
+      {
+        "id": "hammam",
+        "name": "Hammam Steam & Scrub",
+        "description": "Traditional hammam experience — steam room, exfoliating body scrub, and foam massage.",
+        "duration": 75,
+        "price": 14000,
+        "therapistPreference": false,
+        "cancellationPolicy": "Cancel at least 2 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1552693673-1bf958298935?w=600"
+      }
+    ],
+    "classes": [
+      {
+        "id": "yoga-flow",
+        "name": "Morning Vinyasa Flow",
+        "description": "Dynamic yoga flow class in our rooftop studio overlooking the city.",
+        "schedule": ["Mon 07:00", "Wed 07:00", "Fri 07:00"],
+        "duration": 60,
+        "price": 3000,
+        "maxParticipants": 8,
+        "image": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600"
+      }
+    ],
+    "packages": [
+      {
+        "id": "city-escape",
+        "name": "Urban Escape Package",
+        "description": "A 3-hour retreat from city life: Swedish massage, hammam, and a healthy lunch by the rooftop pool.",
+        "duration": "3 hours",
+        "price": 32000,
+        "includes": ["Swedish Massage (60 min)", "Hammam Steam & Scrub (45 min)", "Healthy Lunch"],
+        "savings": 5500,
+        "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600"
+      }
+    ]
+  },
+
+  "transport": {
+    "options": [
+      {
+        "id": "airport-arrival",
+        "type": "airport",
+        "direction": "arrival",
+        "name": "Airport Arrival Transfer",
+        "description": "Chauffeur-driven transfer from BIA to Browns City Hotel Colombo.",
+        "vehicles": [
+          { "type": "sedan",    "label": "Business Sedan (1–3 pax)",  "price": 6000 },
+          { "type": "suv",      "label": "SUV (1–5 pax)",             "price": 8000 },
+          { "type": "minivan",  "label": "Executive Van (1–7 pax)",   "price": 10000 }
+        ],
+        "requiredFields": ["flightNumber", "arrivalDate", "arrivalTime", "passengerCount"]
+      },
+      {
+        "id": "airport-departure",
+        "type": "airport",
+        "direction": "departure",
+        "name": "Airport Departure Transfer",
+        "description": "Chauffeur-driven transfer to BIA. Please allow 3 hours before departure.",
+        "vehicles": [
+          { "type": "sedan",    "label": "Business Sedan (1–3 pax)",  "price": 6000 },
+          { "type": "suv",      "label": "SUV (1–5 pax)",             "price": 8000 },
+          { "type": "minivan",  "label": "Executive Van (1–7 pax)",   "price": 10000 }
+        ],
+        "requiredFields": ["departureDate", "departureTime", "flightNumber", "passengerCount"]
+      },
+      {
+        "id": "city-chauffeur",
+        "type": "local",
+        "name": "Colombo City Chauffeur",
+        "description": "Chauffeur-driven car for meetings, shopping, or exploring Colombo.",
+        "vehicles": [
+          { "type": "sedan",   "label": "Business Sedan (4h block)",  "price": 12000, "priceNote": "per 4 hours" },
+          { "type": "suv",     "label": "SUV (4h block)",             "price": 16000, "priceNote": "per 4 hours" }
+        ],
+        "requiredFields": ["date", "startTime", "vehicleType", "destinations"]
+      }
+    ]
+  },
+
+  "experiences": [
+    {
+      "id": "colombo-food-tour",
+      "name": "Colombo Street Food Walking Tour",
+      "category": "Culinary",
+      "description": "Explore Colombo's vibrant food scene on a guided walk through Pettah Market, kottu stalls, and heritage bakeries. Taste 8–10 local dishes along the way.",
+      "duration": "3 hours",
+      "inclusions": ["Expert guide", "All tastings", "Food history commentary", "Recipe card"],
+      "price": 9000,
+      "priceNote": "per person",
+      "minGuests": 2,
+      "maxGuests": 8,
+      "bookingCutoffHours": 12,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      "startTime": "09:00",
+      "images": ["https://images.unsplash.com/photo-1464219551459-ac14ae01fbe0?w=800"],
+      "isFeatured": true,
+      "addOns": []
+    },
+    {
+      "id": "colombo-heritage-walk",
+      "name": "Colonial Fort & Pettah Heritage Walk",
+      "category": "Culture",
+      "description": "Discover Colombo's Dutch and British colonial architecture, the bustling bazaars of Pettah, and the city's hidden temples with a knowledgeable local guide.",
+      "duration": "3 hours",
+      "inclusions": ["Certified heritage guide", "Entry fees", "Return tuk-tuk", "Bottled water"],
+      "price": 7500,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 10,
+      "bookingCutoffHours": 8,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "08:30",
+      "images": ["https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800"],
+      "isFeatured": false,
+      "addOns": []
+    }
+  ],
+
+  "localPlaces": [
+    {
+      "id": "pettah-market",
+      "name": "Pettah Market",
+      "category": "Shopping",
+      "description": "Colombo's oldest and most chaotic bazaar — every street selling something different. Electronics, spices, textiles, and everything in between.",
+      "distanceKm": 2.5,
+      "travelTime": "10 min by tuk-tuk",
+      "hotelNote": "Best on weekday mornings. Our concierge can arrange a tuk-tuk and a local guide for the first visit.",
+      "mapUrl": "https://maps.google.com/?q=Pettah+Market+Colombo",
+      "images": []
+    },
+    {
+      "id": "galle-face-green",
+      "name": "Galle Face Green",
+      "category": "Leisure",
+      "description": "A wide oceanfront promenade — the perfect evening stroll with street food, kite flying, and ocean views.",
+      "distanceKm": 0.8,
+      "travelTime": "10 min walk",
+      "hotelNote": "Best at sunset (18:00). Try the famous Isso Vade (prawn fritters) from the street vendors.",
+      "mapUrl": "https://maps.google.com/?q=Galle+Face+Green+Colombo",
+      "images": []
+    },
+    {
+      "id": "national-museum",
+      "name": "National Museum of Colombo",
+      "category": "Culture",
+      "description": "Sri Lanka's premier museum housing artefacts from pre-historic times to colonial era, including the regalia of the last Kandyan king.",
+      "distanceKm": 2.0,
+      "travelTime": "8 min by car",
+      "hotelNote": "Closed on Mondays. Our concierge can arrange tickets and a guided tour.",
+      "mapUrl": "https://maps.google.com/?q=National+Museum+Colombo",
+      "images": []
+    },
+    {
+      "id": "arcade-independence",
+      "name": "The Arcade Independence Square",
+      "category": "Shopping",
+      "description": "Premium shopping in a beautifully restored colonial arcade. Local designers, gem stores, cafes, and restaurants.",
+      "distanceKm": 3.5,
+      "travelTime": "15 min by car",
+      "hotelNote": "Open 10:00–21:00 daily. Our concierge can arrange a private chauffeur for the evening.",
+      "mapUrl": "https://maps.google.com/?q=The+Arcade+Independence+Square+Colombo",
+      "images": []
+    }
+  ],
+
+  "complaintCategories": [
+    { "id": "room",       "label": "Room",       "icon": "bed",            "subcategories": ["Cleanliness", "Maintenance / Repair", "Room Temperature", "Noise", "Amenities Missing", "Other"] },
+    { "id": "dining",     "label": "Dining",     "icon": "restaurant",     "subcategories": ["Food Quality", "Service Speed", "Order Incorrect", "Billing Error", "Hygiene", "Other"] },
+    { "id": "service",    "label": "Service",    "icon": "room_service",   "subcategories": ["Request Not Fulfilled", "Delayed Response", "Staff Attitude", "Other"] },
+    { "id": "business",   "label": "Business",   "icon": "business_center","subcategories": ["Meeting Room", "AV Equipment", "Internet", "Printing", "Other"] },
+    { "id": "facilities", "label": "Facilities", "icon": "pool",           "subcategories": ["Rooftop Pool", "Gym", "Spa", "WiFi / Internet", "Valet Parking", "Other"] },
+    { "id": "staff",      "label": "Staff",      "icon": "person",         "subcategories": ["Rude / Unprofessional", "Incorrect Information", "Unhelpful", "Other"] },
+    { "id": "other",      "label": "Other",      "icon": "help_outline",   "subcategories": ["General Feedback", "Safety Concern", "Other"] }
+  ],
+
+  "whatsappGroups": {
+    "housekeeping": "+94701238011",
+    "fnb": "+94701238012",
+    "concierge": "+94701238013",
+    "frontDesk": "+94701238014",
+    "dutyManager": "+94701238015",
+    "gm": "+94701238016"
+  }
+}

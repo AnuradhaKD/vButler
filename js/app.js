@@ -325,10 +325,30 @@ const App = (() => {
         return null;
       }
     },
-    async loadProperty(propertyId) { return data.load(`data/properties/${propertyId}.json`); },
-    async loadChain()              { return data.load('data/chain.json'); },
-    async loadGuests()             { return data.load('data/mock/guests.json'); },
-    async loadReservations()       { return data.load('data/mock/reservations.json'); }
+    async loadProperty(propertyId) {
+      // Resolve dataFile from chain manifest (supports custom file names)
+      try {
+        const chainData = await data.loadChain();
+        const prop = chainData?.properties?.find(p => p.id === propertyId);
+        if (prop?.dataFile) return data.load(`data/properties/${prop.dataFile}`);
+      } catch(e) { /* fall through */ }
+      return data.load(`data/properties/${propertyId}.json`);
+    },
+    // Returns just the property summary from chain.json — no full property file loaded
+    async loadPropertySummary(propertyId) {
+      const chainData = await data.loadChain();
+      return chainData?.properties?.find(p => p.id === propertyId) || null;
+    },
+    // Merge chain feature flags with property-level overrides
+    async loadFeatureFlags(propertyId) {
+      const chainData = await data.loadChain();
+      const chainFlags = chainData?.featureFlags || {};
+      const propFlags  = chainData?.properties?.find(p => p.id === propertyId)?.featureFlags || {};
+      return { ...chainFlags, ...propFlags };
+    },
+    async loadChain()        { return data.load('data/chain.json'); },
+    async loadGuests()       { return data.load('data/mock/guests.json'); },
+    async loadReservations() { return data.load('data/mock/reservations.json'); }
   };
 
   // ─── Header ───────────────────────────────────────────────────────────────────

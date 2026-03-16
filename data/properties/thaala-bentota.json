@@ -1,0 +1,435 @@
+{
+  "property": {
+    "id": "thaala-bentota",
+    "name": "Thaala Bentota",
+    "fullName": "Thaala Bentota Resort & Spa",
+    "tagline": "Where the river meets the sea",
+    "address": "Bentota Beach, Southern Coastal Road, Bentota, Sri Lanka",
+    "phone": "+94 34 227 5500",
+    "email": "bentota@brownshotels.com",
+    "currency": "LKR",
+    "currencySymbol": "Rs.",
+    "timezone": "Asia/Colombo",
+    "heroImages": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200",
+      "https://images.unsplash.com/photo-1540541338537-fdb4c8e9df90?w=1200",
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200"
+    ],
+    "facilities": ["Beachfront Pool", "Spa", "Restaurant", "Beach Bar", "Water Sports Centre", "Boat Jetty", "Free WiFi", "Concierge", "Laundry", "Yoga Pavilion"]
+  },
+
+  "quickActions": [
+    { "id": "services",     "label": "Services",     "icon": "room_service",   "route": "services.html" },
+    { "id": "dining",       "label": "Dining",        "icon": "restaurant",     "route": "dining.html" },
+    { "id": "wellness",     "label": "Spa & Wellness","icon": "spa",            "route": "wellness.html" },
+    { "id": "my-bill",      "label": "My Bill",       "icon": "receipt_long",   "route": "billing.html" },
+    { "id": "experiences",  "label": "Experiences",   "icon": "surfing",        "route": "experiences.html" },
+    { "id": "complaints",   "label": "Feedback",      "icon": "support_agent",  "route": "complaints.html" },
+    { "id": "housekeeping", "label": "Room Requests", "icon": "bed",            "route": "housekeeping.html" },
+    { "id": "transport",    "label": "Transport",     "icon": "directions_car", "route": "transport.html" }
+  ],
+
+  "services": {
+    "categories": [
+      {
+        "id": "housekeeping",
+        "label": "Housekeeping",
+        "icon": "cleaning_services",
+        "items": [
+          {
+            "id": "room-makeup",
+            "name": "Room Makeup",
+            "description": "Full room cleaning and bed making at your preferred time.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "08:00", "to": "17:00" },
+            "estimatedTime": "45 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "turndown",
+            "name": "Turndown Service",
+            "description": "Evening turndown with chocolates, petals, and soft lighting.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "17:00", "to": "21:00" },
+            "estimatedTime": "20 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "extra-towels",
+            "name": "Extra Towels / Beach Towels",
+            "description": "Request additional bath or beach towels.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "15 minutes",
+            "requiresBooking": false,
+            "fields": ["quantity", "towelType"]
+          }
+        ]
+      },
+      {
+        "id": "transport",
+        "label": "Transport",
+        "icon": "directions_car",
+        "items": [
+          {
+            "id": "airport-transfer",
+            "name": "Airport Transfer (BIA)",
+            "description": "Chauffeur-driven transfer to/from Bandaranaike International Airport.",
+            "price": 9000,
+            "priceNote": "From LKR 9,000",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "1.5–2 hours",
+            "requiresBooking": true,
+            "fields": ["flightNumber", "date", "time", "direction", "passengerCount", "vehicleType"]
+          },
+          {
+            "id": "colombo-transfer",
+            "name": "Colombo City Transfer",
+            "description": "Chauffeur-driven transfer between Bentota and Colombo city.",
+            "price": 6500,
+            "priceNote": "From LKR 6,500",
+            "availableHours": { "from": "06:00", "to": "22:00" },
+            "estimatedTime": "1.5 hours",
+            "requiresBooking": true,
+            "fields": ["date", "time", "direction", "passengerCount", "vehicleType"]
+          }
+        ]
+      },
+      {
+        "id": "concierge",
+        "label": "Concierge",
+        "icon": "concierge",
+        "items": [
+          {
+            "id": "luggage-storage",
+            "name": "Luggage Storage",
+            "description": "Secure storage before check-in or after check-out.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "5 minutes",
+            "requiresBooking": false,
+            "fields": ["bagCount", "collectionTime"]
+          },
+          {
+            "id": "boat-rental",
+            "name": "Boat Rental Arrangement",
+            "description": "Arrange a private boat for river or ocean excursions via our concierge.",
+            "price": null,
+            "priceNote": "From LKR 5,000 — price varies",
+            "availableHours": { "from": "07:00", "to": "17:00" },
+            "estimatedTime": "Confirmed within 1 hour",
+            "requiresBooking": true,
+            "fields": ["date", "time", "duration", "partySize", "specialRequests"]
+          }
+        ]
+      }
+    ]
+  },
+
+  "laundryPriceList": [
+    { "id": "shirt",     "name": "Shirt / Blouse",   "wash": 350,  "ironOnly": 200, "expressMultiplier": 1.5 },
+    { "id": "trouser",   "name": "Trousers / Pants",  "wash": 400,  "ironOnly": 250, "expressMultiplier": 1.5 },
+    { "id": "dress",     "name": "Dress / Skirt",     "wash": 500,  "ironOnly": 300, "expressMultiplier": 1.5 },
+    { "id": "suit",      "name": "Suit (2 piece)",    "wash": 1200, "ironOnly": 600, "expressMultiplier": 1.5 },
+    { "id": "underwear", "name": "Underwear",          "wash": 200,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "socks",     "name": "Socks (pair)",      "wash": 150,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "swimwear",  "name": "Swimwear",           "wash": 250,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "t-shirt",   "name": "T-Shirt",           "wash": 300,  "ironOnly": 150, "expressMultiplier": 1.5 },
+    { "id": "shorts",    "name": "Shorts",             "wash": 300,  "ironOnly": 150, "expressMultiplier": 1.5 },
+    { "id": "jacket",    "name": "Jacket / Blazer",   "wash": 900,  "ironOnly": 450, "expressMultiplier": 1.5 },
+    { "id": "sarong",    "name": "Sarong",             "wash": 300,  "ironOnly": 150, "expressMultiplier": 1.5 }
+  ],
+
+  "dining": {
+    "restaurants": [
+      {
+        "id": "sea-breeze",
+        "name": "Sea Breeze Restaurant",
+        "cuisine": "Sri Lankan & Mediterranean",
+        "description": "Beachfront dining with panoramic ocean views. Fresh seafood, wood-fired pizzas, and Sri Lankan rice & curry.",
+        "hours": { "breakfast": "07:00–10:30", "lunch": "12:00–15:00", "dinner": "19:00–22:30" },
+        "images": [
+          "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800"
+        ],
+        "acceptsReservations": true,
+        "cancellationCutoffHours": 1,
+        "maxPartySize": 20,
+        "menu": [
+          {
+            "category": "Seafood Starters",
+            "items": [
+              { "id": "sb-001", "name": "Crab Cakes", "description": "Jumbo lump crab, herb aioli, micro greens.", "price": 2200, "tags": ["seafood", "signature"] },
+              { "id": "sb-002", "name": "Prawn Tempura", "description": "Lightly battered tiger prawns, sweet chilli dip.", "price": 1900, "tags": ["seafood"] },
+              { "id": "sb-003", "name": "Bruschetta", "description": "Toasted sourdough, tomato, basil, balsamic.", "price": 1100, "tags": ["vegetarian"] }
+            ]
+          },
+          {
+            "category": "Mains",
+            "items": [
+              { "id": "sb-004", "name": "Grilled Lobster", "description": "Whole baby lobster, garlic butter, lemon, seasonal vegetables.", "price": 8500, "tags": ["seafood", "signature", "gluten-free"] },
+              { "id": "sb-005", "name": "Fish & Chips", "description": "Battered barramundi, hand-cut chips, tartar sauce.", "price": 3800, "tags": ["seafood"] },
+              { "id": "sb-006", "name": "Wood-Fired Margherita", "description": "San Marzano tomato, buffalo mozzarella, fresh basil.", "price": 2900, "tags": ["vegetarian"] },
+              { "id": "sb-007", "name": "Lankan Rice & Curry", "description": "Daily curry selection with dhal, papadam, and condiments.", "price": 2500, "tags": ["local", "vegetarian-option"] }
+            ]
+          },
+          {
+            "category": "Desserts",
+            "items": [
+              { "id": "sb-008", "name": "Coconut Panna Cotta", "description": "Creamy coconut milk pannacotta, mango coulis.", "price": 1200, "tags": ["vegetarian", "local"] },
+              { "id": "sb-009", "name": "Tiramisu", "description": "Classic Italian tiramisu, espresso-soaked ladyfingers.", "price": 1400, "tags": ["vegetarian"] }
+            ]
+          }
+        ]
+      }
+    ],
+    "bars": [
+      {
+        "id": "beach-bar",
+        "name": "Driftwood Beach Bar",
+        "description": "Barefoot bar right on the sand. Tropical cocktails, chilled beer, and fresh coconuts as the waves roll in.",
+        "hours": { "open": "10:00", "close": "23:30" },
+        "images": [
+          "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800"
+        ],
+        "acceptsReservations": false,
+        "menu": [
+          {
+            "category": "Tropical Cocktails",
+            "items": [
+              { "id": "bb-001", "name": "Bentota Sunset",      "description": "Rum, mango, lime, soda, chilli salt rim.", "price": 2000 },
+              { "id": "bb-002", "name": "Blue Lagoon",         "description": "Vodka, blue curacao, lemon juice, soda.",    "price": 1800 },
+              { "id": "bb-003", "name": "Coconut Mojito",      "description": "White rum, fresh coconut water, mint, lime.", "price": 1900 }
+            ]
+          },
+          {
+            "category": "Beers & Soft",
+            "items": [
+              { "id": "bb-004", "name": "Lion Beer (bottle)",  "description": "Sri Lanka's finest lager.",                  "price": 900 },
+              { "id": "bb-005", "name": "Fresh King Coconut",  "description": "Chilled straight from the coconut.",         "price": 500 }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "wellness": {
+    "treatments": [
+      {
+        "id": "beach-massage",
+        "name": "Oceanside Beach Massage",
+        "description": "Relaxation massage performed in a private cabana on the beach, with the sound of the waves as your soundtrack.",
+        "duration": 60,
+        "price": 9500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600"
+      },
+      {
+        "id": "swedish-massage",
+        "name": "Swedish Relaxation Massage",
+        "description": "Classic full-body massage to ease tension and improve circulation.",
+        "duration": 60,
+        "price": 8500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 4 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600"
+      },
+      {
+        "id": "couples-beach",
+        "name": "Couples Beach Ritual",
+        "description": "Side-by-side massages in a private beachside cabana followed by a champagne toast and fruit platter.",
+        "duration": 90,
+        "price": 24000,
+        "therapistPreference": false,
+        "cancellationPolicy": "Cancel at least 6 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1552693673-1bf958298935?w=600"
+      }
+    ],
+    "classes": [
+      {
+        "id": "beach-yoga",
+        "name": "Sunrise Beach Yoga",
+        "description": "Morning yoga on the beach as the sun rises over the Indian Ocean. All levels welcome.",
+        "schedule": ["Mon 06:30", "Wed 06:30", "Fri 06:30", "Sun 06:30"],
+        "duration": 60,
+        "price": 2500,
+        "maxParticipants": 12,
+        "image": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600"
+      }
+    ],
+    "packages": [
+      {
+        "id": "bentota-bliss",
+        "name": "Bentota Bliss Day Package",
+        "description": "Oceanside massage, sunrise yoga, and a spa lunch by the beach. The perfect escape.",
+        "duration": "Half Day",
+        "price": 22000,
+        "includes": ["Oceanside Massage (60 min)", "Sunrise Yoga", "Spa Lunch"],
+        "savings": 3000,
+        "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600"
+      }
+    ]
+  },
+
+  "transport": {
+    "options": [
+      {
+        "id": "airport-arrival",
+        "type": "airport",
+        "direction": "arrival",
+        "name": "Airport Arrival Transfer",
+        "description": "Chauffeur-driven transfer from BIA to Bentota.",
+        "vehicles": [
+          { "type": "sedan", "label": "Sedan (1–3 pax)", "price": 9000 },
+          { "type": "suv",   "label": "SUV (1–5 pax)",   "price": 11000 },
+          { "type": "van",   "label": "Van (1–8 pax)",   "price": 14000 }
+        ],
+        "requiredFields": ["flightNumber", "arrivalDate", "arrivalTime", "passengerCount"]
+      },
+      {
+        "id": "airport-departure",
+        "type": "airport",
+        "direction": "departure",
+        "name": "Airport Departure Transfer",
+        "description": "Chauffeur-driven transfer from Bentota to BIA.",
+        "vehicles": [
+          { "type": "sedan", "label": "Sedan (1–3 pax)", "price": 9000 },
+          { "type": "suv",   "label": "SUV (1–5 pax)",   "price": 11000 },
+          { "type": "van",   "label": "Van (1–8 pax)",   "price": 14000 }
+        ],
+        "requiredFields": ["departureDate", "departureTime", "flightNumber", "passengerCount"]
+      },
+      {
+        "id": "colombo-shuttle",
+        "type": "shuttle",
+        "name": "Colombo Day Trip",
+        "description": "Scheduled shuttle to Colombo city with drop-off at major shopping malls.",
+        "schedule": ["09:00", "14:00"],
+        "vehicles": [
+          { "type": "van", "label": "Mini Van (8 pax)", "price": 2500, "priceNote": "per person" }
+        ],
+        "requiredFields": ["direction", "time", "passengerCount"]
+      }
+    ]
+  },
+
+  "experiences": [
+    {
+      "id": "sunset-cruise",
+      "name": "Bentota River Sunset Cruise",
+      "category": "Leisure",
+      "description": "Glide along the serene Bentota River at golden hour, passing mangroves, cinnamon islands, and local fishermen.",
+      "duration": "2 hours",
+      "inclusions": ["Private boat", "Sunset cocktails", "Canapés", "Photographer"],
+      "price": 12000,
+      "priceNote": "per couple",
+      "minGuests": 2,
+      "maxGuests": 6,
+      "bookingCutoffHours": 6,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "17:30",
+      "images": ["https://images.unsplash.com/photo-1599568433454-8ed48e7e1e8e?w=800"],
+      "isFeatured": true,
+      "addOns": [
+        { "id": "floating-dinner", "name": "Floating Dinner Setup", "price": 8000 }
+      ]
+    },
+    {
+      "id": "water-sports-package",
+      "name": "Water Sports Adventure",
+      "category": "Adventure",
+      "description": "A thrilling half-day of jet skiing, windsurfing, banana boat rides, and stand-up paddleboarding.",
+      "duration": "3 hours",
+      "inclusions": ["All equipment", "Safety instructor", "Life jackets"],
+      "price": 8500,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 8,
+      "bookingCutoffHours": 4,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "09:00",
+      "images": ["https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800"],
+      "isFeatured": true,
+      "addOns": []
+    },
+    {
+      "id": "turtle-watching",
+      "name": "Sea Turtle Watching",
+      "category": "Nature",
+      "description": "Join a guided evening walk to witness Olive Ridley sea turtles nesting on Bentota beach — a truly magical experience.",
+      "duration": "2 hours",
+      "inclusions": ["Certified guide", "Torch", "Conservation donation"],
+      "price": 3500,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 10,
+      "bookingCutoffHours": 4,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "20:30",
+      "images": ["https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=800"],
+      "isFeatured": true,
+      "addOns": []
+    }
+  ],
+
+  "localPlaces": [
+    {
+      "id": "bentota-beach",
+      "name": "Bentota Beach",
+      "category": "Nature",
+      "description": "One of Sri Lanka's finest golden sand beaches stretching for kilometres. Perfect for swimming, sunbathing, and water sports.",
+      "distanceKm": 0.1,
+      "travelTime": "1 min walk",
+      "hotelNote": "Best swimming at low tide. Our beach butler can arrange sun loungers and umbrellas.",
+      "mapUrl": "https://maps.google.com/?q=Bentota+Beach+Sri+Lanka",
+      "images": ["https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600"]
+    },
+    {
+      "id": "brief-garden",
+      "name": "Brief Garden",
+      "category": "Culture",
+      "description": "The enchanting garden estate of Sri Lankan artist Bevis Bawa — a masterpiece of tropical garden design.",
+      "distanceKm": 11.0,
+      "travelTime": "20 min by car",
+      "hotelNote": "Best visited in the morning. Our concierge can arrange transport and tickets.",
+      "mapUrl": "https://maps.google.com/?q=Brief+Garden+Bentota",
+      "images": []
+    },
+    {
+      "id": "lunuganga",
+      "name": "Lunuganga Country Estate",
+      "category": "Culture",
+      "description": "Geoffrey Bawa's private country estate — a pilgrimage site for architecture and garden lovers.",
+      "distanceKm": 14.0,
+      "travelTime": "25 min by car",
+      "hotelNote": "Guided tours available. Book in advance as visitor numbers are limited.",
+      "mapUrl": "https://maps.google.com/?q=Lunuganga+Estate",
+      "images": []
+    }
+  ],
+
+  "complaintCategories": [
+    { "id": "room",       "label": "Room",       "icon": "bed",          "subcategories": ["Cleanliness", "Maintenance / Repair", "Room Temperature", "Noise", "Amenities Missing", "Other"] },
+    { "id": "dining",     "label": "Dining",     "icon": "restaurant",   "subcategories": ["Food Quality", "Service Speed", "Order Incorrect", "Billing Error", "Hygiene", "Other"] },
+    { "id": "service",    "label": "Service",    "icon": "room_service", "subcategories": ["Request Not Fulfilled", "Delayed Response", "Staff Attitude", "Other"] },
+    { "id": "facilities", "label": "Facilities", "icon": "pool",         "subcategories": ["Pool", "Spa", "Beach", "WiFi / Internet", "Water Sports", "Other"] },
+    { "id": "staff",      "label": "Staff",      "icon": "person",       "subcategories": ["Rude / Unprofessional", "Incorrect Information", "Unhelpful", "Other"] },
+    { "id": "other",      "label": "Other",      "icon": "help_outline", "subcategories": ["General Feedback", "Safety Concern", "Other"] }
+  ],
+
+  "whatsappGroups": {
+    "housekeeping": "+94701235011",
+    "fnb": "+94701235012",
+    "concierge": "+94701235013",
+    "frontDesk": "+94701235014",
+    "dutyManager": "+94701235015",
+    "gm": "+94701235016"
+  }
+}

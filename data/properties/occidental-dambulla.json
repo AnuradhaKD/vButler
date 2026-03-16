@@ -1,0 +1,338 @@
+{
+  "property": {
+    "id": "occidental-dambulla",
+    "name": "Occidental Paradise Dambulla",
+    "fullName": "Occidental Paradise Dambulla",
+    "tagline": "At the heart of Sri Lanka's cultural triangle",
+    "address": "Kandy – Jaffna Highway (A9), Dambulla, Central Province, Sri Lanka",
+    "phone": "+94 66 228 4400",
+    "email": "dambulla@brownshotels.com",
+    "currency": "LKR",
+    "currencySymbol": "Rs.",
+    "timezone": "Asia/Colombo",
+    "heroImages": [
+      "https://images.unsplash.com/photo-1589308454676-22b99fd7de75?w=1200",
+      "https://images.unsplash.com/photo-1567596388756-f6d710c8fc07?w=1200"
+    ],
+    "facilities": ["Pool", "Restaurant", "Bar", "Conference Rooms", "Free WiFi", "Concierge", "Tour Desk", "Laundry", "Gift Shop"]
+  },
+
+  "quickActions": [
+    { "id": "services",    "label": "Services",    "icon": "room_service",   "route": "services.html" },
+    { "id": "dining",      "label": "Dining",       "icon": "restaurant",     "route": "dining.html" },
+    { "id": "experiences", "label": "Experiences",  "icon": "account_balance","route": "experiences.html" },
+    { "id": "my-bill",     "label": "My Bill",      "icon": "receipt_long",   "route": "billing.html" },
+    { "id": "transport",   "label": "Transport",    "icon": "directions_car", "route": "transport.html" },
+    { "id": "complaints",  "label": "Feedback",     "icon": "support_agent",  "route": "complaints.html" },
+    { "id": "explore",     "label": "Explore",      "icon": "explore",        "route": "local-explore.html" },
+    { "id": "housekeeping","label": "Room Requests","icon": "bed",            "route": "housekeeping.html" }
+  ],
+
+  "services": {
+    "categories": [
+      {
+        "id": "housekeeping",
+        "label": "Housekeeping",
+        "icon": "cleaning_services",
+        "items": [
+          {
+            "id": "room-makeup",
+            "name": "Room Makeup",
+            "description": "Full room cleaning and bed making.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "08:00", "to": "17:00" },
+            "estimatedTime": "45 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "extra-towels",
+            "name": "Extra Towels",
+            "description": "Request additional bath towels.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "15 minutes",
+            "requiresBooking": false,
+            "fields": ["quantity"]
+          }
+        ]
+      },
+      {
+        "id": "transport",
+        "label": "Transport",
+        "icon": "directions_car",
+        "items": [
+          {
+            "id": "airport-transfer",
+            "name": "Airport Transfer (BIA)",
+            "description": "Chauffeur-driven transfer to/from Bandaranaike International Airport via Colombo.",
+            "price": 18000,
+            "priceNote": "From LKR 18,000",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "3.5–4 hours",
+            "requiresBooking": true,
+            "fields": ["flightNumber", "date", "time", "direction", "passengerCount", "vehicleType"]
+          },
+          {
+            "id": "sigiriya-transfer",
+            "name": "Sigiriya Day Transfer",
+            "description": "Return transfer to Sigiriya Rock Fortress (20 min drive) with waiting time.",
+            "price": 3500,
+            "priceNote": "LKR 3,500 return",
+            "availableHours": { "from": "06:00", "to": "17:00" },
+            "estimatedTime": "Half day",
+            "requiresBooking": true,
+            "fields": ["date", "time", "passengerCount"]
+          },
+          {
+            "id": "safari-transfer",
+            "name": "Minneriya / Kaudulla Safari Transfer",
+            "description": "Return transfer to Minneriya or Kaudulla National Park for elephant gathering safaris.",
+            "price": 5000,
+            "priceNote": "LKR 5,000 return (jeep safari extra)",
+            "availableHours": { "from": "14:00", "to": "19:00" },
+            "estimatedTime": "Half day",
+            "requiresBooking": true,
+            "fields": ["date", "time", "passengerCount", "parkChoice"]
+          }
+        ]
+      },
+      {
+        "id": "concierge",
+        "label": "Tour Desk",
+        "icon": "explore",
+        "items": [
+          {
+            "id": "ticket-booking",
+            "name": "Attraction Ticket Booking",
+            "description": "We arrange tickets for Sigiriya, Dambulla Cave Temple, Polonnaruwa and more.",
+            "price": null,
+            "priceNote": "Complimentary service — ticket costs apply",
+            "availableHours": { "from": "08:00", "to": "20:00" },
+            "estimatedTime": "Same day",
+            "requiresBooking": false,
+            "fields": ["attractions", "date", "partySize"]
+          }
+        ]
+      }
+    ]
+  },
+
+  "laundryPriceList": [
+    { "id": "shirt",     "name": "Shirt / Blouse",   "wash": 350,  "ironOnly": 200, "expressMultiplier": 1.5 },
+    { "id": "trouser",   "name": "Trousers / Pants",  "wash": 400,  "ironOnly": 250, "expressMultiplier": 1.5 },
+    { "id": "dress",     "name": "Dress / Skirt",     "wash": 500,  "ironOnly": 300, "expressMultiplier": 1.5 },
+    { "id": "suit",      "name": "Suit (2 piece)",    "wash": 1200, "ironOnly": 600, "expressMultiplier": 1.5 },
+    { "id": "underwear", "name": "Underwear",          "wash": 200,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "socks",     "name": "Socks (pair)",      "wash": 150,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "t-shirt",   "name": "T-Shirt",           "wash": 300,  "ironOnly": 150, "expressMultiplier": 1.5 },
+    { "id": "shorts",    "name": "Shorts",             "wash": 300,  "ironOnly": 150, "expressMultiplier": 1.5 },
+    { "id": "jacket",    "name": "Jacket / Blazer",   "wash": 900,  "ironOnly": 450, "expressMultiplier": 1.5 }
+  ],
+
+  "dining": {
+    "restaurants": [
+      {
+        "id": "paddy-field",
+        "name": "Paddy Field Restaurant",
+        "cuisine": "Sri Lankan & Asian",
+        "description": "Inspired by the lush paddy fields of the Cultural Triangle. Authentic Sri Lankan rice & curry, clay pot cooking, and traditional sweets.",
+        "hours": { "breakfast": "07:00–10:30", "lunch": "12:00–14:30", "dinner": "18:30–21:30" },
+        "images": [
+          "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800"
+        ],
+        "acceptsReservations": true,
+        "cancellationCutoffHours": 1,
+        "maxPartySize": 40,
+        "menu": [
+          {
+            "category": "Sri Lankan Starters",
+            "items": [
+              { "id": "pf-001", "name": "Ela Hodhi (Leafy Green Curry)",  "description": "Traditional greens simmered in coconut milk with turmeric and garlic.", "price": 900,  "tags": ["vegetarian", "local"] },
+              { "id": "pf-002", "name": "Isso Wade (Prawn Fritters)",     "description": "Crispy lentil fritters topped with whole prawns.", "price": 1400, "tags": ["seafood", "local"] }
+            ]
+          },
+          {
+            "category": "Rice & Curry",
+            "items": [
+              { "id": "pf-003", "name": "Traditional Rice & Curry (Veg)", "description": "8 vegetable curries, dhal, papadam, pol sambol.", "price": 2200, "tags": ["vegetarian", "local", "signature"] },
+              { "id": "pf-004", "name": "Crab Curry", "description": "Blue swimmer crab in a rich roasted coconut milk gravy.", "price": 4500, "tags": ["seafood", "local", "signature"] },
+              { "id": "pf-005", "name": "Lamb Kiri Hodi", "description": "Slow-braised lamb in white coconut curry, string hoppers.", "price": 3800, "tags": ["local"] }
+            ]
+          },
+          {
+            "category": "Clay Pot Specials",
+            "items": [
+              { "id": "pf-006", "name": "Chicken Ambul Thiyal", "description": "Sour black pepper chicken cooked dry in a clay pot — a signature of southern Sri Lanka.", "price": 3200, "tags": ["local", "signature", "gluten-free"] }
+            ]
+          }
+        ]
+      }
+    ],
+    "bars": [
+      {
+        "id": "rock-bar",
+        "name": "The Rock Bar",
+        "description": "Poolside bar with views towards the famous Dambulla rock fortress. Arrack cocktails and cold beers.",
+        "hours": { "open": "11:00", "close": "23:00" },
+        "images": [],
+        "acceptsReservations": false,
+        "menu": [
+          {
+            "category": "Cocktails",
+            "items": [
+              { "id": "rb-001", "name": "Sigiriya Sling",    "description": "Arrack, pineapple, grenadine, lime.",      "price": 1700 },
+              { "id": "rb-002", "name": "Ceylon Negroni",    "description": "Gin, sweet vermouth, Campari, orange.",    "price": 2000 }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "wellness": null,
+
+  "transport": {
+    "options": [
+      {
+        "id": "airport-arrival",
+        "type": "airport",
+        "direction": "arrival",
+        "name": "Airport Arrival Transfer",
+        "description": "Chauffeur-driven transfer from BIA to Dambulla.",
+        "vehicles": [
+          { "type": "sedan", "label": "Sedan (1–3 pax)", "price": 18000 },
+          { "type": "suv",   "label": "SUV (1–5 pax)",   "price": 22000 }
+        ],
+        "requiredFields": ["flightNumber", "arrivalDate", "arrivalTime", "passengerCount"]
+      },
+      {
+        "id": "airport-departure",
+        "type": "airport",
+        "direction": "departure",
+        "name": "Airport Departure Transfer",
+        "description": "Chauffeur-driven transfer from Dambulla to BIA.",
+        "vehicles": [
+          { "type": "sedan", "label": "Sedan (1–3 pax)", "price": 18000 },
+          { "type": "suv",   "label": "SUV (1–5 pax)",   "price": 22000 }
+        ],
+        "requiredFields": ["departureDate", "departureTime", "flightNumber", "passengerCount"]
+      }
+    ]
+  },
+
+  "experiences": [
+    {
+      "id": "sigiriya-sunrise",
+      "name": "Sigiriya Rock Fortress — Sunrise Climb",
+      "category": "Culture",
+      "description": "Beat the crowds with an early morning guided ascent of the iconic Sigiriya Lion Rock. Watch the Cultural Triangle light up as the sun rises.",
+      "duration": "4 hours",
+      "inclusions": ["Return transfer", "Certified guide", "Entrance tickets", "Light breakfast"],
+      "price": 12000,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 8,
+      "bookingCutoffHours": 12,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "05:00",
+      "images": ["https://images.unsplash.com/photo-1589308454676-22b99fd7de75?w=800"],
+      "isFeatured": true,
+      "addOns": [
+        { "id": "balloon-ride", "name": "Hot Air Balloon Upgrade", "price": 35000 }
+      ]
+    },
+    {
+      "id": "elephant-safari",
+      "name": "Minneriya Elephant Gathering Safari",
+      "category": "Wildlife",
+      "description": "Witness hundreds of wild Asian elephants gathering at Minneriya Tank — one of the greatest wildlife spectacles on earth.",
+      "duration": "4 hours",
+      "inclusions": ["Jeep & driver", "Naturalist guide", "Park entrance", "Refreshments"],
+      "price": 14000,
+      "priceNote": "per person",
+      "minGuests": 2,
+      "maxGuests": 6,
+      "bookingCutoffHours": 8,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "14:30",
+      "images": ["https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=800"],
+      "isFeatured": true,
+      "addOns": []
+    },
+    {
+      "id": "dambulla-cave-temple",
+      "name": "Dambulla Cave Temple Tour",
+      "category": "Culture",
+      "description": "Explore five cave temples filled with 150 Buddha statues and stunning 2,000-year-old murals. A UNESCO World Heritage Site just 1km away.",
+      "duration": "2 hours",
+      "inclusions": ["Guided tour", "Entrance tickets", "Transfer"],
+      "price": 5500,
+      "priceNote": "per person",
+      "minGuests": 1,
+      "maxGuests": 12,
+      "bookingCutoffHours": 4,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "08:00",
+      "images": ["https://images.unsplash.com/photo-1567596388756-f6d710c8fc07?w=800"],
+      "isFeatured": false,
+      "addOns": []
+    }
+  ],
+
+  "localPlaces": [
+    {
+      "id": "dambulla-cave",
+      "name": "Dambulla Cave Temple",
+      "category": "Culture",
+      "description": "A UNESCO World Heritage Site — five caves with 150+ Buddha statues and 2,100 sq m of murals spanning 22 centuries.",
+      "distanceKm": 1.2,
+      "travelTime": "3 min by car or 15 min walk",
+      "hotelNote": "Visit before 09:00 or after 16:00 to avoid tour groups. Modest dress required.",
+      "mapUrl": "https://maps.google.com/?q=Dambulla+Cave+Temple",
+      "images": ["https://images.unsplash.com/photo-1567596388756-f6d710c8fc07?w=600"]
+    },
+    {
+      "id": "sigiriya",
+      "name": "Sigiriya Lion Rock",
+      "category": "Culture",
+      "description": "A 5th-century rock fortress rising 200m above the jungle. UNESCO World Heritage Site and Sri Lanka's single most visited attraction.",
+      "distanceKm": 18.0,
+      "travelTime": "30 min by car",
+      "hotelNote": "Best climbed early morning. Our tour desk can arrange tickets and a guide. Wear comfortable shoes.",
+      "mapUrl": "https://maps.google.com/?q=Sigiriya+Sri+Lanka",
+      "images": ["https://images.unsplash.com/photo-1589308454676-22b99fd7de75?w=600"]
+    },
+    {
+      "id": "minneriya",
+      "name": "Minneriya National Park",
+      "category": "Nature",
+      "description": "Home to the famous 'Gathering' — up to 300 wild elephants congregate at Minneriya Tank between July and October.",
+      "distanceKm": 32.0,
+      "travelTime": "45 min by car",
+      "hotelNote": "Best visited late afternoon (14:30–18:00). Jeep safaris available through our tour desk.",
+      "mapUrl": "https://maps.google.com/?q=Minneriya+National+Park",
+      "images": ["https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=600"]
+    }
+  ],
+
+  "complaintCategories": [
+    { "id": "room",       "label": "Room",       "icon": "bed",          "subcategories": ["Cleanliness", "Maintenance / Repair", "Room Temperature", "Noise", "Amenities Missing", "Other"] },
+    { "id": "dining",     "label": "Dining",     "icon": "restaurant",   "subcategories": ["Food Quality", "Service Speed", "Order Incorrect", "Billing Error", "Hygiene", "Other"] },
+    { "id": "service",    "label": "Service",    "icon": "room_service", "subcategories": ["Request Not Fulfilled", "Delayed Response", "Staff Attitude", "Other"] },
+    { "id": "facilities", "label": "Facilities", "icon": "pool",         "subcategories": ["Pool", "WiFi / Internet", "Conference Room", "Parking", "Other"] },
+    { "id": "staff",      "label": "Staff",      "icon": "person",       "subcategories": ["Rude / Unprofessional", "Incorrect Information", "Unhelpful", "Other"] },
+    { "id": "other",      "label": "Other",      "icon": "help_outline", "subcategories": ["General Feedback", "Safety Concern", "Other"] }
+  ],
+
+  "whatsappGroups": {
+    "housekeeping": "+94701236011",
+    "fnb": "+94701236012",
+    "concierge": "+94701236013",
+    "frontDesk": "+94701236014",
+    "dutyManager": "+94701236015",
+    "gm": "+94701236016"
+  }
+}

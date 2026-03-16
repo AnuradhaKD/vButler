@@ -1,0 +1,368 @@
+{
+  "property": {
+    "id": "club-dolphin",
+    "name": "Club Hotel Dolphin",
+    "fullName": "Club Hotel Dolphin",
+    "tagline": "All-inclusive fun on the west coast",
+    "address": "Waikkal, Negombo, Western Province, Sri Lanka",
+    "phone": "+94 31 227 7777",
+    "email": "dolphin@brownshotels.com",
+    "currency": "LKR",
+    "currencySymbol": "Rs.",
+    "timezone": "Asia/Colombo",
+    "heroImages": [
+      "https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?w=1200",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200"
+    ],
+    "facilities": ["Beachfront", "Main Pool", "Kids Pool", "Spa", "3 Restaurants", "2 Bars", "Kids Club", "Water Sports", "Gym", "Free WiFi", "Animation Team"]
+  },
+
+  "quickActions": [
+    { "id": "services",    "label": "Services",    "icon": "room_service",   "route": "services.html" },
+    { "id": "dining",      "label": "Dining",       "icon": "restaurant",     "route": "dining.html" },
+    { "id": "wellness",    "label": "Spa",          "icon": "spa",            "route": "wellness.html" },
+    { "id": "my-bill",     "label": "My Bill",      "icon": "receipt_long",   "route": "billing.html" },
+    { "id": "experiences", "label": "Activities",   "icon": "beach_access",   "route": "experiences.html" },
+    { "id": "complaints",  "label": "Feedback",     "icon": "support_agent",  "route": "complaints.html" },
+    { "id": "housekeeping","label": "Room Requests","icon": "bed",            "route": "housekeeping.html" },
+    { "id": "explore",     "label": "Explore",      "icon": "explore",        "route": "local-explore.html" }
+  ],
+
+  "services": {
+    "categories": [
+      {
+        "id": "housekeeping",
+        "label": "Housekeeping",
+        "icon": "cleaning_services",
+        "items": [
+          {
+            "id": "room-makeup",
+            "name": "Room Makeup",
+            "description": "Full room cleaning and bed making.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "08:00", "to": "17:00" },
+            "estimatedTime": "45 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "turndown",
+            "name": "Turndown Service",
+            "description": "Evening turndown with chocolates and soft lighting.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "17:00", "to": "21:00" },
+            "estimatedTime": "20 minutes",
+            "requiresBooking": true,
+            "fields": ["preferredTime"]
+          },
+          {
+            "id": "extra-towels",
+            "name": "Extra Towels / Beach Towels",
+            "description": "Bath or beach towels delivered to your room or sunlounger.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "15 minutes",
+            "requiresBooking": false,
+            "fields": ["quantity", "towelType"]
+          }
+        ]
+      },
+      {
+        "id": "transport",
+        "label": "Transport",
+        "icon": "directions_car",
+        "items": [
+          {
+            "id": "airport-transfer",
+            "name": "Airport Transfer (BIA)",
+            "description": "Chauffeur-driven transfer to/from Bandaranaike International Airport — only 20 minutes away.",
+            "price": 3500,
+            "priceNote": "From LKR 3,500",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "20–30 minutes",
+            "requiresBooking": true,
+            "fields": ["flightNumber", "date", "time", "direction", "passengerCount", "vehicleType"]
+          },
+          {
+            "id": "negombo-transfer",
+            "name": "Negombo Town Transfer",
+            "description": "Return transfer to Negombo town — fishing market, beach, and shopping.",
+            "price": 1500,
+            "priceNote": "LKR 1,500 return",
+            "availableHours": { "from": "08:00", "to": "20:00" },
+            "estimatedTime": "10 minutes",
+            "requiresBooking": false,
+            "fields": ["time", "passengerCount"]
+          }
+        ]
+      },
+      {
+        "id": "concierge",
+        "label": "Concierge",
+        "icon": "concierge",
+        "items": [
+          {
+            "id": "babysitting",
+            "name": "Babysitting Service",
+            "description": "Qualified childcare staff available for evening babysitting in your room.",
+            "price": 2500,
+            "priceNote": "LKR 2,500 per hour",
+            "availableHours": { "from": "18:00", "to": "23:00" },
+            "estimatedTime": "Confirmed within 2 hours",
+            "requiresBooking": true,
+            "fields": ["date", "time", "duration", "childrenCount", "childrenAges"]
+          },
+          {
+            "id": "luggage-storage",
+            "name": "Luggage Storage",
+            "description": "Secure storage before check-in or after check-out.",
+            "price": null,
+            "priceNote": "Complimentary",
+            "availableHours": { "from": "00:00", "to": "23:59" },
+            "estimatedTime": "5 minutes",
+            "requiresBooking": false,
+            "fields": ["bagCount", "collectionTime"]
+          }
+        ]
+      }
+    ]
+  },
+
+  "laundryPriceList": [
+    { "id": "shirt",     "name": "Shirt / Blouse",   "wash": 330,  "ironOnly": 180, "expressMultiplier": 1.5 },
+    { "id": "trouser",   "name": "Trousers / Pants",  "wash": 380,  "ironOnly": 230, "expressMultiplier": 1.5 },
+    { "id": "dress",     "name": "Dress / Skirt",     "wash": 480,  "ironOnly": 280, "expressMultiplier": 1.5 },
+    { "id": "swimwear",  "name": "Swimwear",           "wash": 250,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "underwear", "name": "Underwear",          "wash": 190,  "ironOnly": null,"expressMultiplier": 1.5 },
+    { "id": "t-shirt",   "name": "T-Shirt",           "wash": 280,  "ironOnly": 140, "expressMultiplier": 1.5 },
+    { "id": "shorts",    "name": "Shorts",             "wash": 280,  "ironOnly": 140, "expressMultiplier": 1.5 },
+    { "id": "jacket",    "name": "Jacket / Blazer",   "wash": 850,  "ironOnly": 420, "expressMultiplier": 1.5 }
+  ],
+
+  "dining": {
+    "restaurants": [
+      {
+        "id": "main-restaurant",
+        "name": "Coral Buffet Restaurant",
+        "cuisine": "International Buffet",
+        "description": "Our all-inclusive main restaurant serving buffet breakfast, lunch, and dinner with live cooking stations and a wide international spread.",
+        "hours": { "breakfast": "07:00–10:30", "lunch": "12:30–14:30", "dinner": "19:00–21:30" },
+        "images": [
+          "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800"
+        ],
+        "acceptsReservations": false,
+        "cancellationCutoffHours": 0,
+        "maxPartySize": 200,
+        "menu": [
+          {
+            "category": "Breakfast Highlights",
+            "items": [
+              { "id": "cr-001", "name": "Hoppers & String Hoppers", "description": "Traditional Sri Lankan breakfast staples, freshly made at the live station.", "price": 0, "tags": ["local", "included"] },
+              { "id": "cr-002", "name": "Eggs Your Way", "description": "Omelette, scrambled, fried, or poached — made to order.", "price": 0, "tags": ["included"] }
+            ]
+          },
+          {
+            "category": "Dinner Highlights",
+            "items": [
+              { "id": "cr-003", "name": "Chef's Curry Night (Thursdays)", "description": "Special Sri Lankan curry buffet every Thursday evening.", "price": 0, "tags": ["local", "included"] },
+              { "id": "cr-004", "name": "Seafood BBQ (Saturdays)", "description": "Fresh catch BBQ on the beach terrace every Saturday night.", "price": 0, "tags": ["seafood", "included"] }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "a-la-carte",
+        "name": "The Lagoon — À La Carte",
+        "cuisine": "Sri Lankan Seafood",
+        "description": "A premium à la carte restaurant by the lagoon for special evenings. Advance reservations required.",
+        "hours": { "dinner": "19:00–22:30" },
+        "images": [],
+        "acceptsReservations": true,
+        "cancellationCutoffHours": 2,
+        "maxPartySize": 30,
+        "menu": [
+          {
+            "category": "Seafood Specialties",
+            "items": [
+              { "id": "lg-001", "name": "Negombo Crab Curry",    "description": "Famous Negombo blue crab in a roasted coconut gravy.", "price": 4800, "tags": ["seafood", "local", "signature"] },
+              { "id": "lg-002", "name": "Grilled Sea Bass",       "description": "Whole sea bass, lemon caper butter, roasted vegetables.", "price": 4200, "tags": ["seafood", "gluten-free"] },
+              { "id": "lg-003", "name": "Prawn & Mango Salad",    "description": "Tiger prawns, green mango, coconut dressing.", "price": 2800, "tags": ["seafood", "gluten-free"] }
+            ]
+          }
+        ]
+      }
+    ],
+    "bars": [
+      {
+        "id": "pool-bar",
+        "name": "Splash Pool Bar",
+        "description": "Swim-up bar at the main pool. All-inclusive cocktails, mocktails, and cold beers throughout the day.",
+        "hours": { "open": "10:00", "close": "22:00" },
+        "images": [],
+        "acceptsReservations": false,
+        "menu": [
+          {
+            "category": "All-Inclusive Cocktails",
+            "items": [
+              { "id": "pb-001", "name": "Dolphin Daiquiri",  "description": "White rum, lime, sugar, blended.", "price": 0, "priceNote": "All-inclusive" },
+              { "id": "pb-002", "name": "Waikkal Breeze",    "description": "Vodka, cranberry, pineapple, soda.", "price": 0, "priceNote": "All-inclusive" },
+              { "id": "pb-003", "name": "Lion Beer",         "description": "Local premium lager.", "price": 0, "priceNote": "All-inclusive" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "wellness": {
+    "treatments": [
+      {
+        "id": "relaxation-massage",
+        "name": "Relaxation Massage",
+        "description": "A soothing full-body massage to unwind after a day in the sun.",
+        "duration": 60,
+        "price": 7500,
+        "therapistPreference": true,
+        "cancellationPolicy": "Cancel at least 2 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600"
+      },
+      {
+        "id": "hot-stone",
+        "name": "Hot Stone Therapy",
+        "description": "Heated basalt stones placed along the body's energy centres for deep relaxation.",
+        "duration": 75,
+        "price": 9500,
+        "therapistPreference": false,
+        "cancellationPolicy": "Cancel at least 2 hours in advance.",
+        "image": "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600"
+      }
+    ],
+    "classes": [
+      {
+        "id": "morning-stretch",
+        "name": "Morning Stretch & Tone",
+        "description": "A gentle stretch class by the pool. Perfect for all ages and fitness levels.",
+        "schedule": ["Mon 08:00", "Wed 08:00", "Fri 08:00"],
+        "duration": 45,
+        "price": 0,
+        "maxParticipants": 20,
+        "image": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600"
+      }
+    ],
+    "packages": []
+  },
+
+  "transport": {
+    "options": [
+      {
+        "id": "airport-arrival",
+        "type": "airport",
+        "direction": "arrival",
+        "name": "Airport Arrival Transfer",
+        "description": "Quick 20-minute transfer from BIA to Club Hotel Dolphin.",
+        "vehicles": [
+          { "type": "sedan",  "label": "Sedan (1–3 pax)",  "price": 3500 },
+          { "type": "van",    "label": "Van (1–8 pax)",    "price": 5000 }
+        ],
+        "requiredFields": ["flightNumber", "arrivalDate", "arrivalTime", "passengerCount"]
+      },
+      {
+        "id": "airport-departure",
+        "type": "airport",
+        "direction": "departure",
+        "name": "Airport Departure Transfer",
+        "description": "Transfer to BIA — allow 1.5 hours before flight.",
+        "vehicles": [
+          { "type": "sedan",  "label": "Sedan (1–3 pax)",  "price": 3500 },
+          { "type": "van",    "label": "Van (1–8 pax)",    "price": 5000 }
+        ],
+        "requiredFields": ["departureDate", "departureTime", "flightNumber", "passengerCount"]
+      }
+    ]
+  },
+
+  "experiences": [
+    {
+      "id": "lagoon-fishing",
+      "name": "Negombo Lagoon Fishing Trip",
+      "category": "Leisure",
+      "description": "Join local fishermen on a traditional outrigger canoe for an early morning fishing trip across the lagoon. Whatever you catch gets cooked for your breakfast!",
+      "duration": "3 hours",
+      "inclusions": ["Fishing gear", "Experienced captain", "Cooked catch for breakfast"],
+      "price": 5000,
+      "priceNote": "per person",
+      "minGuests": 2,
+      "maxGuests": 6,
+      "bookingCutoffHours": 12,
+      "availableDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "startTime": "05:30",
+      "images": [],
+      "isFeatured": true,
+      "addOns": []
+    },
+    {
+      "id": "dolphin-watching",
+      "name": "Dolphin Watching Catamaran",
+      "category": "Nature",
+      "description": "Head out to sea on a catamaran in search of spinner dolphins and flying fish. The ocean just beyond the lagoon teems with marine life.",
+      "duration": "3 hours",
+      "inclusions": ["Catamaran", "Naturalist guide", "Life jackets", "Refreshments"],
+      "price": 6500,
+      "priceNote": "per person",
+      "minGuests": 4,
+      "maxGuests": 12,
+      "bookingCutoffHours": 8,
+      "availableDays": ["Mon", "Wed", "Fri", "Sat", "Sun"],
+      "startTime": "07:00",
+      "images": [],
+      "isFeatured": true,
+      "addOns": []
+    }
+  ],
+
+  "localPlaces": [
+    {
+      "id": "negombo-fish-market",
+      "name": "Negombo Fish Market",
+      "category": "Culture",
+      "description": "One of Sri Lanka's most colourful fish markets. Fishermen return in the early morning with their haul of tuna, squid, and exotic fish.",
+      "distanceKm": 6.0,
+      "travelTime": "15 min by tuk-tuk",
+      "hotelNote": "Best visited 05:30–07:00 when the catch arrives. Our front desk can arrange a tuk-tuk the evening before.",
+      "mapUrl": "https://maps.google.com/?q=Negombo+Fish+Market",
+      "images": []
+    },
+    {
+      "id": "dutch-canal",
+      "name": "Dutch Canal",
+      "category": "Culture",
+      "description": "A canal built by Dutch colonists in the 17th century, stretching 120km along Sri Lanka's west coast. Peaceful boat rides available.",
+      "distanceKm": 3.0,
+      "travelTime": "10 min by car",
+      "hotelNote": "Boat hire from LKR 2,000/hour. Our concierge can arrange.",
+      "mapUrl": "https://maps.google.com/?q=Dutch+Canal+Negombo",
+      "images": []
+    }
+  ],
+
+  "complaintCategories": [
+    { "id": "room",       "label": "Room",       "icon": "bed",          "subcategories": ["Cleanliness", "Maintenance / Repair", "Room Temperature", "Noise", "Amenities Missing", "Other"] },
+    { "id": "dining",     "label": "Dining",     "icon": "restaurant",   "subcategories": ["Food Quality", "Service Speed", "Order Incorrect", "Billing Error", "Hygiene", "Other"] },
+    { "id": "service",    "label": "Service",    "icon": "room_service", "subcategories": ["Request Not Fulfilled", "Delayed Response", "Staff Attitude", "Other"] },
+    { "id": "facilities", "label": "Facilities", "icon": "pool",         "subcategories": ["Pool", "Beach", "Kids Club", "WiFi / Internet", "Water Sports", "Other"] },
+    { "id": "staff",      "label": "Staff",      "icon": "person",       "subcategories": ["Rude / Unprofessional", "Incorrect Information", "Unhelpful", "Other"] },
+    { "id": "other",      "label": "Other",      "icon": "help_outline", "subcategories": ["General Feedback", "Safety Concern", "Other"] }
+  ],
+
+  "whatsappGroups": {
+    "housekeeping": "+94701237011",
+    "fnb": "+94701237012",
+    "concierge": "+94701237013",
+    "frontDesk": "+94701237014",
+    "dutyManager": "+94701237015",
+    "gm": "+94701237016"
+  }
+}

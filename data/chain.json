@@ -2,10 +2,18 @@
   "chain": {
     "id": "browns-hotels-resorts",
     "name": "Browns Hotels & Resorts",
+    "shortName": "Browns",
     "primaryColor": "#003c52",
+    "logoUrl": "assets/images/destinity-inspire.svg",
     "website": "https://www.brownshotels.com",
-    "supportEmail": "guest@brownshotels.com"
+    "supportEmail": "guest@brownshotels.com",
+    "supportPhone": "+94 11 230 0000",
+    "socialMedia": {
+      "instagram": "@brownshotelsresorts",
+      "facebook": "BrownsHotelsResorts"
+    }
   },
+
   "featureFlags": {
     "preArrivalChecklist": true,
     "inAppPayments": true,
@@ -13,34 +21,198 @@
     "localExploration": true,
     "wellnessSpa": true,
     "loyaltyPoints": false,
-    "inAppChat": false
+    "inAppChat": false,
+    "tableReservations": true,
+    "transportBooking": true,
+    "laundryService": true
   },
+
   "promotions": [
     {
-      "id": "promo-001",
-      "title": "Ella Weekend Escape",
-      "description": "20% off Wellness packages this April. Book your spa treatment and unwind in the hills.",
+      "id": "promo-ella-wellness",
+      "title": "Ella Wellness Escape",
+      "description": "20% off all spa treatments this April. Unwind in the misty hills with a personalised wellness journey.",
       "imageUrl": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800",
       "targetProperties": ["newburge-ella"],
       "validFrom": "2026-04-01",
       "validTo": "2026-04-30",
       "ctaLabel": "Book Now",
-      "ctaUrl": "#"
+      "ctaUrl": "wellness.html"
     },
     {
-      "id": "promo-002",
+      "id": "promo-bentota-summer",
+      "title": "Bentota Summer Package",
+      "description": "3 nights + complimentary sunset cruise + daily breakfast. The perfect beach getaway.",
+      "imageUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
+      "targetProperties": ["thaala-bentota"],
+      "validFrom": "2026-04-01",
+      "validTo": "2026-06-30",
+      "ctaLabel": "View Offer",
+      "ctaUrl": "experiences.html"
+    },
+    {
+      "id": "promo-colombo-transfer",
       "title": "Colombo City Break",
-      "description": "Complimentary airport transfer when you book 2 nights or more.",
+      "description": "Complimentary airport transfer when you book 2 or more nights at Browns City Hotel.",
       "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
       "targetProperties": ["colombo-city"],
       "validFrom": "2026-03-01",
       "validTo": "2026-05-31",
       "ctaLabel": "Learn More",
-      "ctaUrl": "#"
+      "ctaUrl": "transport.html"
+    },
+    {
+      "id": "promo-cultural-triangle",
+      "title": "Cultural Triangle Explorer",
+      "description": "Sigiriya, Dambulla Cave Temple & Minneriya Safari in one curated package from Occidental Paradise.",
+      "imageUrl": "https://images.unsplash.com/photo-1567596388756-f6d710c8fc07?w=800",
+      "targetProperties": ["occidental-dambulla"],
+      "validFrom": "2026-03-01",
+      "validTo": "2026-07-31",
+      "ctaLabel": "Explore Package",
+      "ctaUrl": "experiences.html"
     }
   ],
+
   "properties": [
-    { "id": "newburge-ella",  "name": "Browns Hotel Newburge Ella",  "dataFile": "newburge-ella.json",  "city": "Ella, Sri Lanka" },
-    { "id": "colombo-city",   "name": "Browns City Hotel Colombo",   "dataFile": "colombo-city.json",   "city": "Colombo, Sri Lanka" }
+    {
+      "id": "newburge-ella",
+      "name": "Newburgh Ella",
+      "fullName": "Browns Hotel Newburgh Ella",
+      "brand": "Browns Hotels & Resorts",
+      "category": "Boutique Hill Resort",
+      "starRating": 5,
+      "city": "Ella",
+      "region": "Uva Province",
+      "country": "Sri Lanka",
+      "fullAddress": "Kings Road, Ella, Badulla District, Sri Lanka",
+      "contact": {
+        "phone": "+94 57 222 8888",
+        "email": "ella@brownshotels.com",
+        "whatsapp": "+94701234001"
+      },
+      "coordinates": { "lat": 6.8667, "lng": 81.0469 },
+      "currency": "LKR",
+      "currencySymbol": "Rs.",
+      "timezone": "Asia/Colombo",
+      "thumbnail": "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=600",
+      "heroImage": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200",
+      "tagline": "Escape to the hills of Ella",
+      "facilities": ["Infinity Pool", "Spa", "Restaurant", "Terrace Bar", "Gym", "Free WiFi", "Concierge", "Laundry"],
+      "featureFlags": null,
+      "dataFile": "newburge-ella.json"
+    },
+    {
+      "id": "thaala-bentota",
+      "name": "Thaala Bentota",
+      "fullName": "Thaala Bentota Resort & Spa",
+      "brand": "Browns Hotels & Resorts",
+      "category": "Beachfront Resort",
+      "starRating": 5,
+      "city": "Bentota",
+      "region": "Southern Province",
+      "country": "Sri Lanka",
+      "fullAddress": "Bentota Beach, Southern Coastal Road, Bentota, Sri Lanka",
+      "contact": {
+        "phone": "+94 34 227 5500",
+        "email": "bentota@brownshotels.com",
+        "whatsapp": "+94701235001"
+      },
+      "coordinates": { "lat": 6.4259, "lng": 79.9967 },
+      "currency": "LKR",
+      "currencySymbol": "Rs.",
+      "timezone": "Asia/Colombo",
+      "thumbnail": "https://images.unsplash.com/photo-1540541338537-fdb4c8e9df90?w=600",
+      "heroImage": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200",
+      "tagline": "Where the river meets the sea",
+      "facilities": ["Beachfront Pool", "Spa", "Restaurant", "Beach Bar", "Water Sports", "Free WiFi", "Concierge", "Boat Jetty"],
+      "featureFlags": null,
+      "dataFile": "thaala-bentota.json"
+    },
+    {
+      "id": "occidental-dambulla",
+      "name": "Occidental Paradise Dambulla",
+      "fullName": "Occidental Paradise Dambulla",
+      "brand": "Browns Hotels & Resorts",
+      "category": "Cultural Heritage Resort",
+      "starRating": 4,
+      "city": "Dambulla",
+      "region": "Central Province",
+      "country": "Sri Lanka",
+      "fullAddress": "Kandy – Jaffna Highway (A9), Dambulla, Central Province, Sri Lanka",
+      "contact": {
+        "phone": "+94 66 228 4400",
+        "email": "dambulla@brownshotels.com",
+        "whatsapp": "+94701236001"
+      },
+      "coordinates": { "lat": 7.8742, "lng": 80.6511 },
+      "currency": "LKR",
+      "currencySymbol": "Rs.",
+      "timezone": "Asia/Colombo",
+      "thumbnail": "https://images.unsplash.com/photo-1567596388756-f6d710c8fc07?w=600",
+      "heroImage": "https://images.unsplash.com/photo-1589308454676-22b99fd7de75?w=1200",
+      "tagline": "At the heart of Sri Lanka's cultural triangle",
+      "facilities": ["Pool", "Restaurant", "Bar", "Conference Rooms", "Free WiFi", "Concierge", "Tour Desk"],
+      "featureFlags": {
+        "wellnessSpa": false
+      },
+      "dataFile": "occidental-dambulla.json"
+    },
+    {
+      "id": "club-dolphin",
+      "name": "Club Hotel Dolphin",
+      "fullName": "Club Hotel Dolphin",
+      "brand": "Browns Hotels & Resorts",
+      "category": "All-Inclusive Beach Resort",
+      "starRating": 4,
+      "city": "Waikkal",
+      "region": "Western Province",
+      "country": "Sri Lanka",
+      "fullAddress": "Waikkal, Negombo, Western Province, Sri Lanka",
+      "contact": {
+        "phone": "+94 31 227 7777",
+        "email": "dolphin@brownshotels.com",
+        "whatsapp": "+94701237001"
+      },
+      "coordinates": { "lat": 7.2908, "lng": 79.8737 },
+      "currency": "LKR",
+      "currencySymbol": "Rs.",
+      "timezone": "Asia/Colombo",
+      "thumbnail": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600",
+      "heroImage": "https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?w=1200",
+      "tagline": "All-inclusive fun on the west coast",
+      "facilities": ["Beachfront", "Two Pools", "Spa", "3 Restaurants", "Bars", "Kids Club", "Water Sports", "Free WiFi"],
+      "featureFlags": {
+        "preArrivalChecklist": false
+      },
+      "dataFile": "club-dolphin.json"
+    },
+    {
+      "id": "colombo-city",
+      "name": "Browns City Hotel Colombo",
+      "fullName": "Browns City Hotel Colombo",
+      "brand": "Browns Hotels & Resorts",
+      "category": "Business City Hotel",
+      "starRating": 5,
+      "city": "Colombo",
+      "region": "Western Province",
+      "country": "Sri Lanka",
+      "fullAddress": "No. 27, Sir James Peiris Mawatha, Colombo 02, Sri Lanka",
+      "contact": {
+        "phone": "+94 11 230 1234",
+        "email": "colombo@brownshotels.com",
+        "whatsapp": "+94701238001"
+      },
+      "coordinates": { "lat": 6.9147, "lng": 79.8482 },
+      "currency": "LKR",
+      "currencySymbol": "Rs.",
+      "timezone": "Asia/Colombo",
+      "thumbnail": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+      "heroImage": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1200",
+      "tagline": "Colombo's premier address for business and leisure",
+      "facilities": ["Rooftop Pool", "Full-Service Spa", "3 Restaurants", "Business Centre", "Fitness Centre", "Free WiFi", "Valet Parking", "Concierge"],
+      "featureFlags": null,
+      "dataFile": "colombo-city.json"
+    }
   ]
 }
