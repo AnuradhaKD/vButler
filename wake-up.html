@@ -53,15 +53,78 @@
 
           <div class="space-y-4">
 
-            <!-- Date & Time row -->
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date <span class="text-red-500">*</span></label>
-                <input type="date" id="wakeup-date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            <!-- Date (full width) -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date <span class="text-red-500">*</span></label>
+              <input type="date" id="wakeup-date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+            </div>
+
+            <!-- Clock Time Picker -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Time <span class="text-red-500">*</span></label>
+              <input type="hidden" id="wakeup-time" value="07:00">
+
+              <!-- Clock face + arrows -->
+              <div class="flex items-center justify-center gap-2">
+
+                <!-- Step back -->
+                <button type="button" onclick="stepClockTime(-30)"
+                        class="w-9 h-9 md:w-11 md:h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:border-[#003c52] hover:text-[#003c52] dark:hover:border-teal-500 dark:hover:text-teal-400 transition-all shrink-0">
+                  <span class="material-symbols-outlined text-xl">chevron_left</span>
+                </button>
+
+                <!-- SVG Clock -->
+                <div class="relative shrink-0 w-48 h-48 md:w-[220px] md:h-[220px]">
+                  <svg id="clock-svg" viewBox="0 0 300 300" class="w-full h-full select-none cursor-pointer"
+                       onclick="handleClockFaceClick(event)">
+                    <!-- Outer glow ring -->
+                    <circle cx="150" cy="150" r="149" fill="#08131b"/>
+                    <!-- Main dark face -->
+                    <circle cx="150" cy="150" r="145" fill="#0f2535" stroke="#1b3a4f" stroke-width="1.5"/>
+                    <!-- Tick marks — JS generated -->
+                    <g id="clock-ticks"></g>
+                    <!-- Arc glow (wide, dim) -->
+                    <path id="clock-arc-glow" d="" fill="none" stroke="#0d4a42" stroke-width="12" stroke-linecap="round"/>
+                    <!-- Arc bright -->
+                    <path id="clock-arc" d="" fill="none" stroke="#14b8a6" stroke-width="5" stroke-linecap="round"/>
+                    <!-- Dot at arc tip -->
+                    <circle id="clock-dot" cx="150" cy="17" r="7.5" fill="#14b8a6"/>
+                    <circle id="clock-dot-inner" cx="150" cy="17" r="3.5" fill="white"/>
+                    <!-- Hour numbers — JS generated -->
+                    <g id="clock-numbers"></g>
+                    <!-- Inner face -->
+                    <circle cx="150" cy="150" r="84" fill="#08131b" stroke="#1b3a4f" stroke-width="1"/>
+                  </svg>
+
+                  <!-- Digital overlay (HTML over SVG) -->
+                  <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span class="material-symbols-outlined fill-icon text-teal-400 text-[1.6rem] leading-none">alarm</span>
+                    <div class="flex items-end gap-0.5 mt-1">
+                      <span id="clock-display-time"
+                            class="font-black leading-none text-slate-100"
+                            style="font-size:clamp(1.5rem,4vw,2rem);letter-spacing:-1px">07:00</span>
+                      <button id="clock-ampm-btn" type="button" onclick="toggleClockAmPm()"
+                              class="pointer-events-auto text-[11px] font-bold text-teal-400 hover:text-teal-300 transition-colors pb-0.5 ml-1">AM</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step forward -->
+                <button type="button" onclick="stepClockTime(30)"
+                        class="w-9 h-9 md:w-11 md:h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:border-[#003c52] hover:text-[#003c52] dark:hover:border-teal-500 dark:hover:text-teal-400 transition-all shrink-0">
+                  <span class="material-symbols-outlined text-xl">chevron_right</span>
+                </button>
+
               </div>
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Time <span class="text-red-500">*</span></label>
-                <input type="time" id="wakeup-time" value="07:00" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+
+              <!-- Quick presets -->
+              <div class="flex flex-wrap gap-1.5 justify-center mt-3">
+                <span class="text-[11px] text-slate-400 self-center mr-0.5">Quick:</span>
+                <button type="button" onclick="setClockTime(5,0,'AM')" class="text-[11px] px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition">5:00 AM</button>
+                <button type="button" onclick="setClockTime(6,0,'AM')" class="text-[11px] px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition">6:00 AM</button>
+                <button type="button" onclick="setClockTime(7,0,'AM')" class="text-[11px] px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition">7:00 AM</button>
+                <button type="button" onclick="setClockTime(8,0,'AM')" class="text-[11px] px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition">8:00 AM</button>
+                <button type="button" onclick="setClockTime(9,0,'AM')" class="text-[11px] px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition">9:00 AM</button>
               </div>
             </div>
 
@@ -132,6 +195,140 @@
 
     let reservation = null;
 
+    // ─── Clock Picker ──────────────────────────────────────────────────────
+    const clock = { hour: 7, minute: 0, ampm: 'AM' };
+    const CLOCK_CX = 150, CLOCK_CY = 150, TICK_R = 133;
+
+    function getArcPath(angleDeg, r) {
+      if (angleDeg <= 0) return '';
+      if (angleDeg >= 360) angleDeg = 359.9;
+      const startRad = -Math.PI / 2;
+      const endRad   = (angleDeg - 90) * Math.PI / 180;
+      const x1 = CLOCK_CX + r * Math.cos(startRad);
+      const y1 = CLOCK_CY + r * Math.sin(startRad);
+      const x2 = CLOCK_CX + r * Math.cos(endRad);
+      const y2 = CLOCK_CY + r * Math.sin(endRad);
+      const large = angleDeg > 180 ? 1 : 0;
+      return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+    }
+
+    function initClockSVG() {
+      const ticksG = document.getElementById('clock-ticks');
+      const numsG  = document.getElementById('clock-numbers');
+      const NS     = 'http://www.w3.org/2000/svg';
+
+      // 60 tick marks
+      for (let i = 0; i < 60; i++) {
+        const major = i % 5 === 0;
+        const angle = (i * 6 - 90) * Math.PI / 180;
+        const r1 = TICK_R;
+        const r2 = major ? TICK_R - 13 : TICK_R - 6;
+        const line = document.createElementNS(NS, 'line');
+        line.setAttribute('x1', (CLOCK_CX + r1 * Math.cos(angle)).toFixed(2));
+        line.setAttribute('y1', (CLOCK_CY + r1 * Math.sin(angle)).toFixed(2));
+        line.setAttribute('x2', (CLOCK_CX + r2 * Math.cos(angle)).toFixed(2));
+        line.setAttribute('y2', (CLOCK_CY + r2 * Math.sin(angle)).toFixed(2));
+        line.setAttribute('stroke', major ? '#2a5060' : '#193040');
+        line.setAttribute('stroke-width', major ? '2' : '1');
+        line.setAttribute('stroke-linecap', 'round');
+        ticksG.appendChild(line);
+      }
+
+      // Hour numbers 1–12
+      const numR = 108;
+      for (let h = 1; h <= 12; h++) {
+        const angle = (h * 30 - 90) * Math.PI / 180;
+        const text = document.createElementNS(NS, 'text');
+        text.setAttribute('x', (CLOCK_CX + numR * Math.cos(angle)).toFixed(2));
+        text.setAttribute('y', (CLOCK_CY + numR * Math.sin(angle) + 5.5).toFixed(2));
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-family', 'Inter, sans-serif');
+        text.setAttribute('font-size', '15');
+        text.setAttribute('font-weight', '600');
+        text.setAttribute('fill', '#3d6878');
+        text.setAttribute('data-hour', h);
+        text.textContent = h;
+        numsG.appendChild(text);
+      }
+
+      updateClockDisplay();
+    }
+
+    function updateClockDisplay() {
+      const hourAngle = (clock.hour % 12) * 30 + clock.minute * 0.5;
+      const arcPath   = getArcPath(hourAngle, TICK_R);
+
+      document.getElementById('clock-arc-glow').setAttribute('d', arcPath);
+      document.getElementById('clock-arc').setAttribute('d', arcPath);
+
+      // Move dot to arc tip
+      const dotAngle = (hourAngle - 90) * Math.PI / 180;
+      const dotX = CLOCK_CX + TICK_R * Math.cos(dotAngle);
+      const dotY = CLOCK_CY + TICK_R * Math.sin(dotAngle);
+      document.getElementById('clock-dot').setAttribute('cx', dotX.toFixed(2));
+      document.getElementById('clock-dot').setAttribute('cy', dotY.toFixed(2));
+      document.getElementById('clock-dot-inner').setAttribute('cx', dotX.toFixed(2));
+      document.getElementById('clock-dot-inner').setAttribute('cy', dotY.toFixed(2));
+
+      // Highlight selected hour number
+      const selHour = clock.hour % 12 || 12;
+      document.querySelectorAll('#clock-numbers text').forEach(t => {
+        const active = parseInt(t.getAttribute('data-hour')) === selHour;
+        t.setAttribute('fill', active ? '#14b8a6' : '#3d6878');
+        t.setAttribute('font-weight', active ? '800' : '600');
+      });
+
+      // Digital display
+      const timeStr = `${String(clock.hour).padStart(2,'0')}:${String(clock.minute).padStart(2,'0')}`;
+      document.getElementById('clock-display-time').textContent = timeStr;
+      document.getElementById('clock-ampm-btn').textContent = clock.ampm;
+
+      // Sync hidden input (24-hour format)
+      let h24 = clock.hour;
+      if (clock.ampm === 'AM') { if (h24 === 12) h24 = 0; }
+      else                     { if (h24 !== 12) h24 += 12; }
+      document.getElementById('wakeup-time').value =
+        `${String(h24).padStart(2,'0')}:${String(clock.minute).padStart(2,'0')}`;
+    }
+
+    function stepClockTime(minutes) {
+      let h24 = clock.hour;
+      if (clock.ampm === 'AM') { if (h24 === 12) h24 = 0; }
+      else                     { if (h24 !== 12) h24 += 12; }
+      let total = ((h24 * 60 + clock.minute + minutes) % 1440 + 1440) % 1440;
+      const h = Math.floor(total / 60), m = total % 60;
+      if      (h === 0)  { clock.hour = 12; clock.ampm = 'AM'; }
+      else if (h < 12)   { clock.hour = h;  clock.ampm = 'AM'; }
+      else if (h === 12) { clock.hour = 12; clock.ampm = 'PM'; }
+      else               { clock.hour = h - 12; clock.ampm = 'PM'; }
+      clock.minute = m;
+      updateClockDisplay();
+    }
+
+    function toggleClockAmPm() {
+      clock.ampm = clock.ampm === 'AM' ? 'PM' : 'AM';
+      updateClockDisplay();
+    }
+
+    function setClockTime(hour, minute, ampm) {
+      clock.hour = hour; clock.minute = minute; clock.ampm = ampm;
+      updateClockDisplay();
+    }
+
+    function handleClockFaceClick(event) {
+      const svg  = document.getElementById('clock-svg');
+      const rect = svg.getBoundingClientRect();
+      const dx   = ((event.clientX - rect.left) / rect.width)  * 300 - CLOCK_CX;
+      const dy   = ((event.clientY - rect.top)  / rect.height) * 300 - CLOCK_CY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 84 || dist > 145) return;
+      let angle = Math.atan2(dx, -dy) * 180 / Math.PI;
+      if (angle < 0) angle += 360;
+      clock.hour = Math.round(angle / 30) % 12 || 12;
+      updateClockDisplay();
+    }
+    // ─── End Clock Picker ─────────────────────────────────────────────────
+
     function init() {
       reservation = App.reservations.getActive();
 
@@ -142,7 +339,7 @@
       const todayStr = new Date().toISOString().split('T')[0];
 
       App.datepicker.date('#wakeup-date', { minDate: todayStr, defaultDate: tomorrowStr });
-      App.datepicker.time('#wakeup-time', { defaultHour: 7, defaultMinute: 0 });
+      initClockSVG();
 
       renderCallsList();
     }
