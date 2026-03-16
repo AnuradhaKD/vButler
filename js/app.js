@@ -451,12 +451,12 @@ const App = (() => {
               <button onclick="App.sidebar.openMobile()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Open menu">
                 <span class="material-symbols-outlined text-[22px]">menu</span>
               </button>
-              <a href="dashboard.html" class="flex items-center gap-2 shrink-0">
+              <a href="dashboard.html" class="md:hidden flex items-center gap-2 shrink-0">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-slate-200 p-1">
                   <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
                 </div>
               </a>
-              <div class="min-w-0">
+              <div class="md:hidden min-w-0">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Destinity vButler</div>
                 <div class="text-xs font-semibold text-[#003c52] dark:text-teal-400 truncate max-w-[180px]">${propertyName}</div>
               </div>
@@ -515,6 +515,8 @@ const App = (() => {
     render(active = '') {
       const el = document.getElementById('app-sidebar');
       if (!el) return;
+      const activeRes = reservations.getActive();
+      const propertyName = activeRes ? activeRes.propertyName : 'Browns Hotels & Resorts';
       const items = [
         { id: 'dashboard',      label: 'Dashboard',      icon: 'home',           href: 'dashboard.html' },
         { id: 'reservations',   label: 'My Reservations',icon: 'hotel',          href: 'reservations.html' },
@@ -533,6 +535,17 @@ const App = (() => {
       ];
       el.innerHTML = `
         <aside class="hidden md:flex flex-col w-72 h-full shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
+          <div class="flex items-center gap-3 px-7 py-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
+            <a href="dashboard.html" class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200 p-1.5 shrink-0">
+                <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
+              </div>
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider leading-tight">Destinity vButler</div>
+                <div class="text-xs font-semibold text-[#003c52] dark:text-teal-400 truncate">${propertyName}</div>
+              </div>
+            </a>
+          </div>
           <nav class="flex-1 overflow-y-auto p-4 space-y-1">
             ${items.map(item => `
             <a href="${item.href}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${active === item.id
