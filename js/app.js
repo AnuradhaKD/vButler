@@ -109,7 +109,7 @@ const App = (() => {
       return upcoming[0] || null;
     },
     canSetActive(res) {
-      return res && (res.status === 'inhouse' || res.status === 'confirmed');
+      return res && (res.status === 'inhouse' || res.status === 'confirmed' || res.status === 'checked_out');
     },
     setActive(id) { storage.set('vb:activeReservation', id); },
     // Call on any service page — redirects to reservation selection if nothing is active
