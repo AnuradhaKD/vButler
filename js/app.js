@@ -73,7 +73,10 @@ const App = (() => {
       });
     },
     logout() {
-      storage.remove('vb:session');
+      // Clear all vb: keys from localStorage for a clean fresh start
+      Object.keys(localStorage)
+        .filter(k => k.startsWith('vb:'))
+        .forEach(k => localStorage.removeItem(k));
       window.location.href = 'login.html';
     },
     requireAuth() {
