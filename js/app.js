@@ -114,7 +114,6 @@ const App = (() => {
     canSetActive(res) {
       return res && (res.status === 'inhouse' || res.status === 'confirmed' || res.status === 'checked_out');
     },
-    setActive(id) { storage.set('vb:activeReservation', id); },
     // Call on any service page — redirects to reservation selection if nothing is active
     requireReservation() {
       if (!reservations.getActive()) {
@@ -124,16 +123,27 @@ const App = (() => {
       }
       return true;
     },
-    // Returns the current reservation level for menu visibility logic
+    // Returns the menu level based on the ACTIVE reservation's status
     getLevel() {
+      const active = reservations.getActive();
+      if (active) {
+        if (active.status === 'inhouse')                                    return 'inhouse';
+        if (active.status === 'confirmed' || active.status === 'tentative') return 'pre-arrival';
+      }
+      // No active inhouse/confirmed — check remaining statuses
       const all = reservations.getAll();
       if (!all.length) return 'none';
-      if (all.some(r => r.status === 'inhouse'))      return 'inhouse';
-      if (all.some(r => r.status === 'confirmed'))    return 'pre-arrival';
-      if (all.some(r => r.status === 'checked_out'))  return 'checked-out';
+      if (all.some(r => r.status === 'checked_out')) return 'checked-out';
       return 'cancelled';
     },
-    save(list) { storage.set('vb:reservations', list); },
+    save(list) {
+      storage.set('vb:reservations', list);
+      _refreshNav();
+    },
+    setActive(id) {
+      storage.set('vb:activeReservation', id);
+      _refreshNav();
+    },
     update(id, updates) {
       const all = reservations.getAll();
       const idx = all.findIndex(r => r.id === id);
@@ -479,6 +489,16 @@ const App = (() => {
     }
   };
 
+  // ─── Nav refresh helper ───────────────────────────────────────────────────────
+  // Tracks the active page ID so nav can be re-rendered after data changes
+  let _lastNavActive = '';
+  function _refreshNav() {
+    const sidebarEl = document.getElementById('desktop-sidebar');
+    if (sidebarEl) sidebar.render('app-sidebar', _lastNavActive);
+    const bottomNavEl = document.getElementById('bottom-nav');
+    if (bottomNavEl) bottomNav.render(_lastNavActive);
+  }
+
   // ─── Header ───────────────────────────────────────────────────────────────────
   const header = {
     render(containerId = 'app-header') {
@@ -550,8 +570,14 @@ const App = (() => {
   };
 
   // ─── Bottom Nav (Mobile) ──────────────────────────────────────────────────────
+  // True when guest is on the forced reservation-selection screen
+  function _isSelectMode() {
+    return window.location.search.includes('select=1');
+  }
+
   const bottomNav = {
     render(active = '') {
+      _lastNavActive = active || _lastNavActive;
       const existing = document.getElementById('bottom-nav');
       if (existing) existing.remove();
       const nav = document.createElement('nav');
@@ -597,11 +623,15 @@ const App = (() => {
       };
       const items = byLevel[level] || byLevel['none'];
 
-      nav.innerHTML = `<div class="flex">${items.map(item => `
-        <a href="${item.href}" class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 ${active === item.id ? 'text-[#003c52] dark:text-teal-400' : 'text-slate-500 dark:text-slate-400'} transition-colors">
-          <span class="material-symbols-outlined text-2xl ${active === item.id ? 'fill-icon' : ''}">${item.icon}</span>
+      const selectMode = _isSelectMode();
+      nav.innerHTML = `<div class="flex">${items.map(item => {
+        const blocked = selectMode && item.id !== 'reservations';
+        return `<a ${blocked ? 'href="javascript:void(0)" onclick="App.toast.show(\'Please select a reservation first.\',\'warning\')"' : `href="${item.href}"`}
+          class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${blocked ? 'opacity-30 cursor-not-allowed' : ''} ${!blocked && active === item.id ? 'text-[#003c52] dark:text-teal-400' : 'text-slate-500 dark:text-slate-400'}">
+          <span class="material-symbols-outlined text-2xl ${!blocked && active === item.id ? 'fill-icon' : ''}">${item.icon}</span>
           <span class="text-[10px] font-semibold">${item.label}</span>
-        </a>`).join('')}</div>`;
+        </a>`;
+      }).join('')}</div>`;
       document.body.appendChild(nav);
     }
   };
@@ -610,6 +640,7 @@ const App = (() => {
   const sidebar = {
     render(first = '', second = '') {
       const active = second || first;
+      _lastNavActive = active || _lastNavActive;
       const el = document.getElementById('app-sidebar');
       if (!el) return;
       const isCollapsed = storage.get('vb:sidebarCollapsed') || false;
@@ -635,17 +666,20 @@ const App = (() => {
         { id: 'notifications', label: 'Notifications',   icon: 'notifications',     href: 'notifications.html',levels: ALL },
       ];
       const items = allItems.filter(item => item.levels.includes(level));
+      const selectMode = _isSelectMode();
       el.innerHTML = `
         <aside id="desktop-sidebar" data-active="${active}" class="hidden md:flex flex-col h-full shrink-0 bg-[#003c52] border-r border-[#004f6e] ${isCollapsed ? 'vb-sidebar-collapsed' : ''}">
           <nav class="flex-1 overflow-y-auto p-2 space-y-0.5">
-            ${items.map(item => `
-            <a href="${item.href}" title="${item.label}" class="sidebar-nav-item relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${active === item.id
-              ? 'bg-white/15 text-white font-semibold'
-              : 'text-white/70 hover:bg-white/10 hover:text-white'}">
-              ${active === item.id ? '<span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-teal-300 rounded-r-full"></span>' : ''}
-              <span class="material-symbols-outlined text-xl shrink-0 ${active === item.id ? 'fill-icon' : ''}">${item.icon}</span>
+            ${items.map(item => {
+              const blocked = selectMode && item.id !== 'reservations';
+              return `
+            <a ${blocked ? `href="javascript:void(0)" onclick="App.toast.show('Please select a reservation first.','warning')"` : `href="${item.href}"`}
+               title="${item.label}" class="sidebar-nav-item relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${blocked ? 'opacity-30 cursor-not-allowed' : active === item.id ? 'bg-white/15 text-white font-semibold' : 'text-white/70 hover:bg-white/10 hover:text-white'}">
+              ${!blocked && active === item.id ? '<span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-teal-300 rounded-r-full"></span>' : ''}
+              <span class="material-symbols-outlined text-xl shrink-0 ${!blocked && active === item.id ? 'fill-icon' : ''}">${item.icon}</span>
               <span class="sidebar-label">${item.label}</span>
-            </a>`).join('')}
+            </a>`;
+            }).join('')}
           </nav>
           <div class="p-2 border-t border-white/10">
             <button onclick="App.auth.logout()" title="Sign Out" class="sidebar-nav-item flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-red-300 hover:bg-white/10 hover:text-red-200 transition">
@@ -696,14 +730,17 @@ const App = (() => {
       // Update mobile nav items (keeps active state in sync)
       const mobileNav = document.getElementById('mobile-menu-nav');
       if (mobileNav) {
-        mobileNav.innerHTML = items.map(item => `
-          <a href="${item.href}" onclick="App.sidebar.closeMobile()"
-             class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${active === item.id
-               ? 'bg-[#003c52]/10 text-[#003c52] dark:bg-teal-900/30 dark:text-teal-400'
-               : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'}">
+        mobileNav.innerHTML = items.map(item => {
+          const blocked = selectMode && item.id !== 'reservations';
+          return `
+          <a ${blocked
+              ? `href="javascript:void(0)" onclick="App.toast.show('Please select a reservation first.','warning')"`
+              : `href="${item.href}" onclick="App.sidebar.closeMobile()"`}
+             class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${blocked ? 'opacity-30 cursor-not-allowed' : active === item.id ? 'bg-[#003c52]/10 text-[#003c52] dark:bg-teal-900/30 dark:text-teal-400' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'}">
             <span class="material-symbols-outlined text-xl">${item.icon}</span>
             ${item.label}
-          </a>`).join('');
+          </a>`;
+        }).join('');
       }
     },
 

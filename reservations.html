@@ -418,17 +418,9 @@
     // ─── Set active reservation ───────────────────────────────────────────────────
     function setActive(id) {
       App.reservations.setActive(id);
-      if (selectMode) {
-        // Coming from login — go to dashboard (or the page they were trying to reach)
-        const dest = returnTo.includes('.html') ? returnTo : 'dashboard.html';
-        App.toast.show('Reservation selected. Taking you to your dashboard…', 'success');
-        setTimeout(() => { window.location.href = dest; }, 700);
-      } else {
-        // Normal mode — stay on page, just update UI
-        App.toast.show('Active reservation updated. All services are now linked to this stay.', 'success');
-        App.header.render('app-header');
-        renderTabs(allReservations);
-      }
+      // Always redirect to dashboard after selecting a reservation
+      App.toast.show('Reservation selected. Taking you to your dashboard…', 'success');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 700);
     }
 
     init();
