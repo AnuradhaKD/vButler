@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Commit Log — Destinity vButler</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'Courier New', Courier, monospace; }
+    thead th { background: #003c52; color: white; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .tag-feat    { background: #dcfce7; color: #166534; }
+    .tag-fix     { background: #fef9c3; color: #854d0e; }
+    .tag-docs    { background: #dbeafe; color: #1e40af; }
+    .tag-data    { background: #ede9fe; color: #5b21b6; }
+    .tag-revert  { background: #fee2e2; color: #991b1b; }
+    .tag-other   { background: #f1f5f9; color: #475569; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+  <!-- Header -->
+  <div style="background: linear-gradient(135deg,#003c52 0%,#004f6e 100%);" class="text-white py-10 px-6 md:px-16">
+    <div class="max-w-7xl mx-auto">
+      <p class="text-teal-300 text-sm font-semibold uppercase tracking-widest mb-2">Destinity vButler — Internal Documentation</p>
+      <h1 class="text-3xl md:text-4xl font-bold mb-1">GitHub Commit Log</h1>
+      <p class="text-white/60 text-sm mt-1">
+        Repository: <a href="https://github.com/AnuradhaKD/vButler" class="text-teal-300 hover:underline">github.com/AnuradhaKD/vButler</a>
+        &nbsp;·&nbsp; Last updated: <span id="last-updated">2026-03-17</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-10 space-y-12">
+
+    <!-- Stats bar -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center">
+        <p class="text-3xl font-bold text-[#003c52]" id="total-commits">46</p>
+        <p class="text-xs text-slate-500 mt-1">Total Commits</p>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center">
+        <p class="text-3xl font-bold text-green-600" id="feat-count">—</p>
+        <p class="text-xs text-slate-500 mt-1">Features</p>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center">
+        <p class="text-3xl font-bold text-amber-600" id="fix-count">—</p>
+        <p class="text-xs text-slate-500 mt-1">Fixes</p>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center">
+        <p class="text-3xl font-bold text-blue-600" id="docs-count">—</p>
+        <p class="text-xs text-slate-500 mt-1">Docs</p>
+      </div>
+    </div>
+
+    <!-- Commit Table -->
+    <section>
+      <h2 class="text-xl font-bold text-[#003c52] mb-4">Complete Commit History <span class="text-slate-400 font-normal text-sm">(oldest → newest)</span></h2>
+      <div class="overflow-x-auto rounded-xl shadow">
+        <table class="w-full text-sm border-collapse" id="commit-table">
+          <thead>
+            <tr>
+              <th class="px-3 py-3 text-left w-8">#</th>
+              <th class="px-3 py-3 text-left">Short ID</th>
+              <th class="px-3 py-3 text-left hidden md:table-cell">Full Commit ID</th>
+              <th class="px-3 py-3 text-left">Date & Time (IST)</th>
+              <th class="px-3 py-3 text-left">Commit Message</th>
+            </tr>
+          </thead>
+          <tbody id="commit-tbody">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Push Log -->
+    <section>
+      <h2 class="text-xl font-bold text-[#003c52] mb-4">Push Log <span class="text-slate-400 font-normal text-sm">(newest first)</span></h2>
+      <div class="space-y-4" id="push-log">
+        <!-- Cards injected by JS -->
+      </div>
+    </section>
+
+    <footer class="text-center text-xs text-slate-400 pb-8">
+      Destinity vButler — Internal Documentation · Browns Hotels &amp; Resorts · 2026-03-17
+    </footer>
+
+  </div>
+
+<script>
+// ─── Commit Data ────────────────────────────────────────────────────────────
+const commits = [
+  { n:1,  short:'7f9089c', full:'7f9089c39dcf15250ceda094a433b8fbb38907d6', date:'2026-03-16 10:26', msg:'init' },
+  { n:2,  short:'c533d4e', full:'c533d4e34325c7824d3043f6b45c66c4bd33fb0e', date:'2026-03-16 11:01', msg:'Show hero panel on mobile at top of login page' },
+  { n:3,  short:'1145e40', full:'1145e40c9dd9413b6ff806d2c4a4fda81f7951c6', date:'2026-03-16 11:11', msg:'fix: improve mobile responsiveness across all pages' },
+  { n:4,  short:'1fb826c', full:'1fb826c7ecdcbe4edd6a1f072c9d4c6f1e8aa521', date:'2026-03-16 11:19', msg:'fix: dashboard layout and mobile responsiveness' },
+  { n:5,  short:'ba2e707', full:'ba2e7073a9d73e0ffbb3981707fd615e9d50bc38', date:'2026-03-16 11:44', msg:'Fix horizontal scroll by setting overflow-x hidden globally' },
+  { n:6,  short:'bc47d8c', full:'bc47d8cffe69f3d8b113f6ac96739ea27e8a60cb', date:'2026-03-16 11:49', msg:'Fix services page mobile responsiveness' },
+  { n:7,  short:'30c1466', full:'30c1466bb37e4ef790a493ea3596c4147b927384', date:'2026-03-16 13:35', msg:'Add CLAUDE.md with project architecture and development guidance' },
+  { n:8,  short:'255caec', full:'255caec181002c914cc9c205b3f867e7d9a88cc4', date:'2026-03-16 13:43', msg:'feat: reservations page with multi-property tabs and status grouping' },
+  { n:9,  short:'82695ef', full:'82695efa5cf8fb926bb7abab0d1ef77c57211076', date:'2026-03-16 14:34', msg:'feat: force reservation selection after login before accessing app' },
+  { n:10, short:'c3cb92b', full:'c3cb92bc31d5c98e4b102cd7f89697ab327b6ab4', date:'2026-03-16 15:02', msg:'feat: multi-property dynamic data with chain manifest + per-property files' },
+  { n:11, short:'aad36bd', full:'aad36bd6185318ee03bf27bab379f4e28cb9698e', date:'2026-03-16 15:14', msg:'feat: JSON seed files for all guest data with auto-seeding on login' },
+  { n:12, short:'53ee794', full:'53ee7941db3a2c82797e13a6b2993bb4ebaa3199', date:'2026-03-16 15:41', msg:'feat: replace native date/time inputs with Flatpickr themed pickers' },
+  { n:13, short:'05fbb4f', full:'05fbb4f3b7006192e63745cf481fdf34e707f73b', date:'2026-03-16 15:54', msg:'feat: replace time input with analog clock picker on wake-up call page' },
+  { n:14, short:'d58fbb3', full:'d58fbb3481024b984abd68746e063ef6edfb5c1f', date:'2026-03-16 16:02', msg:'feat: clock picker adapts to light/dark mode, step by 1 minute' },
+  { n:15, short:'5f22a31', full:'5f22a31c8e778057d08474855c46fcfe36fb7600', date:'2026-03-16 17:01', msg:'data: update all 5 properties with accurate nearby places & contact details' },
+  { n:16, short:'d7c3c56', full:'d7c3c561b1a1673bf700381ee99d86c23bbae43d', date:'2026-03-16 17:10', msg:'feat: add hamburger menu with full slide-in drawer on mobile' },
+  { n:17, short:'023735c', full:'023735cf424efbd140a8734662c3707a2813c42d', date:'2026-03-16 17:12', msg:'fix: make desktop sidebar sticky below header while content scrolls' },
+  { n:18, short:'60ceea7', full:'60ceea741552ee17a8358a6320d22eccc758b637', date:'2026-03-16 17:26', msg:'feat: center all page content on desktop with appropriate max-widths' },
+  { n:19, short:'5bd7800', full:'5bd7800d9f5e2ac67305de1ad18c72d87d602e13', date:'2026-03-16 17:35', msg:'fix: remove duplicate logo block from desktop sidebar' },
+  { n:20, short:'becffd7', full:'becffd70b19f2fbd859433bbb256ff9dda34b6a9', date:'2026-03-16 17:54', msg:'fix: lock header and sidebar in place — only main content scrolls' },
+  { n:21, short:'9605af3', full:'9605af371bc1724c6c5dfeb16db8e1af8d6f49d3', date:'2026-03-16 21:49', msg:'feat: move logo to sidebar, full-width hero banner, center promotions' },
+  { n:22, short:'16f4452', full:'16f44528c92dd68c9ec1f86b042fc10da41f4751', date:'2026-03-16 21:53', msg:'revert: restore hero banner to original style (rounded, padded, max-w)' },
+  { n:23, short:'8a0e9af', full:'8a0e9af081d6309a3cc974ce0e81a4f7471f56ce', date:'2026-03-16 21:57', msg:'feat: remove max-width constraint on dashboard and reservations pages' },
+  { n:24, short:'cddfb57', full:'cddfb57594e9f7cbfb63e1887c3f539b77d9e3e8', date:'2026-03-16 22:01', msg:'feat: add carousel arrows to Exclusive Offers and align section padding' },
+  { n:25, short:'d7bd017', full:'d7bd0172935790b5908c89a34e731b566968ac13', date:'2026-03-16 22:17', msg:'fix: render step indicator circles in pre-arrival page' },
+  { n:26, short:'653d177', full:'653d177c706a5fc88e59bc0c8b7ded2d149c2a15', date:'2026-03-16 22:29', msg:'feat: add confirmation dialogs and fix validation across all request forms' },
+  { n:27, short:'dc42d52', full:'dc42d52b8daabb951d15d580d5fa839b58e2f2f2', date:'2026-03-16 22:40', msg:'fix: move logo+brand back to header aligned with sidebar width' },
+  { n:28, short:'2b046dc', full:'2b046dc5f5b47cfd02cffdf804161cf3bbb794d1', date:'2026-03-16 22:46', msg:'feat: restrict past reservation actions to Set Active, View Bill, Add Feedback' },
+  { n:29, short:'0539729', full:'0539729069f71daa91f7ee6fa007574b4991f75d', date:'2026-03-16 22:50', msg:'feat: make 8 profile fields required with validation' },
+  { n:30, short:'efb26b0', full:'efb26b0b4e26e501c00f5774b262913713d4dadc', date:'2026-03-16 22:55', msg:'feat: collapsible desktop sidebar with hamburger toggle' },
+  { n:31, short:'e9a5351', full:'e9a5351b79344d52de8b8ad0ca8a2cc7830c3362', date:'2026-03-16 22:58', msg:'fix: move hamburger to right of logo/brand, add tooltip on desktop' },
+  { n:32, short:'f35d294', full:'f35d294d32d29dabecb15c0644f79661810376bc', date:'2026-03-16 23:01', msg:'feat: sidebar dark brand color with active page indicator' },
+  { n:33, short:'48280d1', full:'48280d1c69070342683246bb5d7d29445336fa08', date:'2026-03-16 23:14', msg:'feat: unified header brand bar with sidebar color and active page indicator' },
+  { n:34, short:'2e9afd6', full:'2e9afd6f3eac15e1464cd9646f623672ccc03b64', date:'2026-03-16 23:29', msg:'fix: move hamburger out of dark brand block onto white header background' },
+  { n:35, short:'566692e', full:'566692e2ef6594d0610dbcc02e826561e5245e1e', date:'2026-03-16 23:51', msg:'feat: document scanning with OCR for profile — passport, NIC, driving licence' },
+  { n:36, short:'74bb3d2', full:'74bb3d24fc5bb102bfd3cb8c9ec2fba1325b3165', date:'2026-03-17 00:14', msg:'feat: add loyalty & rewards feature — loyalty card, tier benefits, redeem points, points history' },
+  { n:37, short:'3233f1b', full:'3233f1bc73f0d42d591b3b9b022d601f8bb1e103', date:'2026-03-17 00:15', msg:'docs: add github-commit.md — running log of all pushes with commit IDs and dates' },
+  { n:38, short:'1303fa5', full:'1303fa514289138e3f0beb10226002278027c400', date:'2026-03-17 00:18', msg:'docs: update github-commit.md with full project history — all 37 commits since init' },
+  { n:39, short:'e3aea21', full:'e3aea210af472628ae279ba5d99c33d779d0dfa9', date:'2026-03-17 09:42', msg:'feat: add tabbed profile page — preferences, dietary & allergies, health & accessibility' },
+  { n:40, short:'7bb0e54', full:'7bb0e54dbe4bfddba6961f4316be43f2921e93c8', date:'2026-03-17 10:37', msg:'feat: separate feedback & complaints pages, primary header, thin scrollbars' },
+  { n:41, short:'240e3ab', full:'240e3ab...', date:'2026-03-17 10:38', msg:'docs: update github-commit.md — log push 7bb0e54' },
+  { n:42, short:'549f44e', full:'549f44e404e4824d2e4ac4eb0328fb1645c483e5', date:'2026-03-17 11:07', msg:'feat: full-width desktop layout on all pages — remove max-w constraints' },
+  { n:43, short:'14482bb', full:'14482bb...', date:'2026-03-17 11:08', msg:'docs: update github-commit.md — log push 549f44e' },
+  { n:44, short:'4411114', full:'44111144c6a2c448fb3455eba3a033bd2acce8e5', date:'2026-03-17 11:32', msg:'feat: offers 3-up grid, wellness hero card, change stay modal, emoji feedback ratings' },
+  { n:45, short:'6e4d7ef', full:'6e4d7ef...', date:'2026-03-17 11:33', msg:'docs: update github-commit.md — log push 4411114' },
+  { n:46, short:'54e742f', full:'54e742f0952c2091dfdfab833979f2f7c84bd1af', date:'2026-03-17 11:54', msg:'feat: Change Stay page + sidebar nav item, WhatsApp number updated' },
+  { n:47, short:'650478e', full:'650478e...', date:'2026-03-17 11:55', msg:'docs: update github-commit.md — log push 54e742f' },
+];
+
+// ─── Push Log Data ───────────────────────────────────────────────────────────
+const pushLog = [
+  {
+    date: '2026-03-17 11:54 +0530',
+    commits: ['54e742f'],
+    summary: 'Change Stay standalone page + sidebar nav item, WhatsApp number updated to +94778187177',
+    bullets: [
+      '<code>change-stay.html</code> <em>(new)</em> — standalone Change Stay page with 6 request types, date pickers, submits to <code>vb:stayRequests</code>, SRQ-XXXX ref, WhatsApp follow-up',
+      '<code>js/app.js</code> — added Change Stay and Feedback sidebar nav entries; renamed Complaints nav item',
+      '<code>reservations.html</code>, <code>reservation-detail.html</code>, <code>complaint-detail.html</code> — WhatsApp number updated to <code>94778187177</code>',
+    ]
+  },
+  {
+    date: '2026-03-17 11:32 +0530',
+    commits: ['4411114'],
+    summary: 'Offers 3-up grid, wellness hero card, Change Stay modal, emoji feedback ratings',
+    bullets: [
+      '<code>dashboard.html</code> — Exclusive Offers cards use <code>md:flex-1</code> to show 3 side-by-side on desktop',
+      '<code>wellness.html</code> — hero changed to <code>rounded-2xl</code> card matching dining.html style',
+      '<code>reservation-detail.html</code> + <code>reservations.html</code> — Change Stay modal with 6 request types; sends SRQ-XXXX to <code>vb:stayRequests</code>',
+      '<code>feedback.html</code> — rating buttons replaced with emojis 😞😕😐🙂😄; legend updated',
+    ]
+  },
+  {
+    date: '2026-03-17 11:07 +0530',
+    commits: ['549f44e'],
+    summary: 'Full-width desktop layout on all pages + scrollbar fix',
+    bullets: [
+      'Removed <code>max-w-* mx-auto</code> from <code>&lt;main&gt;</code> on 27 pages so content fills full area on desktop',
+      'Moved scrollbar CSS into <code>app.js init()</code> injected <code>&lt;style&gt;</code> so 2px primary-colour scrollbars apply on every page',
+    ]
+  },
+  {
+    date: '2026-03-17 10:37 +0530',
+    commits: ['7bb0e54'],
+    summary: 'Separate feedback & complaints pages, primary-colour header, 2px thin scrollbars',
+    bullets: [
+      '<code>feedback.html</code> <em>(new)</em> — detailed stay feedback form (4 sections, scoring logic)',
+      '<code>complaints.html</code> — stripped to complaints-only; added teal nudge banner',
+      '<code>complaint-submit.html</code> — added Custom Complaint path alongside category tiles',
+      '<code>js/app.js</code> — header bg changed to <code>#003c52</code>; sidebar Complaints + Feedback entries separated',
+      '<code>assets/css/app.css</code> — scrollbars set to 2px, primary-tinted semi-transparent',
+    ]
+  },
+  {
+    date: '2026-03-17 09:42 +0530',
+    commits: ['e3aea21'],
+    summary: 'Tabbed profile page with guest preferences, dietary info, and health/accessibility',
+    bullets: [
+      '<code>profile.html</code> — 4-tab layout: Profile, Preferences, Dietary & Allergies, Health & Accessibility',
+      'All tab data persisted to <code>vb:profile</code> localStorage under <code>preferences</code>/<code>dietary</code>/<code>health</code> keys',
+    ]
+  },
+  {
+    date: '2026-03-17 00:15–00:18 +0530',
+    commits: ['74bb3d2', '3233f1b', '1303fa5'],
+    summary: 'Loyalty & rewards feature + commit log document',
+    bullets: [
+      '<code>loyalty.html</code> <em>(new)</em> — Full rewards page: tier card, benefits, redeem options, points history',
+      '<code>data/mock/points-history.json</code> <em>(new)</em> — Transaction history for demo guests',
+      '<code>profile.html</code> — Compact loyalty card section added',
+      '<code>js/app.js</code> — Rewards nav item in sidebar; sidebar active page fix',
+    ]
+  },
+  {
+    date: '2026-03-16 23:51 +0530',
+    commits: ['566692e'],
+    summary: 'Document scanning with Tesseract.js OCR on profile page (passport, NIC, driving licence)',
+    bullets: []
+  },
+  {
+    date: '2026-03-16 22:40–23:29 +0530',
+    commits: ['2b046dc', '0539729', 'efb26b0', 'e9a5351', 'f35d294', '48280d1', '2e9afd6'],
+    summary: 'Collapsible desktop sidebar, hamburger toggle, dark brand header, active page indicator, profile required fields',
+    bullets: []
+  },
+  {
+    date: '2026-03-16 17:10–22:29 +0530',
+    commits: ['d7c3c56', '023735c', '60ceea7', '5bd7800', 'becffd7', '9605af3', '16f4452', '8a0e9af', 'cddfb57', 'd7bd017', '653d177', 'dc42d52'],
+    summary: 'Mobile hamburger drawer, sticky sidebar/header, layout fixes, dashboard/reservation UI improvements, confirmation dialogs',
+    bullets: []
+  },
+  {
+    date: '2026-03-16 10:26–17:01 +0530',
+    commits: ['7f9089c', 'c533d4e', '1145e40', '1fb826c', 'ba2e707', 'bc47d8c', '30c1466', '255caec', '82695ef', 'c3cb92b', 'aad36bd', '53ee794', '05fbb4f', 'd58fbb3', '5f22a31'],
+    summary: 'Project init, mobile responsiveness, reservations, multi-property data, Flatpickr, clock picker, property data',
+    bullets: []
+  },
+];
+
+// ─── Tag classifier ──────────────────────────────────────────────────────────
+function tagClass(msg) {
+  if (msg.startsWith('feat:') || msg.startsWith('feat ')) return 'tag-feat';
+  if (msg.startsWith('fix:')  || msg.startsWith('fix '))  return 'tag-fix';
+  if (msg.startsWith('docs:') || msg.startsWith('docs ')) return 'tag-docs';
+  if (msg.startsWith('data:') || msg.startsWith('data ')) return 'tag-data';
+  if (msg.startsWith('revert:')) return 'tag-revert';
+  return 'tag-other';
+}
+function tagLabel(msg) {
+  const m = msg.match(/^(\w+):/);
+  return m ? m[1] : 'other';
+}
+
+// ─── Render commits ──────────────────────────────────────────────────────────
+const tbody = document.getElementById('commit-tbody');
+commits.forEach(c => {
+  const tc = tagClass(c.msg);
+  const tl = tagLabel(c.msg);
+  const cleanMsg = c.msg.replace(/^\w+:\s*/, '');
+  tbody.innerHTML += `
+    <tr class="border-b border-slate-200 hover:bg-blue-50 transition-colors">
+      <td class="px-3 py-2 text-slate-400 text-xs">${c.n}</td>
+      <td class="px-3 py-2 mono text-xs text-[#003c52] font-semibold">${c.short}</td>
+      <td class="px-3 py-2 mono text-xs text-slate-400 hidden md:table-cell truncate max-w-xs">${c.full}</td>
+      <td class="px-3 py-2 text-xs text-slate-500 whitespace-nowrap">${c.date}</td>
+      <td class="px-3 py-2 text-sm">
+        <span class="inline-block ${tc} text-xs font-semibold px-1.5 py-0.5 rounded mr-2">${tl}</span>${cleanMsg}
+      </td>
+    </tr>`;
+});
+
+// ─── Update stats ────────────────────────────────────────────────────────────
+document.getElementById('total-commits').textContent = commits.length;
+document.getElementById('feat-count').textContent  = commits.filter(c => c.msg.startsWith('feat')).length;
+document.getElementById('fix-count').textContent   = commits.filter(c => c.msg.startsWith('fix')).length;
+document.getElementById('docs-count').textContent  = commits.filter(c => c.msg.startsWith('docs')).length;
+
+// ─── Render push log ─────────────────────────────────────────────────────────
+const pushEl = document.getElementById('push-log');
+pushLog.forEach(p => {
+  const bulletHtml = p.bullets.length
+    ? `<ul class="mt-3 space-y-1 list-disc list-inside text-sm text-slate-600">${p.bullets.map(b => `<li>${b}</li>`).join('')}</ul>`
+    : '';
+  const commitBadges = p.commits.map(c =>
+    `<span class="mono text-xs bg-[#003c52] text-white px-2 py-0.5 rounded">${c}</span>`
+  ).join(' ');
+  pushEl.innerHTML += `
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="bg-slate-50 border-b border-slate-200 px-5 py-3 flex flex-wrap items-center gap-3">
+        <span class="text-sm font-semibold text-[#003c52]">📦 ${p.date}</span>
+        <div class="flex gap-2 flex-wrap">${commitBadges}</div>
+      </div>
+      <div class="px-5 py-4">
+        <p class="font-semibold text-slate-800">${p.summary}</p>
+        ${bulletHtml}
+      </div>
+    </div>`;
+});
+</script>
+</body>
+</html>

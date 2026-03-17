@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reservation-Level Menu Access — Destinity vButler</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .material-symbols-rounded { font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal; font-size: 20px; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; }
+    .badge-full    { background: #dcfce7; color: #166534; }
+    .badge-browse  { background: #dbeafe; color: #1e40af; }
+    .badge-limited { background: #fef9c3; color: #854d0e; }
+    .badge-hidden  { background: #f1f5f9; color: #94a3b8; }
+    .badge-readonly{ background: #ede9fe; color: #5b21b6; }
+    th { background: #003c52; color: white; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .section-header { background: linear-gradient(135deg, #003c52 0%, #004f6e 100%); }
+    @media print { .no-print { display: none; } }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+  <!-- Header -->
+  <div class="section-header text-white py-10 px-6 md:px-16">
+    <div class="max-w-6xl mx-auto">
+      <p class="text-teal-300 text-sm font-semibold uppercase tracking-widest mb-2">Destinity vButler — Internal Documentation</p>
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">Reservation-Level Menu Access</h1>
+      <p class="text-white/70 text-sm">Defines which menu items are visible and functional at each reservation status. Last updated: 2026-03-17</p>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-10 space-y-12">
+
+    <!-- Legend -->
+    <section>
+      <h2 class="text-xl font-bold text-[#003c52] mb-4">Legend</h2>
+      <div class="flex flex-wrap gap-3">
+        <span class="badge-full px-3 py-1.5 rounded-full text-sm font-semibold">✅ Full access</span>
+        <span class="badge-browse px-3 py-1.5 rounded-full text-sm font-semibold">👁️ Browse / Read-only</span>
+        <span class="badge-limited px-3 py-1.5 rounded-full text-sm font-semibold">⚠️ Limited sub-items only</span>
+        <span class="badge-readonly px-3 py-1.5 rounded-full text-sm font-semibold">🔒 Read-only (no edit)</span>
+        <span class="badge-hidden px-3 py-1.5 rounded-full text-sm font-semibold">❌ Hidden</span>
+      </div>
+    </section>
+
+    <!-- Status Level Cards -->
+    <section>
+      <h2 class="text-xl font-bold text-[#003c52] mb-4">Reservation Status Levels</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+        <div class="bg-white rounded-xl p-4 border-t-4 border-slate-400 shadow-sm">
+          <p class="font-bold text-slate-700">No Reservation</p>
+          <p class="text-xs text-slate-500 mt-1">Logged in, no booking</p>
+        </div>
+        <div class="bg-white rounded-xl p-4 border-t-4 border-blue-400 shadow-sm">
+          <p class="font-bold text-blue-700">Pre-Arrival</p>
+          <p class="text-xs text-slate-500 mt-1">Booked, not yet checked in</p>
+        </div>
+        <div class="bg-white rounded-xl p-4 border-t-4 border-green-500 shadow-sm">
+          <p class="font-bold text-green-700">In-House</p>
+          <p class="text-xs text-slate-500 mt-1">Currently checked in</p>
+        </div>
+        <div class="bg-white rounded-xl p-4 border-t-4 border-purple-400 shadow-sm">
+          <p class="font-bold text-purple-700">Checked-Out</p>
+          <p class="text-xs text-slate-500 mt-1">Stay completed</p>
+        </div>
+        <div class="bg-white rounded-xl p-4 border-t-4 border-red-400 shadow-sm">
+          <p class="font-bold text-red-700">Cancelled</p>
+          <p class="text-xs text-slate-500 mt-1">Reservation cancelled</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Matrix Table -->
+    <section>
+      <h2 class="text-xl font-bold text-[#003c52] mb-4">Menu Access Matrix</h2>
+      <div class="overflow-x-auto rounded-xl shadow">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr>
+              <th class="px-4 py-3 text-left">#</th>
+              <th class="px-4 py-3 text-left">Menu Item</th>
+              <th class="px-4 py-3 text-center">No Reservation</th>
+              <th class="px-4 py-3 text-center">Pre-Arrival</th>
+              <th class="px-4 py-3 text-center">In-House</th>
+              <th class="px-4 py-3 text-center">Checked-Out</th>
+              <th class="px-4 py-3 text-center">Cancelled</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">1</td><td class="px-4 py-3 font-medium">Dashboard</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">2</td><td class="px-4 py-3 font-medium">My Reservations</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">3</td><td class="px-4 py-3 font-medium">Pre-Arrival</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">👁️</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">4</td><td class="px-4 py-3 font-medium">Change Stay</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">⚠️</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">5</td><td class="px-4 py-3 font-medium">Services</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">6</td><td class="px-4 py-3 font-medium">Dining & Bars</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">👁️</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">7</td><td class="px-4 py-3 font-medium">Wellness & Spa</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">👁️</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">8</td><td class="px-4 py-3 font-medium">Housekeeping</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">⚠️</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">9</td><td class="px-4 py-3 font-medium">Transport</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">⚠️</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">10</td><td class="px-4 py-3 font-medium">Wake-Up Call</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">11</td><td class="px-4 py-3 font-medium">Experiences</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">👁️</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">12</td><td class="px-4 py-3 font-medium">Local Explore</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">👁️</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">13</td><td class="px-4 py-3 font-medium">Billing</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">👁️</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">14</td><td class="px-4 py-3 font-medium">Rewards / Loyalty</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">15</td><td class="px-4 py-3 font-medium">Complaints</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">16</td><td class="px-4 py-3 font-medium">Feedback</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 text-slate-400">17</td><td class="px-4 py-3 font-medium">Notifications</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td></tr>
+            <tr><td class="px-4 py-3 text-slate-400">—</td><td class="px-4 py-3 font-medium">Profile</td><td class="px-4 py-3 text-center">✅ edit</td><td class="px-4 py-3 text-center">✅ edit</td><td class="px-4 py-3 text-center">🔒 read</td><td class="px-4 py-3 text-center">🔒 read</td><td class="px-4 py-3 text-center">✅ edit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Detailed Breakdown -->
+    <section class="space-y-8">
+      <h2 class="text-xl font-bold text-[#003c52]">Detailed Sub-Item Breakdown</h2>
+
+      <!-- Change Stay -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">edit_calendar</span>
+          <h3 class="font-bold text-lg">4. Change Stay</h3>
+        </div>
+        <div class="p-6">
+          <p class="text-sm text-slate-500 mb-4">Requests do not modify reservation data — they alert Front Office PMS with an SRQ-XXXX reference + WhatsApp follow-up.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+              <thead><tr><th class="px-3 py-2 text-left bg-slate-100 text-slate-700 rounded-l">Request Type</th><th class="px-3 py-2 text-center bg-slate-100 text-slate-700">Pre-Arrival</th><th class="px-3 py-2 text-center bg-slate-100 text-slate-700 rounded-r">In-House</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Early Check-in</td><td class="px-3 py-2 text-center">✅</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Room Upgrade</td><td class="px-3 py-2 text-center">✅</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Room Change</td><td class="px-3 py-2 text-center">✅</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Extend Stay</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Early Check-out</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr><td class="px-3 py-2">Other</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Housekeeping -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">cleaning_services</span>
+          <h3 class="font-bold text-lg">8. Housekeeping</h3>
+        </div>
+        <div class="p-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+              <thead><tr><th class="px-3 py-2 text-left bg-slate-100 text-slate-700 rounded-l">Sub-item</th><th class="px-3 py-2 text-center bg-slate-100 text-slate-700">Pre-Arrival</th><th class="px-3 py-2 text-center bg-slate-100 text-slate-700 rounded-r">In-House</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Do Not Disturb toggle</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Room Makeup</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Turndown Service</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Extra Towels / Beach Towels</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Extra Pillows / Blankets</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Laundry Service</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr><td class="px-3 py-2 font-semibold text-[#003c52]">Special Occasion / Room Setup Request ✨</td><td class="px-3 py-2 text-center">✅</td><td class="px-3 py-2 text-center">✅</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <p class="text-xs font-semibold text-amber-700 mb-2">Special Occasion Sub-types</p>
+            <ul class="text-xs text-amber-800 space-y-1 list-disc list-inside">
+              <li>Honeymoon / Romance Setup (rose petals, candles, champagne)</li>
+              <li>Birthday Decoration</li>
+              <li>Anniversary Setup</li>
+              <li>Baby / Family Arrival Setup</li>
+              <li>Other (free text)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transport -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">directions_car</span>
+          <h3 class="font-bold text-lg">9. Transport</h3>
+        </div>
+        <div class="p-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+              <thead><tr><th class="px-3 py-2 text-left bg-slate-100 text-slate-700 rounded-l">Sub-item</th><th class="px-3 py-2 text-center bg-slate-100 text-slate-700">Pre-Arrival</th><th class="px-3 py-2 text-center bg-slate-100 text-slate-700 rounded-r">In-House</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2 font-semibold text-[#003c52]">Airport Arrival Transfer (BIA) ✨</td><td class="px-3 py-2 text-center">✅</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Airport Departure Transfer (BIA)</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Colombo Day Trip / Shuttle</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+                <tr><td class="px-3 py-2">Other city transfers</td><td class="px-3 py-2 text-center">❌</td><td class="px-3 py-2 text-center">✅</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">room_service</span>
+          <h3 class="font-bold text-lg">5. Services (In-House only)</h3>
+        </div>
+        <div class="p-6 grid md:grid-cols-3 gap-4">
+          <div class="bg-slate-50 rounded-xl p-4">
+            <p class="font-semibold text-slate-700 mb-2">Housekeeping</p>
+            <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+              <li>Room Makeup</li>
+              <li>Turndown Service</li>
+              <li>Extra Towels / Beach Towels</li>
+            </ul>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4">
+            <p class="font-semibold text-slate-700 mb-2">Transport</p>
+            <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+              <li>Airport Transfer (BIA)</li>
+              <li>Colombo City Transfer</li>
+            </ul>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4">
+            <p class="font-semibold text-slate-700 mb-2">Concierge</p>
+            <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+              <li>Luggage Storage</li>
+              <li>Boat Rental Arrangement</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dining -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">restaurant</span>
+          <h3 class="font-bold text-lg">6. Dining & Bars</h3>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="font-semibold text-slate-700 mb-2">Restaurants</p>
+              <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                <li>Browse menu</li>
+                <li>Make table reservation <span class="text-blue-600">(in-house only)</span></li>
+              </ul>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="font-semibold text-slate-700 mb-2">Bars</p>
+              <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                <li>Browse menu</li>
+                <li>No reservations (walk-in only)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="flex gap-3 text-sm">
+            <span class="badge-browse px-3 py-1.5 rounded-full font-semibold">👁️ Pre-Arrival: browse only, no booking</span>
+            <span class="badge-full px-3 py-1.5 rounded-full font-semibold">✅ In-House: browse + book</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wellness -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">spa</span>
+          <h3 class="font-bold text-lg">7. Wellness & Spa</h3>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-3 gap-4 mb-4">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="font-semibold text-slate-700 mb-2">Treatments</p>
+              <p class="text-sm text-slate-500">e.g. Swedish Massage, Oceanside Massage, Couples Ritual</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="font-semibold text-slate-700 mb-2">Classes</p>
+              <p class="text-sm text-slate-500">e.g. Sunrise Beach Yoga</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="font-semibold text-slate-700 mb-2">Packages</p>
+              <p class="text-sm text-slate-500">e.g. Bentota Bliss Day Package</p>
+            </div>
+          </div>
+          <div class="flex gap-3 text-sm">
+            <span class="badge-browse px-3 py-1.5 rounded-full font-semibold">👁️ Pre-Arrival: browse only</span>
+            <span class="badge-full px-3 py-1.5 rounded-full font-semibold">✅ In-House: browse + book</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">star_rate</span>
+          <h3 class="font-bold text-lg">16. Feedback</h3>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="font-semibold text-slate-700 mb-2">Sections (emoji ratings 😞😕😐🙂😄)</p>
+              <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                <li>Hotel Services (11 items, max 55 pts)</li>
+                <li>Room & Facilities (8 items, max 40 pts)</li>
+                <li>Associates (4 items, max 20 pts)</li>
+                <li>Food & Beverage (7 items, max 35 pts)</li>
+              </ul>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4">
+              <p class="font-semibold text-slate-700 mb-2">Scoring Logic</p>
+              <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                <li>Score &gt; 100 → TripAdvisor / Google review redirect</li>
+                <li>Score &lt; 60 → GM escalation message</li>
+                <li>One submission per reservation</li>
+              </ul>
+            </div>
+          </div>
+          <div class="flex gap-3 text-sm flex-wrap">
+            <span class="badge-full px-3 py-1.5 rounded-full font-semibold">✅ In-House: mid-stay feedback</span>
+            <span class="badge-full px-3 py-1.5 rounded-full font-semibold">✅ Checked-Out: post-stay feedback</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complaints -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">support_agent</span>
+          <h3 class="font-bold text-lg">15. Complaints</h3>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-3 gap-3 mb-4">
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Room</p><p class="text-xs text-slate-500 mt-1">Cleanliness, Maintenance, Temperature, Noise, Amenities, Other</p></div>
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Dining</p><p class="text-xs text-slate-500 mt-1">Food Quality, Service Speed, Order Incorrect, Billing Error, Hygiene, Other</p></div>
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Service</p><p class="text-xs text-slate-500 mt-1">Request Not Fulfilled, Delayed Response, Staff Attitude, Other</p></div>
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Facilities</p><p class="text-xs text-slate-500 mt-1">Pool, Spa, Beach, WiFi, Water Sports, Other</p></div>
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Staff</p><p class="text-xs text-slate-500 mt-1">Rude / Unprofessional, Incorrect Information, Unhelpful, Other</p></div>
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Custom</p><p class="text-xs text-slate-500 mt-1">Subject + free-form description + urgency + location</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#003c52] text-white px-6 py-4 flex items-center gap-3">
+          <span class="material-symbols-rounded">person</span>
+          <h3 class="font-bold text-lg">Profile</h3>
+        </div>
+        <div class="p-6">
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm border-collapse">
+              <thead><tr><th class="px-3 py-2 text-left bg-slate-100 text-slate-700">Status</th><th class="px-3 py-2 text-center bg-slate-100 text-slate-700">Edit Access</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">No Reservation</td><td class="px-3 py-2 text-center">✅ Editable</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Pre-Arrival</td><td class="px-3 py-2 text-center">✅ Editable</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">In-House</td><td class="px-3 py-2 text-center">🔒 Read-only</td></tr>
+                <tr class="border-b border-slate-100"><td class="px-3 py-2">Checked-Out</td><td class="px-3 py-2 text-center">🔒 Read-only</td></tr>
+                <tr><td class="px-3 py-2">Cancelled</td><td class="px-3 py-2 text-center">✅ Editable</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="grid md:grid-cols-4 gap-3">
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Profile tab</p><p class="text-xs text-slate-500 mt-1">Personal details, document scan (OCR), photo</p></div>
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Preferences tab</p><p class="text-xs text-slate-500 mt-1">Bed type, pillow, floor, temperature, wake-up style, amenities</p></div>
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Dietary tab</p><p class="text-xs text-slate-500 mt-1">Diet type, food allergies, kitchen notes</p></div>
+            <div class="bg-slate-50 rounded-xl p-3"><p class="font-semibold text-sm text-slate-700">Health tab</p><p class="text-xs text-slate-500 mt-1">Medical allergies, accessibility needs, emergency contact</p></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Summary Table -->
+    <section>
+      <h2 class="text-xl font-bold text-[#003c52] mb-4">Summary by Feature Area</h2>
+      <div class="overflow-x-auto rounded-xl shadow">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr>
+              <th class="px-4 py-3 text-left">Feature Area</th>
+              <th class="px-4 py-3 text-center">No Res</th>
+              <th class="px-4 py-3 text-center">Pre-Arrival</th>
+              <th class="px-4 py-3 text-center">In-House</th>
+              <th class="px-4 py-3 text-center">Checked-Out</th>
+              <th class="px-4 py-3 text-center">Cancelled</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 font-medium">Account (Rewards, Notifications, Profile)</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅ (profile read)</td><td class="px-4 py-3 text-center">✅ (profile read)</td><td class="px-4 py-3 text-center">✅</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 font-medium">Stay Planning (Pre-Arrival, Change Stay)</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">⚠️ limited</td><td class="px-4 py-3 text-center">✅ full</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 font-medium">In-Room Services (Housekeeping, Wake-Up, Services)</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">⚠️ special req only</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 font-medium">Hotel Services (Dining, Wellness, Experiences)</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">👁️ browse</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 font-medium">Information (Local Explore)</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">👁️ browse</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 font-medium">Transport</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">⚠️ arrival only</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 font-medium">Billing</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅ live</td><td class="px-4 py-3 text-center">👁️ past</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr class="border-b border-slate-200"><td class="px-4 py-3 font-medium">Post-Stay (Feedback, Complaints)</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">✅</td><td class="px-4 py-3 text-center">❌</td></tr>
+            <tr><td class="px-4 py-3 font-medium">Cancellation (info + contact hotel)</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">❌</td><td class="px-4 py-3 text-center">✅</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="text-center text-xs text-slate-400 pb-8">
+      Destinity vButler — Internal Documentation · Browns Hotels & Resorts · 2026-03-17
+    </footer>
+
+  </div>
+</body>
+</html>

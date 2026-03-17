@@ -1,6 +1,6 @@
 ---
 name:  push-to-github
-description: Pushes code to GitHub and updates docs/github-commit.md with the new commit details.
+description: Pushes code to GitHub and updates docs/git-commit.html with the new commit details.
 ---
 
 When the user says "push to github", follow these steps in order:
@@ -14,31 +14,38 @@ When the user says "push to github", follow these steps in order:
    Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
    ```
 
-## Step 2 — Update docs/github-commit.md
+## Step 2 — Update docs/git-commit.html
 After committing, get the new commit's short ID and full ID via:
 ```
 git log -1 --format="%h %H %ai %s"
 ```
 
-Then update `docs/github-commit.md`:
+Then update `docs/git-commit.html` in **two places**:
 
-1. **Update the "Last updated" date** at the top to today's date.
-2. **Add a new row** to the commit history table (increment the `#` counter):
-   ```
-   | N | `<shortId>` | `<fullId>` | YYYY-MM-DD HH:MM | <commit message> |
-   ```
-3. **Add a new Push Log section** at the top of the Push Log (below the `## Push Log` heading), following this format:
-   ```markdown
-   ### Push — YYYY-MM-DD HH:MM +0530
-   **Commits pushed:** `<shortId>`
-   **Summary:** <one-line summary of what was pushed>
-   - list of key files changed
-   ```
+### 2a — Add a new entry to the `commits` array
+Find the `const commits = [` array near the top of the `<script>` block and append a new object **at the end**:
+```js
+{ n:<next_number>, short:'<shortId>', full:'<fullId>', date:'YYYY-MM-DD HH:MM', msg:'<commit message>' },
+```
+Increment `n` by 1 from the last entry.
+
+### 2b — Add a new entry to the `pushLog` array (newest first)
+Find the `const pushLog = [` array and **prepend** a new object at the very top of the array:
+```js
+{
+  date: 'YYYY-MM-DD HH:MM +0530',
+  commits: ['<shortId>'],
+  summary: '<one-line summary of what was pushed>',
+  bullets: [
+    '<code>filename.html</code> — description of change',
+  ]
+},
+```
 
 ## Step 3 — Commit the docs update
-Stage and commit the `docs/github-commit.md` update:
+Stage and commit the `docs/git-commit.html` update:
 ```
-docs: update github-commit.md — log push <shortId>
+docs: update git-commit.html — log push <shortId>
 ```
 Include the co-author trailer as usual.
 
