@@ -147,10 +147,19 @@ const commits = [
   { n:52, short:'fa11e88', full:'fa11e884261378e7ec08160087de51c686a5677b', date:'2026-03-17 13:50', msg:'feat: replace Change Stay with Request to Confirm for tentative reservations' },
   { n:53, short:'6fbce23', full:'6fbce23d6215d2360921975a87d38037dae15464', date:'2026-03-17 13:59', msg:'feat: pre-arrival browse-only mode, new guest, and invalid credentials banner' },
   { n:54, short:'053b9ad', full:'053b9adb4ce47aa75690be12d32fe048dae09826', date:'2026-03-17 14:13', msg:'feat: add room sharers tab to profile + release notes v1.0 doc' },
+  { n:55, short:'b999959', full:'b9999598614302d595a0b6f3a2686c54d0e27596', date:'2026-03-17 14:21', msg:'feat: expand sharer fields — first name, last name, email, phone, country, nationality' },
 ];
 
 // ─── Push Log Data ───────────────────────────────────────────────────────────
 const pushLog = [
+  {
+    date: '2026-03-17 14:21 +0530',
+    commits: ['b999959'],
+    summary: 'Expanded sharer fields to include first name, last name, email, phone, country, nationality',
+    bullets: [
+      '<code>profile.html</code> — sharer cards now collect: first name, last name, email, phone number, date of birth, relationship, country, nationality, document type + number (adults only)',
+    ]
+  },
   {
     date: '2026-03-17 14:13 +0530',
     commits: ['053b9ad'],
