@@ -145,10 +145,23 @@ const commits = [
   { n:50, short:'6debe27', full:'6debe273b18af49785a66087c0c323d1cf7810cb', date:'2026-03-17 13:25', msg:'feat: clear all vb: localStorage keys on sign out for fresh start' },
   { n:51, short:'1ef46cf', full:'1ef46cffdc11c5daf6afdd0564821a952057bf09', date:'2026-03-17 13:42', msg:'feat: block nav until reservation selected, always redirect to dashboard on set-active' },
   { n:52, short:'fa11e88', full:'fa11e884261378e7ec08160087de51c686a5677b', date:'2026-03-17 13:50', msg:'feat: replace Change Stay with Request to Confirm for tentative reservations' },
+  { n:53, short:'6fbce23', full:'6fbce23d6215d2360921975a87d38037dae15464', date:'2026-03-17 13:59', msg:'feat: pre-arrival browse-only mode, new guest, and invalid credentials banner' },
 ];
 
 // ─── Push Log Data ───────────────────────────────────────────────────────────
 const pushLog = [
+  {
+    date: '2026-03-17 13:59 +0530',
+    commits: ['6fbce23'],
+    summary: 'Pre-arrival browse-only mode, new guest account, and invalid credentials banner',
+    bullets: [
+      '<code>dining.html</code> — hide in-room dining banner, show amber browse notice, change CTA to "View Menu Only" for pre-arrival guests',
+      '<code>wellness.html</code> — disable Book Now/Class/Package buttons with "Available After Check-in" for pre-arrival guests',
+      '<code>experiences.html</code> — show browse banner and change CTA label to "Explore" for pre-arrival guests',
+      '<code>login.html</code> — add prominent inline red error banner with red field borders on invalid credentials; password cleared on failure',
+      '<code>data/mock/guests.json</code> — add guest-003 (<code>new@guest.com</code> / <code>Password1!</code>) with no reservations, Bronze tier',
+    ]
+  },
   {
     date: '2026-03-17 13:50 +0530',
     commits: ['fa11e88'],
