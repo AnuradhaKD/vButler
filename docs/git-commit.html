@@ -146,10 +146,20 @@ const commits = [
   { n:51, short:'1ef46cf', full:'1ef46cffdc11c5daf6afdd0564821a952057bf09', date:'2026-03-17 13:42', msg:'feat: block nav until reservation selected, always redirect to dashboard on set-active' },
   { n:52, short:'fa11e88', full:'fa11e884261378e7ec08160087de51c686a5677b', date:'2026-03-17 13:50', msg:'feat: replace Change Stay with Request to Confirm for tentative reservations' },
   { n:53, short:'6fbce23', full:'6fbce23d6215d2360921975a87d38037dae15464', date:'2026-03-17 13:59', msg:'feat: pre-arrival browse-only mode, new guest, and invalid credentials banner' },
+  { n:54, short:'053b9ad', full:'053b9adb4ce47aa75690be12d32fe048dae09826', date:'2026-03-17 14:13', msg:'feat: add room sharers tab to profile + release notes v1.0 doc' },
 ];
 
 // ─── Push Log Data ───────────────────────────────────────────────────────────
 const pushLog = [
+  {
+    date: '2026-03-17 14:13 +0530',
+    commits: ['053b9ad'],
+    summary: 'Room sharers tab on profile page + release notes v1.0 HTML doc',
+    bullets: [
+      '<code>profile.html</code> — new "Sharers" tab (5th tab): auto-generates one form card per sharer based on active reservation adults + children count; adults get name, DOB, nationality, relationship, doc type/number; children skip document fields; saved to <code>vb:sharers:{resId}</code>',
+      '<code>docs/release-note-v1.html</code> <em>(new)</em> — full styled release notes covering all 17 feature modules, 5 properties, tech stack, scope/limitations, changelog timeline, and stat summary',
+    ]
+  },
   {
     date: '2026-03-17 13:59 +0530',
     commits: ['6fbce23'],
