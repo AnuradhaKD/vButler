@@ -54,10 +54,19 @@
 | 42 | `549f44e` | `549f44e404e4824d2e4ac4eb0328fb1645c483e5` | 2026-03-17 11:07 | feat: full-width desktop layout on all pages — remove max-w constraints |
 | 43 | `14482bb` | `14482bb...` | 2026-03-17 11:08 | docs: update github-commit.md — log push 549f44e |
 | 44 | `4411114` | `44111144c6a2c448fb3455eba3a033bd2acce8e5` | 2026-03-17 11:32 | feat: offers 3-up grid, wellness hero card, change stay modal, emoji feedback ratings |
+| 45 | `6e4d7ef` | `6e4d7ef...` | 2026-03-17 11:33 | docs: update github-commit.md — log push 4411114 |
+| 46 | `54e742f` | `54e742f0952c2091dfdfab833979f2f7c84bd1af` | 2026-03-17 11:54 | feat: Change Stay page + sidebar nav item, WhatsApp number updated |
 
 ---
 
 ## Push Log (summary by push session)
+
+### Push — 2026-03-17 11:54 +0530
+**Commits pushed:** `54e742f`
+**Summary:** Change Stay standalone page + sidebar nav item, WhatsApp number updated to +94778187177
+- `change-stay.html` *(new)* — standalone Change Stay page with 6 request types, date pickers for extend/early checkout/checkin, submits to `vb:stayRequests`, SRQ-XXXX ref, WhatsApp follow-up
+- `js/app.js` — added Change Stay and Feedback sidebar nav entries; renamed Complaints nav item
+- `reservations.html`, `reservation-detail.html`, `complaint-detail.html` — WhatsApp number updated to `94778187177`
 
 ### Push — 2026-03-17 11:32 +0530
 **Commits pushed:** `4411114`
