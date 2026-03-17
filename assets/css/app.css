@@ -10,22 +10,7 @@ body { animation: fadeIn 0.2s ease-out; }
 /* Safe area for iOS bottom nav */
 .safe-area-pb { padding-bottom: env(safe-area-inset-bottom, 0px); }
 
-/* Custom scrollbar — thin, primary-tinted, unobtrusive */
-* { scrollbar-width: thin; scrollbar-color: rgba(0,60,82,0.25) transparent; }
-*:hover { scrollbar-color: rgba(0,60,82,0.45) transparent; }
-.dark * { scrollbar-color: rgba(45,212,191,0.2) transparent; }
-.dark *:hover { scrollbar-color: rgba(45,212,191,0.4) transparent; }
-
-::-webkit-scrollbar { width: 2px; height: 2px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,60,82,0.3); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,60,82,0.6); }
-.dark ::-webkit-scrollbar-thumb { background: rgba(45,212,191,0.25); }
-.dark ::-webkit-scrollbar-thumb:hover { background: rgba(45,212,191,0.5); }
-
-/* Main content area — scrollbar always at viewport right edge */
-html { overflow-y: scroll; scrollbar-gutter: stable; }
-body { overflow-x: hidden; }
+/* Scrollbars — defined globally in js/app.js init() so they apply on every page */
 
 /* Swiper-like horizontal scroll snap */
 .scroll-snap-x { scroll-snap-type: x mandatory; }

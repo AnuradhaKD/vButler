@@ -822,9 +822,20 @@ const App = (() => {
     theme.apply();
     toast.init();
 
-    // Inject layout CSS — only active on pages that call header.render() (adds body.vb-app)
+    // Inject global CSS (scrollbars + layout)
     const s = document.createElement('style');
     s.textContent = `
+      /* ── Thin primary-colour scrollbars ── */
+      ::-webkit-scrollbar { width: 2px; height: 2px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: rgba(0,60,82,0.35); border-radius: 2px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(0,60,82,0.65); }
+      .dark ::-webkit-scrollbar-thumb { background: rgba(45,212,191,0.3); }
+      .dark ::-webkit-scrollbar-thumb:hover { background: rgba(45,212,191,0.6); }
+      * { scrollbar-width: thin; scrollbar-color: rgba(0,60,82,0.3) transparent; }
+      .dark * { scrollbar-color: rgba(45,212,191,0.3) transparent; }
+
+      /* ── App layout — only active on pages that call header.render() (adds body.vb-app) ── */
       body.vb-app { height: 100%; overflow: hidden; display: flex; flex-direction: column; }
       html:has(body.vb-app) { height: 100%; overflow: hidden; }
       body.vb-app > #app-header { flex-shrink: 0; }
