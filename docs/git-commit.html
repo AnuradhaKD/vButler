@@ -144,10 +144,21 @@ const commits = [
   { n:49, short:'18a30a9', full:'18a30a97a7c8db2bd99e03f0583c5133a0292358', date:'2026-03-17 13:22', msg:'feat: hide/show menu items based on reservation status level' },
   { n:50, short:'6debe27', full:'6debe273b18af49785a66087c0c323d1cf7810cb', date:'2026-03-17 13:25', msg:'feat: clear all vb: localStorage keys on sign out for fresh start' },
   { n:51, short:'1ef46cf', full:'1ef46cffdc11c5daf6afdd0564821a952057bf09', date:'2026-03-17 13:42', msg:'feat: block nav until reservation selected, always redirect to dashboard on set-active' },
+  { n:52, short:'fa11e88', full:'fa11e884261378e7ec08160087de51c686a5677b', date:'2026-03-17 13:50', msg:'feat: replace Change Stay with Request to Confirm for tentative reservations' },
 ];
 
 // ─── Push Log Data ───────────────────────────────────────────────────────────
 const pushLog = [
+  {
+    date: '2026-03-17 13:50 +0530',
+    commits: ['fa11e88'],
+    summary: 'Tentative reservations show "Request to Confirm" button instead of Change Stay',
+    bullets: [
+      '<code>reservations.html</code> — tentative cards show purple "Request to Confirm" button; non-tentative cards keep "Change Stay"',
+      '<code>reservations.html</code> — new modal with reservation info banner, required remarks textarea, CFM-XXXX reference, WhatsApp follow-up',
+      '<code>reservations.html</code> — saves to <code>vb:confirmRequests</code> localStorage and fires notification on submit',
+    ]
+  },
   {
     date: '2026-03-17 13:42 +0530',
     commits: ['1ef46cf'],
