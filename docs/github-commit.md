@@ -49,10 +49,20 @@
 | 37 | `3233f1b` | `3233f1bc73f0d42d591b3b9b022d601f8bb1e103` | 2026-03-17 00:15 | docs: add github-commit.md — running log of all pushes with commit IDs and dates |
 | 38 | `1303fa5` | `1303fa514289138e3f0beb10226002278027c400` | 2026-03-17 00:18 | docs: update github-commit.md with full project history — all 37 commits since init |
 | 39 | `e3aea21` | `e3aea210af472628ae279ba5d99c33d779d0dfa9` | 2026-03-17 09:42 | feat: add tabbed profile page — preferences, dietary & allergies, health & accessibility |
+| 40 | `7bb0e54` | `7bb0e54dbe4bfddba6961f4316be43f2921e93c8` | 2026-03-17 10:37 | feat: separate feedback & complaints pages, primary header, thin scrollbars |
 
 ---
 
 ## Push Log (summary by push session)
+
+### Push — 2026-03-17 10:37 +0530
+**Commits pushed:** `7bb0e54`
+**Summary:** Separate feedback & complaints pages, primary-colour header, 2px thin scrollbars
+- `feedback.html` *(new)* — detailed stay feedback form (Hotel Services, Room & Facilities, Associates, F&B) with 1–5 per item, live score bar, scoring logic (>100 → review redirect, <60 → GM escalation)
+- `complaints.html` — stripped to complaints-only; added teal nudge banner to feedback.html
+- `complaint-submit.html` — added Custom Complaint path (subject + free-form description) alongside category tiles
+- `js/app.js` — header bg changed to `#003c52`; all header icons updated to white; sidebar now has separate Complaints + Feedback entries
+- `assets/css/app.css` — scrollbars set to 2px, primary-tinted semi-transparent; `scrollbar-gutter: stable` pins bar to viewport edge
 
 ### Push — 2026-03-17 09:42 +0530
 **Commits pushed:** `e3aea21`
