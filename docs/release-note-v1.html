@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Release Notes v1.0 — Destinity vButler</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .serif { font-family: 'Playfair Display', serif; }
+    .mono { font-family: 'Courier New', monospace; }
+
+    /* Feature status pills */
+    .tag-new      { background:#dcfce7; color:#166534; }
+    .tag-improved { background:#dbeafe; color:#1e40af; }
+    .tag-ux       { background:#fef9c3; color:#854d0e; }
+    .tag-system   { background:#ede9fe; color:#5b21b6; }
+
+    /* Section anchors offset for sticky header */
+    .section-anchor { scroll-margin-top: 80px; }
+
+    /* Sticky toc sidebar on desktop */
+    @media (min-width: 1280px) {
+      .toc-sticky { position: sticky; top: 96px; max-height: calc(100vh - 120px); overflow-y: auto; }
+    }
+
+    /* Timeline dot connector */
+    .timeline-item { position: relative; padding-left: 2rem; }
+    .timeline-item::before {
+      content: '';
+      position: absolute; left: 0; top: 0.45rem;
+      width: 10px; height: 10px;
+      border-radius: 50%; background: #003c52;
+    }
+    .timeline-item::after {
+      content: '';
+      position: absolute; left: 4px; top: 1.1rem;
+      width: 2px; bottom: -0.5rem;
+      background: #e2e8f0;
+    }
+    .timeline-item:last-child::after { display: none; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+
+    /* Card hover */
+    .feat-card { transition: box-shadow 0.2s, transform 0.2s; }
+    .feat-card:hover { box-shadow: 0 8px 24px rgba(0,60,82,.10); transform: translateY(-2px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+  <!-- ── STICKY TOP BAR ─────────────────────────────────────────────────────── -->
+  <nav class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-screen-2xl mx-auto px-4 md:px-8 flex items-center justify-between h-14">
+      <div class="flex items-center gap-3">
+        <img src="../assets/images/destinity-inspire.svg" alt="Destinity" class="w-7 h-7">
+        <span class="font-bold text-[#003c52] text-sm">Destinity vButler</span>
+        <span class="hidden sm:inline text-slate-300">·</span>
+        <span class="hidden sm:inline mono text-xs text-slate-400">Release Notes v1.0</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">v1.0.0</span>
+        <span class="hidden md:inline px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">2026-03-17</span>
+        <a href="git-commit.html" class="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-[#003c52] hover:underline ml-2">
+          <span class="material-symbols-outlined text-sm">history</span>Commit Log
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── HERO ──────────────────────────────────────────────────────────────── -->
+  <div style="background: linear-gradient(135deg, #003c52 0%, #004f6e 60%, #00667a 100%);" class="text-white py-16 md:py-24 px-6 md:px-16 relative overflow-hidden">
+    <!-- decorative circles -->
+    <div class="absolute -top-24 -right-24 w-96 h-96 bg-white/5 rounded-full"></div>
+    <div class="absolute -bottom-16 -left-16 w-64 h-64 bg-white/5 rounded-full"></div>
+
+    <div class="max-w-screen-2xl mx-auto relative z-10">
+      <p class="text-teal-300 text-xs font-bold uppercase tracking-widest mb-3">Browns Hotels & Resorts · Digital Products</p>
+      <h1 class="serif text-4xl md:text-6xl font-bold mb-3 leading-tight">
+        Destinity vButler<br>
+        <span class="text-white/60 font-normal italic text-3xl md:text-4xl">Release Notes — Version 1.0</span>
+      </h1>
+      <p class="text-white/70 text-base md:text-lg max-w-2xl leading-relaxed mt-4">
+        The first public release of <strong class="text-white">Destinity vButler</strong> — the official guest-facing digital companion for Browns Hotels &amp; Resorts. A PWA that puts a personal butler in every guest's pocket, across all five properties, from pre-arrival through checkout.
+      </p>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10 max-w-2xl">
+        <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
+          <p class="text-3xl font-extrabold text-white">42</p>
+          <p class="text-xs text-white/60 mt-0.5 uppercase tracking-wider">Pages</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
+          <p class="text-3xl font-extrabold text-white">5</p>
+          <p class="text-xs text-white/60 mt-0.5 uppercase tracking-wider">Properties</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
+          <p class="text-3xl font-extrabold text-white">17</p>
+          <p class="text-xs text-white/60 mt-0.5 uppercase tracking-wider">Feature Modules</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur rounded-xl p-4 text-center">
+          <p class="text-3xl font-extrabold text-white">53</p>
+          <p class="text-xs text-white/60 mt-0.5 uppercase tracking-wider">Commits</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BODY LAYOUT ────────────────────────────────────────────────────────── -->
+  <div class="max-w-screen-2xl mx-auto px-4 md:px-8 py-12 xl:flex xl:gap-10">
+
+    <!-- ── TOC SIDEBAR ──────────────────────────────────────────────────────── -->
+    <aside class="hidden xl:block w-64 shrink-0">
+      <div class="toc-sticky">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">On This Page</p>
+        <nav class="space-y-1 text-sm">
+          <a href="#overview"       class="block py-1 px-3 rounded-lg text-slate-600 hover:bg-[#003c52]/8 hover:text-[#003c52] transition font-medium">Overview</a>
+          <a href="#whats-new"      class="block py-1 px-3 rounded-lg text-slate-600 hover:bg-[#003c52]/8 hover:text-[#003c52] transition font-medium">What's New at a Glance</a>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider pt-3 pb-1 px-3">Feature Modules</p>
+          <a href="#auth"           class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Authentication</a>
+          <a href="#reservations"   class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Reservations</a>
+          <a href="#dashboard"      class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Dashboard</a>
+          <a href="#pre-arrival"    class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Pre-Arrival</a>
+          <a href="#services"       class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Services</a>
+          <a href="#dining"         class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Dining & Bars</a>
+          <a href="#wellness"       class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Wellness & Spa</a>
+          <a href="#housekeeping"   class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Housekeeping</a>
+          <a href="#transport"      class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Transport</a>
+          <a href="#wakeup"         class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Wake-Up Call</a>
+          <a href="#experiences"    class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Experiences</a>
+          <a href="#local"          class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Local Exploration</a>
+          <a href="#billing"        class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Billing</a>
+          <a href="#complaints"     class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Complaints & Feedback</a>
+          <a href="#profile"        class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Guest Profile</a>
+          <a href="#loyalty"        class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Loyalty & Rewards</a>
+          <a href="#notifications"  class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Notifications</a>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider pt-3 pb-1 px-3">Platform</p>
+          <a href="#ux"             class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">UX & Design</a>
+          <a href="#properties"     class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Properties</a>
+          <a href="#tech"           class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Technical Stack</a>
+          <a href="#scope"          class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Scope & Limitations</a>
+          <a href="#changelog"      class="block py-1 px-3 rounded-lg text-slate-500 hover:bg-[#003c52]/8 hover:text-[#003c52] transition text-xs">Changelog</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ─────────────────────────────────────────────────────── -->
+    <main class="flex-1 min-w-0 space-y-14">
+
+      <!-- OVERVIEW -->
+      <section id="overview" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">info</span> Overview
+        </h2>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+          <blockquote class="serif italic text-xl md:text-2xl text-[#003c52] border-l-4 border-teal-400 pl-5 mb-6 leading-snug">
+            "Every Browns guest deserves a personal butler — available 24/7, across every property, in the palm of their hand."
+          </blockquote>
+          <p class="text-slate-600 leading-relaxed mb-4">
+            <strong>Destinity vButler</strong> is the official guest-facing digital companion for <strong>Browns Hotels &amp; Resorts</strong>. Version 1.0 delivers a complete, production-ready Progressive Web App covering every major guest journey touchpoint — from the moment a reservation is confirmed, through check-in, the in-stay experience, and post-checkout.
+          </p>
+          <p class="text-slate-600 leading-relaxed mb-6">
+            The app is built on a <strong>reservation-centric model</strong>: every feature — services, billing, complaints, dining, wellness — is contextual to the guest's <em>active reservation</em>. A single login gives access to all reservations across all Browns properties, past and present.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+              <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Release Date</p>
+              <p class="font-bold text-slate-800">17 March 2026</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+              <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Version</p>
+              <p class="font-bold text-slate-800 mono">v1.0.0</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+              <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Platform</p>
+              <p class="font-bold text-slate-800">PWA · Mobile + Desktop</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHAT'S NEW -->
+      <section id="whats-new" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">new_releases</span> What's New at a Glance
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- cards -->
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">hotel</span>
+            <h3 class="font-bold text-slate-900 mb-1">Multi-Reservation Hub</h3>
+            <p class="text-sm text-slate-500">View and switch between all Browns reservations in one place. Status-aware navigation — menus unlock as your stay progresses from pre-arrival to in-house to checked-out.</p>
+          </div>
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">assignment</span>
+            <h3 class="font-bold text-slate-900 mb-1">Pre-Arrival Checklist</h3>
+            <p class="text-sm text-slate-500">Guests complete ID upload, arrival time, dietary preferences, and payment before they even walk through the door — reducing front-desk queues.</p>
+          </div>
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">room_service</span>
+            <h3 class="font-bold text-slate-900 mb-1">Full Services Catalog</h3>
+            <p class="text-sm text-slate-500">Housekeeping, laundry, transport, wake-up calls, dining, wellness, and more — all requestable from the app, dispatched to staff via property-specific channels.</p>
+          </div>
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">restaurant</span>
+            <h3 class="font-bold text-slate-900 mb-1">Dining & Wellness Booking</h3>
+            <p class="text-sm text-slate-500">Browse restaurants, bars, spa treatments, yoga classes, and wellness packages. In-house guests book; pre-arrival guests browse — browse mode enforced automatically.</p>
+          </div>
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">workspace_premium</span>
+            <h3 class="font-bold text-slate-900 mb-1">Loyalty & Rewards</h3>
+            <p class="text-sm text-slate-500">Full loyalty programme: tier card (Bronze → Silver → Gold → Platinum), points balance, redemption, tier progress bar, and points history.</p>
+          </div>
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">receipt_long</span>
+            <h3 class="font-bold text-slate-900 mb-1">Live Folio & Billing</h3>
+            <p class="text-sm text-slate-500">Itemised bill with charges grouped by category (Room, Dining, Wellness, Laundry, Minibar, Payments). Balance summary and partial payment support.</p>
+          </div>
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">support_agent</span>
+            <h3 class="font-bold text-slate-900 mb-1">Complaints & Feedback</h3>
+            <p class="text-sm text-slate-500">Full complaint lifecycle with real-time status tracking. Separate post-stay feedback with emoji ratings per category. Dedicated pages for each.</p>
+          </div>
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">person</span>
+            <h3 class="font-bold text-slate-900 mb-1">Rich Guest Profile</h3>
+            <p class="text-sm text-slate-500">5-tab profile: personal info (with OCR document scanning), room preferences, dietary & allergies, health & accessibility, and room sharers by head count.</p>
+          </div>
+          <div class="feat-card bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <span class="material-symbols-outlined text-[#003c52] text-2xl mb-3 block" style="font-variation-settings:'FILL' 1">alarm</span>
+            <h3 class="font-bold text-slate-900 mb-1">Analog Clock Wake-Up</h3>
+            <p class="text-sm text-slate-500">Custom analog clock picker for wake-up call scheduling — dark/light mode aware, 1-minute step precision. No third-party libraries.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURE MODULES -->
+      <section id="auth" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">lock</span> Authentication
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Secure two-step login flow with OTP verification.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Split-panel login screen</p>
+                <p class="text-sm text-slate-500 mt-0.5">Hero image panel on desktop; mobile-optimised card layout. Inline invalid-credentials error banner with red field borders and password field auto-cleared on failure.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">OTP verification page</p>
+                <p class="text-sm text-slate-500 mt-0.5">6-digit OTP input, resend option, 10-minute expiry. Session stored via sessionStorage pending OTP confirm.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Guest registration & forgot password</p>
+                <p class="text-sm text-slate-500 mt-0.5">New account creation with full validation. Password reset flow via email.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Sign-out clears all local state</p>
+                <p class="text-sm text-slate-500 mt-0.5">Logout removes all <span class="mono text-xs bg-slate-100 px-1 rounded">vb:</span> localStorage keys for a clean fresh start on next login.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-improved">IMPROVED</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reservations" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">hotel</span> Reservation Management
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">The central hub for all guest bookings across Browns properties.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Multi-reservation list with status tabs</p>
+                <p class="text-sm text-slate-500 mt-0.5">All reservations across all Browns properties in one view: Active, Upcoming, Past, Cancelled. Property photo thumbnails and booking references on every card.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Reservation-level menu gating</p>
+                <p class="text-sm text-slate-500 mt-0.5">Sidebar and bottom navigation automatically filter based on the active reservation's status: <strong>none</strong> (account items only), <strong>pre-arrival</strong> (browse + checklist), <strong>in-house</strong> (full access), <strong>checked-out</strong> (bill + feedback), <strong>cancelled</strong> (minimal).</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Set as Active always redirects to Dashboard</p>
+                <p class="text-sm text-slate-500 mt-0.5">Nav is blocked (dimmed, cursor-not-allowed) until a reservation is selected. Once selected, the guest is taken to the dashboard with the correct menu context.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-ux">UX</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Request to Confirm for tentative reservations</p>
+                <p class="text-sm text-slate-500 mt-0.5">Tentative bookings show a purple <em>Request to Confirm</em> button. A modal lets the guest send remarks to the front office with a CFM-XXXX reference and WhatsApp follow-up link.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Change Stay modal</p>
+                <p class="text-sm text-slate-500 mt-0.5">Confirmed/in-house guests can request date changes, room upgrades, early check-in, or late check-out directly from the app. Standalone Change Stay page also available from sidebar.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboard" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">dashboard</span> Home Dashboard
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Context-aware overview of the active reservation.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Property hero banner + stay countdown</p>
+                <p class="text-sm text-slate-500 mt-0.5">Full-width property image, welcome message, check-in/out dates, and a live day counter ("Day 2 of 4" or "Check-in in 3 days").</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Quick actions grid</p>
+                <p class="text-sm text-slate-500 mt-0.5">Contextual shortcut tiles (Services, Dining, Wellness, Billing, Experiences, Complaints, Wake-Up, Explore) that deep-link to each feature.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Exclusive Offers carousel</p>
+                <p class="text-sm text-slate-500 mt-0.5">Swipeable promotions carousel loaded from <span class="mono text-xs bg-slate-100 px-1 rounded">chain.json</span> — property-targeted offers with CTA links.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Recent service requests feed</p>
+                <p class="text-sm text-slate-500 mt-0.5">Latest 3 requests with status badges. "View All" deep-links to My Requests page.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pre-arrival" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">assignment_turned_in</span> Pre-Arrival & Check-In
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Available for confirmed and tentative reservations before check-in.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Step-by-step checklist with progress indicator</p>
+                <p class="text-sm text-slate-500 mt-0.5">Visual step circles: Personal Details → ID Upload → Arrival Time → Special Requests → Advance Payment → T&Cs. Each step persisted per reservation.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Document OCR scanning</p>
+                <p class="text-sm text-slate-500 mt-0.5">Upload passport, NIC (front+back), or driving licence. OCR engine extracts name, document number, and address — guest reviews and confirms before applying to profile.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Browse-only mode for pre-arrival guests</p>
+                <p class="text-sm text-slate-500 mt-0.5">Dining, wellness, and experiences pages show content with amber browse banners. Booking buttons are replaced with "Available After Check-In" or "View Menu Only" — enforced automatically from reservation level.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-ux">UX</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="services" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">room_service</span> Hotel Services Catalog
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">In-house guests only. All requests linked to the active reservation.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Categorised service tiles</p>
+                <p class="text-sm text-slate-500 mt-0.5">Icon grid linking to Housekeeping, Laundry, Transport, Wake-Up Call, In-Room Dining, Room Extras. Loaded from property data.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">My Requests feed</p>
+                <p class="text-sm text-slate-500 mt-0.5">All submitted requests with status badges (Pending, In Progress, Completed, Cancelled), timestamps, and service icons. Linked to active reservation.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dining" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">restaurant</span> Dining & Bars
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Property restaurants, bar listings, table reservations, and in-room dining.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Restaurant and bar listing with hours badges</p>
+                <p class="text-sm text-slate-500 mt-0.5">Cards with hero images, cuisine type, opening hours (Breakfast / Lunch / Dinner), and booking CTA. Property-specific data from JSON.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Restaurant detail & table reservation</p>
+                <p class="text-sm text-slate-500 mt-0.5">Full restaurant detail page with menu sections. Separate table reservation flow: date, time, party size, seating preference, special notes.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">In-Room Dining</p>
+                <p class="text-sm text-slate-500 mt-0.5">Browse property menu by category, add items, select delivery time. Available 07:00–22:00. Hidden from dining listing for pre-arrival guests.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Pre-arrival browse mode</p>
+                <p class="text-sm text-slate-500 mt-0.5">"View Menu & Reserve" becomes "View Menu Only" (outlined style). In-room dining hidden. Amber banner explains restriction.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-ux">UX</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="wellness" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">spa</span> Wellness & Spa
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Treatments, fitness classes, and wellness packages.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Tabbed Treatments / Classes / Packages</p>
+                <p class="text-sm text-slate-500 mt-0.5">Three-tab layout. Treatments show duration and price. Classes show schedule chips and max participants. Packages show inclusions list and savings badge.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Wellness booking flow</p>
+                <p class="text-sm text-slate-500 mt-0.5">Dedicated booking page for all three types: select date, time, therapist preference, add-ons. Confirmation saves to requests feed.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Pre-arrival browse lock</p>
+                <p class="text-sm text-slate-500 mt-0.5">All book buttons replaced with a lock-icon "Available After Check-In" disabled span. Amber banner at top. Property hero shown for inspiration.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-ux">UX</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="housekeeping" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">cleaning_services</span> Housekeeping
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Room makeup, laundry, turndown, DND, and extra amenities.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Housekeeping request page</p>
+                <p class="text-sm text-slate-500 mt-0.5">Room Makeup, Turndown, DND toggle, Extra Amenities (towels, pillows, toiletries, hangers) with time slot picker and notes.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Laundry service</p>
+                <p class="text-sm text-slate-500 mt-0.5">Property laundry price list, item quantity selector, standard/express service toggle, and pickup time preference. Charges added to folio.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="transport" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">directions_car</span> Transport & Transfers
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Airport transfers and local transport. Limited to arrival transfer for pre-arrival guests.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Transport listing and booking</p>
+                <p class="text-sm text-slate-500 mt-0.5">Airport transfers (arrival/departure), hotel shuttle, car hire, local tuk-tuk. Vehicle type selection, flight details, passenger count.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="wakeup" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">alarm</span> Wake-Up Call
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">In-house guests only. Custom analog clock time picker.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Custom analog clock picker</p>
+                <p class="text-sm text-slate-500 mt-0.5">Built from scratch — no libraries. Canvas-rendered clock face, draggable hour and minute hands, 1-minute precision, dark/light mode aware. Date picker via Flatpickr.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Scheduled calls list with cancel</p>
+                <p class="text-sm text-slate-500 mt-0.5">View, modify, and cancel existing wake-up calls. Stored per reservation in <span class="mono text-xs bg-slate-100 px-1 rounded">vb:wakeupCalls</span>.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="experiences" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">hiking</span> Curated Experiences
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Property-specific adventures, culinary events, cultural tours, and unique experiences.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Featured + All experiences with category filters</p>
+                <p class="text-sm text-slate-500 mt-0.5">Star-badged featured experiences in a 2-up grid. Filter chips: Adventure, Culinary, Culture, Unique. Cards show duration, start time, and price.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Wishlist / Save experiences</p>
+                <p class="text-sm text-slate-500 mt-0.5">Heart button on each card saves to <span class="mono text-xs bg-slate-100 px-1 rounded">vb:wishlist</span>. Saved count badge shown on the page header. State preserved across sessions.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Experience detail & booking</p>
+                <p class="text-sm text-slate-500 mt-0.5">Full detail page: gallery, inclusions, what to bring, availability slots, booking form with date, guest count, and special requests.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="local" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">explore</span> Local Exploration
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Hotel-curated guide to nearby restaurants, attractions, and experiences.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Nearby places with category filters</p>
+                <p class="text-sm text-slate-500 mt-0.5">Distance, travel time, category badge, hotel recommendation note, and Google Maps link on each place card. All content from property JSON.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="billing" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">receipt_long</span> Billing & Payments
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Live folio, category breakdown, and in-app payment initiation.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Itemised folio with category summary</p>
+                <p class="text-sm text-slate-500 mt-0.5">All charges grouped by Room, Dining, Wellness, Laundry, Minibar, and Payments. Running balance, total paid, and outstanding amount clearly displayed.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Payment page</p>
+                <p class="text-sm text-slate-500 mt-0.5">Full or partial payment selection. Payment method options (card, bank transfer, digital wallet). Confirmation receipt flow.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="complaints" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">support_agent</span> Complaints & Feedback
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Separate complaint submission and post-stay feedback — each with its own dedicated page.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Complaint submission with full lifecycle tracking</p>
+                <p class="text-sm text-slate-500 mt-0.5">Category, subcategory, description (500 chars), photo attachment, priority. Status timeline: Submitted → Acknowledged → In Progress → Resolved → Closed.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Post-stay feedback with emoji ratings</p>
+                <p class="text-sm text-slate-500 mt-0.5">Dedicated feedback page with emoji-based ratings (😞→😍) for Room, Cleanliness, Service, Dining, Overall. Open text comments. Available in-stay and post-checkout.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-improved">IMPROVED</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">manage_accounts</span> Guest Profile
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Five-tab profile page covering all guest details, preferences, and sharers.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Tab 1 — Personal Info with document OCR</p>
+                <p class="text-sm text-slate-500 mt-0.5">Name, phone, DOB, nationality, country, document type + number. Upload passport / NIC / driving licence for OCR auto-fill. Profile photo from camera or gallery.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Tab 2 — Room Preferences</p>
+                <p class="text-sm text-slate-500 mt-0.5">Bed type, pillow firmness, floor preference, room temperature, morning newspaper, wake-up style, and amenity toggles (extra towels, pillows, baby cot, DND). Free-text notes.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Tab 3 — Dietary & Allergies</p>
+                <p class="text-sm text-slate-500 mt-0.5">Diet type selector (Omnivore → Vegan). 10 allergy toggle chips (peanuts, tree nuts, shellfish, fish, dairy, eggs, wheat, soy, sesame, sulfites). Kitchen notes field.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Tab 4 — Health & Accessibility + Emergency Contact</p>
+                <p class="text-sm text-slate-500 mt-0.5">Medical allergies, medical notes, accessibility toggles (wheelchair, mobility, visual, hearing impairment), other accessibility notes, and emergency contact details.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Tab 5 — Room Sharers</p>
+                <p class="text-sm text-slate-500 mt-0.5">Auto-generates one form card per sharer based on the active reservation's adult + child head count. Each card captures name, DOB, nationality, relationship, and document details. Children skip document fields. Saved per reservation.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="loyalty" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">workspace_premium</span> Loyalty & Rewards
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">Full loyalty programme with tier progression and point redemption.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Tier loyalty card (Bronze → Silver → Gold → Platinum)</p>
+                <p class="text-sm text-slate-500 mt-0.5">Gradient membership card with tier icon, points balance, membership ID, tier progress bar, and points to next tier. Compact version on profile page.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Redeem points & tier benefits</p>
+                <p class="text-sm text-slate-500 mt-0.5">Redemption slider with LKR value preview. Tier benefits listed per level (early check-in, complimentary breakfast, butler service, etc.). Points history log.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="notifications" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">notifications</span> Notifications
+        </h2>
+        <p class="text-slate-500 text-sm mb-4">In-app notification centre — available at all reservation levels.</p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-start gap-4 p-5">
+              <span class="material-symbols-outlined text-green-600 text-xl mt-0.5 shrink-0">check_circle</span>
+              <div>
+                <p class="font-semibold text-slate-800">Notification centre with read/unread state</p>
+                <p class="text-sm text-slate-500 mt-0.5">Service updates, billing alerts, complaint progress, pre-arrival reminders, and promotional messages. Bell icon with badge count in header. Stored in <span class="mono text-xs bg-slate-100 px-1 rounded">vb:notifications</span>.</p>
+              </div>
+              <span class="shrink-0 ml-auto px-2 py-0.5 rounded text-xs font-bold tag-new">NEW</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- UX & DESIGN -->
+      <section id="ux" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">palette</span> UX & Design System
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-[#003c52]">phone_android</span> Mobile Layout</h3>
+            <ul class="space-y-2 text-sm text-slate-600">
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Bottom navigation bar (5 context-aware items per reservation level)</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Hamburger slide-in drawer with full sidebar navigation</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Safe-area padding, full-width cards, touch-optimised</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> PWA installable to home screen (iOS Safari, Android Chrome)</li>
+            </ul>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-[#003c52]">laptop</span> Desktop Layout</h3>
+            <ul class="space-y-2 text-sm text-slate-600">
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Fixed left sidebar (collapsible) — 14 navigation items grouped by section</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Brand-coloured sidebar (#003c52) with active page indicator</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Full-width content panels — no max-width cap</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Sticky header + sticky sidebar — only main content scrolls</li>
+            </ul>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-[#003c52]">dark_mode</span> Dark Mode</h3>
+            <ul class="space-y-2 text-sm text-slate-600">
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Full dark mode across all 42 pages</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Detects system preference on first visit</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Persisted in <span class="mono text-xs bg-slate-800 text-slate-300 px-1 rounded">vb:theme</span> localStorage</li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Applied before page paint (no flash)</li>
+            </ul>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-[#003c52]">design_services</span> Design Tokens</h3>
+            <ul class="space-y-2 text-sm text-slate-600">
+              <li class="flex items-center gap-2"><span class="inline-block w-4 h-4 rounded" style="background:#003c52"></span> Primary: <span class="mono text-xs">#003c52</span></li>
+              <li class="flex items-center gap-2"><span class="inline-block w-4 h-4 rounded bg-[#f5f8f8] border border-slate-200"></span> Light BG: <span class="mono text-xs">#f5f8f8</span></li>
+              <li class="flex items-center gap-2"><span class="inline-block w-4 h-4 rounded" style="background:#0f1e23"></span> Dark BG: <span class="mono text-xs">#0f1e23</span></li>
+              <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">›</span> Inter (UI) + Playfair Display (hero/display) + Material Symbols Outlined</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROPERTIES -->
+      <section id="properties" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">location_on</span> Supported Properties
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <p class="font-bold text-slate-900">Newburgh Ella</p>
+                <p class="text-xs text-slate-500">Ella, Uva Province</p>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700">★★★★★</span>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">Boutique Hill Resort</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Infinity Pool</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Spa</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Terrace Bar</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <p class="font-bold text-slate-900">Thaala Bentota</p>
+                <p class="text-xs text-slate-500">Bentota, Southern Province</p>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700">★★★★★</span>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">Beachfront Resort & Spa</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Beachfront Pool</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Water Sports</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Boat Jetty</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <p class="font-bold text-slate-900">Occidental Dambulla</p>
+                <p class="text-xs text-slate-500">Dambulla, Central Province</p>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700">★★★★</span>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">Cultural Heritage Resort</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Pool</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Conference</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-yellow-100 text-yellow-700">Wellness: Off</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <p class="font-bold text-slate-900">Club Hotel Dolphin</p>
+                <p class="text-xs text-slate-500">Waikkal, Western Province</p>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700">★★★★</span>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">All-Inclusive Beach Resort</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Two Pools</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Kids Club</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-yellow-100 text-yellow-700">Pre-Arrival: Off</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <p class="font-bold text-slate-900">Browns City Hotel Colombo</p>
+                <p class="text-xs text-slate-500">Colombo 02</p>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700">★★★★★</span>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">Business City Hotel</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Rooftop Pool</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Business Centre</span>
+              <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 text-slate-600">Valet</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 mt-3">Property-level feature flags allow individual properties to disable specific features (e.g., Wellness off at Dambulla, Pre-Arrival off at Club Dolphin).</p>
+      </section>
+
+      <!-- TECH STACK -->
+      <section id="tech" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">code</span> Technical Stack
+        </h2>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-[#003c52] text-white">
+                <th class="px-5 py-3 text-left font-semibold">Layer</th>
+                <th class="px-5 py-3 text-left font-semibold">Technology</th>
+                <th class="px-5 py-3 text-left font-semibold hidden md:table-cell">Notes</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">UI Framework</td><td class="px-5 py-3 text-slate-600">Vanilla ES6 JavaScript</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">Zero build step, zero npm dependencies</td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">Styling</td><td class="px-5 py-3 text-slate-600">Tailwind CSS (CDN)</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">Dark mode via <span class="mono text-xs">darkMode: 'class'</span></td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">Icons</td><td class="px-5 py-3 text-slate-600">Material Symbols Outlined</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">Google Fonts CDN, variable font</td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">Typography</td><td class="px-5 py-3 text-slate-600">Inter + Playfair Display</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">Google Fonts CDN</td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">Date Picker</td><td class="px-5 py-3 text-slate-600">Flatpickr</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">Custom theme matching brand, CDN</td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">OCR</td><td class="px-5 py-3 text-slate-600">Tesseract.js (CDN)</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">Client-side document scanning, no server required</td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">Data Layer</td><td class="px-5 py-3 text-slate-600">Static JSON + localStorage</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">All mock data in <span class="mono text-xs">/data/</span>; state in <span class="mono text-xs">vb:*</span> keys</td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">Auth</td><td class="px-5 py-3 text-slate-600">SHA-256 via Web Crypto API</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">Browser-native, no library</td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">Platform</td><td class="px-5 py-3 text-slate-600">Progressive Web App (PWA)</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">Installable, offline-capable shell</td></tr>
+              <tr class="hover:bg-slate-50"><td class="px-5 py-3 font-medium text-slate-700">Hosting</td><td class="px-5 py-3 text-slate-600">Any static host</td><td class="px-5 py-3 text-slate-500 hidden md:table-cell">No server required — serve root directory as-is</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SCOPE & LIMITATIONS -->
+      <section id="scope" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">block</span> v1 Scope & Known Limitations
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-amber-50 rounded-2xl border border-amber-200 p-5">
+            <h3 class="font-bold text-amber-800 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-amber-600">info</span> Not in v1 (Planned)
+            </h3>
+            <ul class="space-y-2 text-sm text-amber-900">
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Live PMS integration (all data is mock JSON in v1)</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Real payment gateway (payment UI only — no actual transaction processing)</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> WhatsApp Business API dispatch (UI flow built; API wiring pending)</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Push notifications (in-app notifications fully built; browser push pending)</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Multi-language support (UI is English only in v1; translations deferred)</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> In-app guest-to-staff chat</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> New reservation booking engine (Destinity vButler manages existing reservations only)</li>
+            </ul>
+          </div>
+          <div class="bg-green-50 rounded-2xl border border-green-200 p-5">
+            <h3 class="font-bold text-green-800 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-green-600">check_circle</span> Fully Delivered in v1
+            </h3>
+            <ul class="space-y-2 text-sm text-green-900">
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> All 42 HTML pages with full UI and JS logic</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Complete reservation-level navigation gating</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Dark mode across every page</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Mobile + Desktop responsive layouts</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> 5-property data layer with per-property feature flags</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Full loyalty programme, complaint lifecycle, profile tabs</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> OCR document scanning (client-side)</li>
+              <li class="flex items-start gap-2"><span class="mt-0.5">·</span> Custom analog clock picker for wake-up calls</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHANGELOG -->
+      <section id="changelog" class="section-anchor">
+        <h2 class="text-2xl font-bold text-[#003c52] mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl">history</span> Abbreviated Changelog
+        </h2>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+          <div class="space-y-4 pl-2">
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 6fbce23</p>
+              <p class="font-semibold text-slate-800 text-sm">Pre-arrival browse-only mode, new guest (no reservations), invalid credentials banner</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · fa11e88</p>
+              <p class="font-semibold text-slate-800 text-sm">Request to Confirm modal for tentative reservations</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 1ef46cf</p>
+              <p class="font-semibold text-slate-800 text-sm">Block nav until reservation selected; Set as Active always redirects to dashboard</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 6debe27</p>
+              <p class="font-semibold text-slate-800 text-sm">Sign-out clears all vb: localStorage keys</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 18a30a9</p>
+              <p class="font-semibold text-slate-800 text-sm">Menu items show/hide based on reservation status level</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 54e742f</p>
+              <p class="font-semibold text-slate-800 text-sm">Change Stay page + sidebar nav item; WhatsApp number updated</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 4411114</p>
+              <p class="font-semibold text-slate-800 text-sm">Offers 3-up grid, wellness hero card, change stay modal, emoji feedback ratings</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 549f44e</p>
+              <p class="font-semibold text-slate-800 text-sm">Full-width desktop layout on all pages</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 7bb0e54</p>
+              <p class="font-semibold text-slate-800 text-sm">Separate Feedback & Complaints pages; primary header style</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · e3aea21</p>
+              <p class="font-semibold text-slate-800 text-sm">Tabbed profile page — Preferences, Dietary & Allergies, Health & Accessibility</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-17 · 74bb3d2</p>
+              <p class="font-semibold text-slate-800 text-sm">Loyalty & rewards — loyalty card, tier benefits, redeem points, points history</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-16 · 566692e</p>
+              <p class="font-semibold text-slate-800 text-sm">Document scanning with OCR — passport, NIC, driving licence</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-16 · d7c3c56–becffd7</p>
+              <p class="font-semibold text-slate-800 text-sm">Mobile hamburger drawer, sticky sidebar/header, layout fixes across all pages</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-16 · 53ee794 / 05fbb4f</p>
+              <p class="font-semibold text-slate-800 text-sm">Flatpickr date pickers + custom analog clock picker for wake-up calls</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-16 · c3cb92b / aad36bd</p>
+              <p class="font-semibold text-slate-800 text-sm">Multi-property dynamic data layer; JSON seed files for all 5 properties</p>
+            </div>
+            <div class="timeline-item">
+              <p class="text-xs text-slate-400 mono mb-0.5">2026-03-16 · 7f9089c</p>
+              <p class="font-semibold text-slate-800 text-sm">Project initialised — Destinity vButler v1</p>
+            </div>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-100">
+            <a href="git-commit.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#003c52] hover:underline">
+              <span class="material-symbols-outlined text-base">open_in_new</span>
+              View full commit log (53 commits) →
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+  <footer style="background: #003c52;" class="text-white mt-16 py-10 px-6 md:px-16">
+    <div class="max-w-screen-2xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img src="../assets/images/destinity-inspire.svg" alt="Destinity" class="w-8 h-8 opacity-80">
+        <div>
+          <p class="font-bold text-white">Destinity vButler</p>
+          <p class="text-white/50 text-xs">Browns Hotels & Resorts · Digital Products</p>
+        </div>
+      </div>
+      <div class="text-center md:text-right">
+        <p class="mono text-white/60 text-xs">Release Notes v1.0.0 · 2026-03-17</p>
+        <p class="text-white/40 text-xs mt-1">© 2026 Browns Hotels & Resorts. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
