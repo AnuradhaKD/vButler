@@ -47,14 +47,25 @@
 | 35 | `566692e` | `566692e2ef6594d0610dbcc02e826561e5245e1e` | 2026-03-16 23:51 | feat: document scanning with OCR for profile — passport, NIC, driving licence |
 | 36 | `74bb3d2` | `74bb3d24fc5bb102bfd3cb8c9ec2fba1325b3165` | 2026-03-17 00:14 | feat: add loyalty & rewards feature — loyalty card, tier benefits, redeem points, points history |
 | 37 | `3233f1b` | `3233f1bc73f0d42d591b3b9b022d601f8bb1e103` | 2026-03-17 00:15 | docs: add github-commit.md — running log of all pushes with commit IDs and dates |
+| 38 | `1303fa5` | `1303fa514289138e3f0beb10226002278027c400` | 2026-03-17 00:18 | docs: update github-commit.md with full project history — all 37 commits since init |
+| 39 | `e3aea21` | `e3aea210af472628ae279ba5d99c33d779d0dfa9` | 2026-03-17 09:42 | feat: add tabbed profile page — preferences, dietary & allergies, health & accessibility |
 
 ---
 
 ## Push Log (summary by push session)
 
-### Push — 2026-03-17 00:15 +0530
-**Commits pushed:** `74bb3d2`, `3233f1b`
-**Summary:** Loyalty & rewards feature + this commit log document
+### Push — 2026-03-17 09:42 +0530
+**Commits pushed:** `e3aea21`
+**Summary:** Tabbed profile page with guest preferences, dietary info, and health/accessibility
+- `profile.html` — 4-tab layout: Profile, Preferences, Dietary & Allergies, Health & Accessibility
+- Preferences: bed type, pillow, floor, temperature, newspaper, wake-up style, amenity toggles
+- Dietary: diet type selector, 10 food allergy checkboxes, kitchen notes
+- Health: medical allergies, accessibility needs toggles, emergency contact
+- All tab data persisted to `vb:profile` localStorage under `preferences`/`dietary`/`health` keys
+
+### Push — 2026-03-17 00:15–00:18 +0530
+**Commits pushed:** `74bb3d2`, `3233f1b`, `1303fa5`
+**Summary:** Loyalty & rewards feature + commit log document
 - `loyalty.html` *(new)* — Full rewards page: tier card, benefits, redeem options, points history
 - `data/mock/points-history.json` *(new)* — Transaction history for demo guests
 - `profile.html` — Compact loyalty card section added
