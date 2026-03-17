@@ -103,6 +103,7 @@
 
     let allExperiences = [];
     let currentFilter = 'all';
+    let isPreArrival = false;
 
     const categoryColors = {
       Adventure: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
@@ -157,7 +158,7 @@
                 <span class="text-lg font-bold text-[#003c52] dark:text-teal-400">Rs. ${exp.price.toLocaleString()}</span>
                 <span class="text-xs text-slate-500 dark:text-slate-400 ml-1">${exp.priceNote}</span>
               </div>
-              <a href="experience-detail.html?id=${exp.id}" class="bg-[#003c52] text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-[#004f6e] transition">View Details</a>
+              <a href="experience-detail.html?id=${exp.id}" class="bg-[#003c52] text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-[#004f6e] transition">${isPreArrival ? 'Explore' : 'View Details'}</a>
             </div>
           </div>
         </div>`;
@@ -235,11 +236,20 @@
 
     (async () => {
       const activeRes = App.reservations.getActive();
+      isPreArrival = App.reservations.getLevel() === 'pre-arrival';
       const propData = await App.data.loadProperty(activeRes?.propertyId || 'newburge-ella');
       allExperiences = propData?.experiences || [];
 
       document.getElementById('loading-state').classList.add('hidden');
       document.getElementById('content-state').classList.remove('hidden');
+
+      if (isPreArrival) {
+        const banner = document.createElement('div');
+        banner.className = 'flex items-center gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-4 mb-6';
+        banner.innerHTML = `<span class="material-symbols-outlined text-amber-500 text-2xl shrink-0">info</span><div><p class="font-semibold text-amber-800 dark:text-amber-300 text-sm">Browse Mode — Pre-Arrival</p><p class="text-amber-700 dark:text-amber-400 text-xs mt-0.5">You can explore experiences now. Booking opens once you check in.</p></div>`;
+        document.getElementById('content-state').prepend(banner);
+      }
+
       renderExperiences();
       updateWishlistBadge();
     })();

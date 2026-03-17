@@ -94,12 +94,24 @@
       const reservation = App.reservations.getActive();
       const propertyId = reservation?.propertyId || 'newburge-ella';
       const propData = await App.data.loadProperty(propertyId);
+      const isPreArrival = App.reservations.getLevel() === 'pre-arrival';
 
       document.getElementById('loading-state').classList.add('hidden');
       if (!propData) return;
 
+      if (isPreArrival) {
+        const banner = document.createElement('div');
+        banner.className = 'flex items-center gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-4 mb-6';
+        banner.innerHTML = `<span class="material-symbols-outlined text-amber-500 text-2xl shrink-0">info</span><div><p class="font-semibold text-amber-800 dark:text-amber-300 text-sm">Browse Mode — Pre-Arrival</p><p class="text-amber-700 dark:text-amber-400 text-xs mt-0.5">Explore our wellness offerings. Bookings open once you check in.</p></div>`;
+        document.getElementById('tab-bar').insertAdjacentElement('beforebegin', banner);
+      }
+
       const currency = propData.property.currencySymbol || 'Rs.';
       const wellness = propData.wellness;
+
+      const bookBtn = (href, icon, label) => isPreArrival
+        ? `<span class="w-full opacity-50 cursor-not-allowed bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl px-4 py-2.5 text-sm font-semibold text-center flex items-center justify-center gap-2"><span class="material-symbols-outlined text-base">lock</span>Available After Check-in</span>`
+        : `<a href="${href}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2"><span class="material-symbols-outlined text-base">${icon}</span>${label}</a>`;
 
       // Treatments
       document.getElementById('section-treatments').innerHTML = `
@@ -117,10 +129,7 @@
                   <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="material-symbols-outlined text-sm">schedule</span>${t.duration} min</span>
                   <span class="font-bold text-[#003c52] dark:text-teal-400">${App.helpers.formatCurrency(t.price, currency)}</span>
                 </div>
-                <a href="wellness-booking.html?type=treatment&id=${t.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-base">spa</span>
-                  Book Now
-                </a>
+                ${bookBtn(`wellness-booking.html?type=treatment&id=${t.id}`, 'spa', 'Book Now')}
               </div>
             </div>`).join('')}
         </div>`;
@@ -144,10 +153,7 @@
                   <span class="text-slate-500 dark:text-slate-400"><span class="material-symbols-outlined text-sm">group</span> Max ${c.maxParticipants}</span>
                   <span class="font-bold text-[#003c52] dark:text-teal-400">${App.helpers.formatCurrency(c.price, currency)}</span>
                 </div>
-                <a href="wellness-booking.html?type=class&id=${c.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-base">event</span>
-                  Book Class
-                </a>
+                ${bookBtn(`wellness-booking.html?type=class&id=${c.id}`, 'event', 'Book Class')}
               </div>
             </div>`).join('')}
         </div>`;
@@ -175,10 +181,7 @@
                     ${p.includes.map(inc=>`<li class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300"><span class="material-symbols-outlined text-sm text-green-500">check_circle</span>${inc}</li>`).join('')}
                   </ul>
                 </div>
-                <a href="wellness-booking.html?type=package&id=${p.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-base">card_giftcard</span>
-                  Book Package
-                </a>
+                ${bookBtn(`wellness-booking.html?type=package&id=${p.id}`, 'card_giftcard', 'Book Package')}
               </div>
             </div>`).join('')}
         </div>`;

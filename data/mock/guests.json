@@ -119,6 +119,62 @@
       "linkedReservationIds": [
         "RES-20260601-006"
       ]
+    },
+    {
+      "id": "guest-003",
+      "email": "new@guest.com",
+      "passwordHash": "1d707811988069ca760826861d6d63a10e8c3b7f171c4441a6472ea58c11711b",
+      "passwordPlain": "Password1!",
+      "fullName": "Alex Morgan",
+      "firstName": "Alex",
+      "lastName": "Morgan",
+      "phone": "+1 555 234 5678",
+      "nationality": "American",
+      "passportNumber": "US1234567",
+      "dateOfBirth": "1995-11-08",
+      "gender": "male",
+      "languagePreference": "en",
+      "memberSince": "2026-03-17",
+      "loyaltyProgram": {
+        "membershipId": "BHR-BRNZ-00411",
+        "tier": "Bronze",
+        "points": 0,
+        "pointsToNextTier": 10000,
+        "nextTier": "Silver",
+        "tierProgress": 0
+      },
+      "preferences": {
+        "roomFloor": null,
+        "bedType": null,
+        "pillowType": null,
+        "roomTemperature": null,
+        "smokingRoom": false,
+        "viewPreference": null,
+        "extraBlanket": false,
+        "wakeUpCall": null
+      },
+      "dietaryRequirements": {
+        "vegetarian": false,
+        "vegan": false,
+        "glutenFree": false,
+        "nutAllergy": false,
+        "seafoodAllergy": false,
+        "dairyFree": false,
+        "halal": false,
+        "other": ""
+      },
+      "communicationPreferences": {
+        "emailNotifications": true,
+        "smsNotifications": false,
+        "pushNotifications": true,
+        "marketingEmails": false
+      },
+      "emergencyContact": {
+        "name": "",
+        "relationship": "",
+        "phone": ""
+      },
+      "linkedReservationIds": []
     }
   ]
 }

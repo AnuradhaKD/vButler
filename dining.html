@@ -49,8 +49,17 @@
       <!-- Content -->
       <div id="content-state" class="hidden">
 
+        <!-- Pre-Arrival Browse Banner -->
+        <div id="pre-arrival-banner" class="hidden flex items-center gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-4 mb-6">
+          <span class="material-symbols-outlined text-amber-500 text-2xl shrink-0">info</span>
+          <div>
+            <p class="font-semibold text-amber-800 dark:text-amber-300 text-sm">Browse Mode — Pre-Arrival</p>
+            <p class="text-amber-700 dark:text-amber-400 text-xs mt-0.5">You can explore our dining options now. Reservations and in-room orders open once you check in.</p>
+          </div>
+        </div>
+
         <!-- In-Room Dining Banner -->
-        <a href="in-room-dining.html" class="flex items-center justify-between bg-[#003c52] text-white rounded-2xl p-5 mb-8 hover:bg-[#004f6e] transition group">
+        <a id="in-room-dining-link" href="in-room-dining.html" class="flex items-center justify-between bg-[#003c52] text-white rounded-2xl p-5 mb-8 hover:bg-[#004f6e] transition group">
           <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
               <span class="material-symbols-outlined text-2xl">room_service</span>
@@ -91,6 +100,7 @@
       const reservation = App.reservations.getActive();
       const propertyId = reservation?.propertyId || 'newburge-ella';
       const propData = await App.data.loadProperty(propertyId);
+      const isPreArrival = App.reservations.getLevel() === 'pre-arrival';
 
       document.getElementById('loading-state').classList.add('hidden');
 
@@ -99,7 +109,12 @@
       document.getElementById('hero-tagline').textContent = propData.property.tagline || '';
       document.getElementById('content-state').classList.remove('hidden');
 
-      renderRestaurants(propData.dining.restaurants, propData.property.currencySymbol);
+      if (isPreArrival) {
+        document.getElementById('pre-arrival-banner').classList.remove('hidden');
+        document.getElementById('in-room-dining-link').classList.add('hidden');
+      }
+
+      renderRestaurants(propData.dining.restaurants, propData.property.currencySymbol, isPreArrival);
       renderBars(propData.dining.bars, propData.property.currencySymbol);
     }
 
@@ -112,7 +127,7 @@
       return badges.join('');
     }
 
-    function renderRestaurants(restaurants, currency) {
+    function renderRestaurants(restaurants, currency, isPreArrival) {
       const grid = document.getElementById('restaurants-grid');
       grid.innerHTML = restaurants.map(r => `
         <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
@@ -127,10 +142,16 @@
             <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-1">${r.name}</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-3 flex-1">${r.description}</p>
             <div class="flex flex-wrap gap-2 mb-4">${renderHoursBadges(r.hours)}</div>
-            <a href="restaurant-detail.html?id=${r.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-base">menu_book</span>
-              View Menu & Reserve
-            </a>
+            ${isPreArrival
+              ? `<a href="restaurant-detail.html?id=${r.id}" class="w-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-400 rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition text-center flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">menu_book</span>
+                  View Menu Only
+                </a>`
+              : `<a href="restaurant-detail.html?id=${r.id}" class="w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition text-center flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">menu_book</span>
+                  View Menu & Reserve
+                </a>`
+            }
           </div>
         </div>`).join('');
     }

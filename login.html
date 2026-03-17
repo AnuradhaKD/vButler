@@ -138,6 +138,12 @@
           </p>
         </div>
 
+        <!-- Auth Error Banner -->
+        <div id="auth-error" class="hidden items-center gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl px-4 py-3">
+          <span class="material-symbols-outlined text-red-500 text-xl shrink-0">gpp_bad</span>
+          <p class="text-sm text-red-700 dark:text-red-400 font-medium">Invalid email or password. Please try again.</p>
+        </div>
+
         <!-- Remember Me -->
         <div class="flex items-center gap-3">
           <input id="remember-me" name="remember-me" type="checkbox" class="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-[#003c52] focus:ring-[#003c52] bg-white dark:bg-slate-800 cursor-pointer">
@@ -211,10 +217,23 @@
       text.textContent = loading ? 'Signing in…' : 'Sign In';
     }
 
+    function showAuthError() {
+      const el = document.getElementById('auth-error');
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+    }
+
+    function hideAuthError() {
+      const el = document.getElementById('auth-error');
+      el.classList.add('hidden');
+      el.classList.remove('flex');
+    }
+
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       clearFieldError('email');
       clearFieldError('password');
+      hideAuthError();
 
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
@@ -237,8 +256,10 @@
 
         if (!guest) {
           setLoading(false);
-          showFieldError('password', 'Incorrect email or password.');
-          App.toast.show('Invalid credentials. Please try again.', 'error');
+          showAuthError();
+          document.getElementById('email').classList.add('border-red-400', 'dark:border-red-500');
+          document.getElementById('password').classList.add('border-red-400', 'dark:border-red-500');
+          document.getElementById('password').value = '';
           return;
         }
 
