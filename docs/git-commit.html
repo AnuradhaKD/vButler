@@ -143,10 +143,23 @@ const commits = [
   { n:48, short:'a2322ed', full:'a2322edd317fc73b3f971eb2ba86b49bcacefa92', date:'2026-03-17 12:52', msg:'docs: replace github-commit.md with git-commit.html, add res-level-menu docs, update push skill' },
   { n:49, short:'18a30a9', full:'18a30a97a7c8db2bd99e03f0583c5133a0292358', date:'2026-03-17 13:22', msg:'feat: hide/show menu items based on reservation status level' },
   { n:50, short:'6debe27', full:'6debe273b18af49785a66087c0c323d1cf7810cb', date:'2026-03-17 13:25', msg:'feat: clear all vb: localStorage keys on sign out for fresh start' },
+  { n:51, short:'1ef46cf', full:'1ef46cffdc11c5daf6afdd0564821a952057bf09', date:'2026-03-17 13:42', msg:'feat: block nav until reservation selected, always redirect to dashboard on set-active' },
 ];
 
 // ─── Push Log Data ───────────────────────────────────────────────────────────
 const pushLog = [
+  {
+    date: '2026-03-17 13:42 +0530',
+    commits: ['1ef46cf'],
+    summary: 'Block all nav clicks until reservation is selected; Set as Active always redirects to dashboard',
+    bullets: [
+      '<code>reservations.html</code> — <code>setActive()</code> always redirects to <code>dashboard.html</code> (both select mode and normal mode)',
+      '<code>js/app.js</code> — added <code>_isSelectMode()</code> helper; sidebar, mobile drawer, and bottom nav items dimmed (opacity-30, cursor-not-allowed) when on <code>?select=1</code>',
+      '<code>js/app.js</code> — clicking a blocked nav item shows warning toast: "Please select a reservation first"',
+      '<code>js/app.js</code> — fixed <code>getLevel()</code> to use active reservation status (not all reservations)',
+      '<code>js/app.js</code> — <code>_refreshNav()</code> re-renders nav after <code>reservations.save()</code> or <code>setActive()</code>',
+    ]
+  },
   {
     date: '2026-03-17 13:25 +0530',
     commits: ['6debe27'],
