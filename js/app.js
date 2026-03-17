@@ -572,6 +572,7 @@ const App = (() => {
         { id: 'dashboard',      label: 'Dashboard',      icon: 'home',           href: 'dashboard.html' },
         { id: 'reservations',   label: 'My Reservations',icon: 'hotel',          href: 'reservations.html' },
         { id: 'pre-arrival',    label: 'Pre-Arrival',    icon: 'flight_land',    href: 'pre-arrival.html' },
+        { id: 'change-stay',    label: 'Change Stay',    icon: 'edit_calendar',  href: 'change-stay.html' },
         { id: 'services',       label: 'Services',       icon: 'room_service',   href: 'services.html' },
         { id: 'dining',         label: 'Dining & Bars',  icon: 'restaurant',     href: 'dining.html' },
         { id: 'wellness',       label: 'Wellness & Spa', icon: 'spa',            href: 'wellness.html' },

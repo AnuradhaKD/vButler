@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Change Stay | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8">
+
+      <!-- Page header -->
+      <div class="mb-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Reservation</p>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Change Stay</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Request a modification to your current reservation.</p>
+      </div>
+
+      <!-- Active reservation banner -->
+      <div id="res-banner" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 mb-6 flex items-center gap-4">
+        <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400 text-2xl shrink-0" style="font-variation-settings:'FILL' 1">hotel</span>
+        <div class="min-w-0">
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide mb-0.5">Active Reservation</p>
+          <p class="font-bold text-slate-900 dark:text-white text-sm truncate" id="res-name"></p>
+          <p class="text-xs text-slate-500 dark:text-slate-400" id="res-dates"></p>
+        </div>
+        <a id="res-detail-link" href="#" class="ml-auto text-xs font-semibold text-[#003c52] dark:text-teal-400 hover:underline shrink-0">View Details →</a>
+      </div>
+
+      <!-- No reservation state -->
+      <div id="no-res" class="hidden bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-6 text-center mb-6">
+        <span class="material-symbols-outlined text-amber-500 text-4xl block mb-2">hotel_class</span>
+        <p class="font-semibold text-amber-800 dark:text-amber-300">No active reservation</p>
+        <p class="text-sm text-amber-700 dark:text-amber-400 mt-1 mb-4">Please select an active reservation first.</p>
+        <a href="reservations.html" class="inline-flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">
+          <span class="material-symbols-outlined text-base">hotel</span>My Reservations
+        </a>
+      </div>
+
+      <!-- Info banner -->
+      <div class="flex items-start gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl px-4 py-3 mb-6">
+        <span class="material-symbols-outlined text-amber-500 text-base shrink-0 mt-0.5">info</span>
+        <p class="text-xs text-amber-700 dark:text-amber-300 leading-relaxed">This request will be sent to our front office team. Your reservation will only be updated once confirmed by the hotel.</p>
+      </div>
+
+      <!-- Form -->
+      <div id="request-form">
+
+        <!-- Request type -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5 mb-4">
+          <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-4">What would you like to change? <span class="text-red-500">*</span></h2>
+          <div class="space-y-2">
+
+            <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer hover:border-amber-400 transition has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50 dark:has-[:checked]:bg-amber-900/20">
+              <input type="radio" name="request-type" value="extend" onchange="onTypeChange()" class="accent-amber-500 shrink-0">
+              <span class="material-symbols-outlined text-xl text-amber-500 shrink-0">event_available</span>
+              <div><span class="block text-sm font-semibold text-slate-800 dark:text-white">Extend Stay</span><span class="block text-xs text-slate-500 dark:text-slate-400">Stay longer than planned</span></div>
+            </label>
+
+            <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer hover:border-amber-400 transition has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50 dark:has-[:checked]:bg-amber-900/20">
+              <input type="radio" name="request-type" value="early-checkout" onchange="onTypeChange()" class="accent-amber-500 shrink-0">
+              <span class="material-symbols-outlined text-xl text-amber-500 shrink-0">logout</span>
+              <div><span class="block text-sm font-semibold text-slate-800 dark:text-white">Early Check-out</span><span class="block text-xs text-slate-500 dark:text-slate-400">Leave before your scheduled date</span></div>
+            </label>
+
+            <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer hover:border-amber-400 transition has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50 dark:has-[:checked]:bg-amber-900/20">
+              <input type="radio" name="request-type" value="early-checkin" onchange="onTypeChange()" class="accent-amber-500 shrink-0">
+              <span class="material-symbols-outlined text-xl text-amber-500 shrink-0">login</span>
+              <div><span class="block text-sm font-semibold text-slate-800 dark:text-white">Early Check-in</span><span class="block text-xs text-slate-500 dark:text-slate-400">Arrive earlier than booked</span></div>
+            </label>
+
+            <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer hover:border-amber-400 transition has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50 dark:has-[:checked]:bg-amber-900/20">
+              <input type="radio" name="request-type" value="room-upgrade" onchange="onTypeChange()" class="accent-amber-500 shrink-0">
+              <span class="material-symbols-outlined text-xl text-amber-500 shrink-0">upgrade</span>
+              <div><span class="block text-sm font-semibold text-slate-800 dark:text-white">Room Upgrade</span><span class="block text-xs text-slate-500 dark:text-slate-400">Request an upgrade to a higher room type</span></div>
+            </label>
+
+            <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer hover:border-amber-400 transition has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50 dark:has-[:checked]:bg-amber-900/20">
+              <input type="radio" name="request-type" value="room-change" onchange="onTypeChange()" class="accent-amber-500 shrink-0">
+              <span class="material-symbols-outlined text-xl text-amber-500 shrink-0">swap_horiz</span>
+              <div><span class="block text-sm font-semibold text-slate-800 dark:text-white">Room Change</span><span class="block text-xs text-slate-500 dark:text-slate-400">Move to a different room</span></div>
+            </label>
+
+            <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer hover:border-amber-400 transition has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50 dark:has-[:checked]:bg-amber-900/20">
+              <input type="radio" name="request-type" value="other" onchange="onTypeChange()" class="accent-amber-500 shrink-0">
+              <span class="material-symbols-outlined text-xl text-amber-500 shrink-0">edit_note</span>
+              <div><span class="block text-sm font-semibold text-slate-800 dark:text-white">Other Request</span><span class="block text-xs text-slate-500 dark:text-slate-400">Any other modification</span></div>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Date (conditional) -->
+        <div id="date-row" class="hidden bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5 mb-4">
+          <label id="date-label" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">New Check-out Date <span class="text-red-500">*</span></label>
+          <input id="change-date" type="date" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm">
+        </div>
+
+        <!-- Notes -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5 mb-6">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Additional Notes <span class="text-slate-400 font-normal">(optional)</span></label>
+          <textarea id="change-notes" rows="4" placeholder="Any specific preferences or details for the front office…" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm resize-none"></textarea>
+        </div>
+
+        <button onclick="submitRequest()" class="w-full bg-amber-500 hover:bg-amber-600 text-white rounded-xl py-3.5 font-semibold transition text-sm flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-base">send</span>Send Request to Front Office
+        </button>
+
+      </div>
+
+      <!-- Success state -->
+      <div id="success-state" class="hidden text-center py-10">
+        <div class="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-5">
+          <span class="material-symbols-outlined text-5xl text-green-600 dark:text-green-400" style="font-variation-settings:'FILL' 1">check_circle</span>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Request Sent!</h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mb-1">Your reference number is</p>
+        <p id="success-ref" class="text-2xl font-mono font-bold text-amber-500 dark:text-amber-400 mb-2"></p>
+        <p class="text-slate-400 dark:text-slate-500 text-xs mb-8">Our front office team will review your request and contact you shortly to confirm.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a id="wa-link" href="#" target="_blank" class="inline-flex items-center justify-center gap-2 border border-green-500 text-green-600 dark:text-green-400 rounded-xl px-6 py-3 font-semibold hover:bg-green-50 dark:hover:bg-green-900/20 transition text-sm">
+            <span class="material-symbols-outlined text-base">chat</span>Follow up via WhatsApp
+          </a>
+          <button onclick="resetForm()" class="inline-flex items-center justify-center gap-2 bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm">
+            <span class="material-symbols-outlined text-base">add</span>New Request
+          </button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'change-stay');
+    App.bottomNav.render();
+
+    const activeRes = App.reservations.getActive();
+
+    // Show/hide reservation banner
+    if (activeRes) {
+      const banner = document.getElementById('res-banner');
+      banner.classList.remove('hidden');
+      document.getElementById('res-name').textContent = `${activeRes.propertyName} — Room ${activeRes.roomNumber || 'TBC'}`;
+      document.getElementById('res-dates').textContent = `${App.helpers.formatDate(activeRes.checkIn)} → ${App.helpers.formatDate(activeRes.checkOut)}`;
+      document.getElementById('res-detail-link').href = `reservation-detail.html?id=${activeRes.id}`;
+    } else {
+      document.getElementById('no-res').classList.remove('hidden');
+      document.getElementById('request-form').classList.add('hidden');
+      document.querySelector('.flex.items-start.gap-2.bg-amber-50').classList.add('hidden');
+    }
+
+    const TYPE_LABELS = {
+      'extend': 'Extend Stay',
+      'early-checkout': 'Early Check-out',
+      'early-checkin': 'Early Check-in',
+      'room-upgrade': 'Room Upgrade',
+      'room-change': 'Room Change',
+      'other': 'Other Request'
+    };
+
+    function onTypeChange() {
+      const type = document.querySelector('input[name="request-type"]:checked')?.value;
+      const dateRow = document.getElementById('date-row');
+      const dateLabel = document.getElementById('date-label');
+      const needsDate = ['extend', 'early-checkout', 'early-checkin'].includes(type);
+      dateRow.classList.toggle('hidden', !needsDate);
+      if (type === 'extend')         dateLabel.textContent = 'New Check-out Date *';
+      if (type === 'early-checkout') dateLabel.textContent = 'Requested Check-out Date *';
+      if (type === 'early-checkin')  dateLabel.textContent = 'Requested Check-in Date *';
+    }
+
+    function submitRequest() {
+      const type = document.querySelector('input[name="request-type"]:checked')?.value;
+      if (!type) { App.toast.show('Please select a request type', 'warning'); return; }
+
+      const requestedDate = document.getElementById('change-date').value;
+      const notes = document.getElementById('change-notes').value.trim();
+      const needsDate = ['extend', 'early-checkout', 'early-checkin'].includes(type);
+      if (needsDate && !requestedDate) { App.toast.show('Please select the requested date', 'warning'); return; }
+
+      const ref = 'SRQ-' + Date.now().toString(36).toUpperCase();
+      const all = App.storage.get('vb:stayRequests') || [];
+      all.unshift({
+        id: ref, ref,
+        reservationId: activeRes?.id,
+        bookingReference: activeRes?.bookingReference,
+        type, typeLabel: TYPE_LABELS[type],
+        requestedDate: requestedDate || null,
+        notes, status: 'pending',
+        createdAt: new Date().toISOString()
+      });
+      App.storage.set('vb:stayRequests', all);
+
+      App.notifications.add({
+        type: 'info',
+        title: 'Stay Change Requested',
+        message: `Your request to ${TYPE_LABELS[type].toLowerCase()} has been sent to the front office. Ref: ${ref}`,
+        icon: 'edit_calendar'
+      });
+
+      document.getElementById('request-form').classList.add('hidden');
+      document.getElementById('success-state').classList.remove('hidden');
+      document.getElementById('success-ref').textContent = ref;
+
+      const waMsg = encodeURIComponent(
+        `Stay Change Request — Ref: ${ref}\nReservation: ${activeRes?.bookingReference}\nRequest: ${TYPE_LABELS[type]}${requestedDate ? '\nRequested Date: ' + requestedDate : ''}${notes ? '\nNotes: ' + notes : ''}`
+      );
+      document.getElementById('wa-link').href = `https://wa.me/94778187177?text=${waMsg}`;
+      App.toast.show('Request sent to front office!', 'success');
+    }
+
+    function resetForm() {
+      document.querySelectorAll('input[name="request-type"]').forEach(r => r.checked = false);
+      document.getElementById('change-date').value = '';
+      document.getElementById('change-notes').value = '';
+      document.getElementById('date-row').classList.add('hidden');
+      document.getElementById('request-form').classList.remove('hidden');
+      document.getElementById('success-state').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
