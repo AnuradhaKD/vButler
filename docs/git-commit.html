@@ -57,7 +57,7 @@
 
     <!-- Commit Table -->
     <section>
-      <h2 class="text-xl font-bold text-[#003c52] mb-4">Complete Commit History <span class="text-slate-400 font-normal text-sm">(oldest → newest)</span></h2>
+      <h2 class="text-xl font-bold text-[#003c52] mb-4">Complete Commit History <span class="text-slate-400 font-normal text-sm">(newest → oldest)</span></h2>
       <div class="overflow-x-auto rounded-xl shadow">
         <table class="w-full text-sm border-collapse" id="commit-table">
           <thead>
@@ -261,7 +261,7 @@ function tagLabel(msg) {
 
 // ─── Render commits ──────────────────────────────────────────────────────────
 const tbody = document.getElementById('commit-tbody');
-commits.forEach(c => {
+[...commits].reverse().forEach(c => {
   const tc = tagClass(c.msg);
   const tl = tagLabel(c.msg);
   const cleanMsg = c.msg.replace(/^\w+:\s*/, '');

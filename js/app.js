@@ -121,6 +121,15 @@ const App = (() => {
       }
       return true;
     },
+    // Returns the current reservation level for menu visibility logic
+    getLevel() {
+      const all = reservations.getAll();
+      if (!all.length) return 'none';
+      if (all.some(r => r.status === 'inhouse'))      return 'inhouse';
+      if (all.some(r => r.status === 'confirmed'))    return 'pre-arrival';
+      if (all.some(r => r.status === 'checked_out'))  return 'checked-out';
+      return 'cancelled';
+    },
     save(list) { storage.set('vb:reservations', list); },
     update(id, updates) {
       const all = reservations.getAll();
@@ -545,13 +554,46 @@ const App = (() => {
       const nav = document.createElement('nav');
       nav.id = 'bottom-nav';
       nav.className = 'md:hidden fixed bottom-0 inset-x-0 z-40 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 safe-area-pb';
-      const items = [
-        { id: 'dashboard',     label: 'Home',     icon: 'home',          href: 'dashboard.html' },
-        { id: 'services',      label: 'Services', icon: 'room_service',  href: 'services.html' },
-        { id: 'dining',        label: 'Dining',   icon: 'restaurant',    href: 'dining.html' },
-        { id: 'reservations',  label: 'My Stay',  icon: 'hotel',         href: 'reservations.html' },
-        { id: 'profile',       label: 'Profile',  icon: 'person',        href: 'profile.html' }
-      ];
+
+      const level = reservations.getLevel();
+      const byLevel = {
+        'none': [
+          { id: 'dashboard',    label: 'Home',     icon: 'home',          href: 'dashboard.html' },
+          { id: 'reservations', label: 'My Stay',  icon: 'hotel',         href: 'reservations.html' },
+          { id: 'loyalty',      label: 'Rewards',  icon: 'stars',         href: 'loyalty.html' },
+          { id: 'notifications',label: 'Alerts',   icon: 'notifications', href: 'notifications.html' },
+          { id: 'profile',      label: 'Profile',  icon: 'person',        href: 'profile.html' },
+        ],
+        'pre-arrival': [
+          { id: 'dashboard',    label: 'Home',     icon: 'home',          href: 'dashboard.html' },
+          { id: 'dining',       label: 'Dining',   icon: 'restaurant',    href: 'dining.html' },
+          { id: 'reservations', label: 'My Stay',  icon: 'hotel',         href: 'reservations.html' },
+          { id: 'experiences',  label: 'Explore',  icon: 'hiking',        href: 'experiences.html' },
+          { id: 'profile',      label: 'Profile',  icon: 'person',        href: 'profile.html' },
+        ],
+        'inhouse': [
+          { id: 'dashboard',    label: 'Home',     icon: 'home',          href: 'dashboard.html' },
+          { id: 'services',     label: 'Services', icon: 'room_service',  href: 'services.html' },
+          { id: 'dining',       label: 'Dining',   icon: 'restaurant',    href: 'dining.html' },
+          { id: 'reservations', label: 'My Stay',  icon: 'hotel',         href: 'reservations.html' },
+          { id: 'profile',      label: 'Profile',  icon: 'person',        href: 'profile.html' },
+        ],
+        'checked-out': [
+          { id: 'dashboard',    label: 'Home',     icon: 'home',          href: 'dashboard.html' },
+          { id: 'reservations', label: 'My Stay',  icon: 'hotel',         href: 'reservations.html' },
+          { id: 'billing',      label: 'Billing',  icon: 'receipt_long',  href: 'billing.html' },
+          { id: 'feedback',     label: 'Feedback', icon: 'star_rate',     href: 'feedback.html' },
+          { id: 'profile',      label: 'Profile',  icon: 'person',        href: 'profile.html' },
+        ],
+        'cancelled': [
+          { id: 'reservations', label: 'My Stay',  icon: 'hotel',         href: 'reservations.html' },
+          { id: 'loyalty',      label: 'Rewards',  icon: 'stars',         href: 'loyalty.html' },
+          { id: 'notifications',label: 'Alerts',   icon: 'notifications', href: 'notifications.html' },
+          { id: 'profile',      label: 'Profile',  icon: 'person',        href: 'profile.html' },
+        ],
+      };
+      const items = byLevel[level] || byLevel['none'];
+
       nav.innerHTML = `<div class="flex">${items.map(item => `
         <a href="${item.href}" class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 ${active === item.id ? 'text-[#003c52] dark:text-teal-400' : 'text-slate-500 dark:text-slate-400'} transition-colors">
           <span class="material-symbols-outlined text-2xl ${active === item.id ? 'fill-icon' : ''}">${item.icon}</span>
@@ -568,25 +610,28 @@ const App = (() => {
       const el = document.getElementById('app-sidebar');
       if (!el) return;
       const isCollapsed = storage.get('vb:sidebarCollapsed') || false;
-      const items = [
-        { id: 'dashboard',      label: 'Dashboard',      icon: 'home',           href: 'dashboard.html' },
-        { id: 'reservations',   label: 'My Reservations',icon: 'hotel',          href: 'reservations.html' },
-        { id: 'pre-arrival',    label: 'Pre-Arrival',    icon: 'flight_land',    href: 'pre-arrival.html' },
-        { id: 'change-stay',    label: 'Change Stay',    icon: 'edit_calendar',  href: 'change-stay.html' },
-        { id: 'services',       label: 'Services',       icon: 'room_service',   href: 'services.html' },
-        { id: 'dining',         label: 'Dining & Bars',  icon: 'restaurant',     href: 'dining.html' },
-        { id: 'wellness',       label: 'Wellness & Spa', icon: 'spa',            href: 'wellness.html' },
-        { id: 'housekeeping',   label: 'Housekeeping',   icon: 'cleaning_services', href: 'housekeeping.html' },
-        { id: 'transport',      label: 'Transport',      icon: 'directions_car', href: 'transport.html' },
-        { id: 'wake-up',        label: 'Wake-Up Call',   icon: 'alarm',          href: 'wake-up.html' },
-        { id: 'experiences',    label: 'Experiences',    icon: 'hiking',         href: 'experiences.html' },
-        { id: 'local-explore',  label: 'Local Explore',  icon: 'explore',        href: 'local-explore.html' },
-        { id: 'billing',        label: 'Billing',        icon: 'receipt_long',   href: 'billing.html' },
-        { id: 'loyalty',        label: 'Rewards',        icon: 'stars',          href: 'loyalty.html' },
-        { id: 'complaints',     label: 'Complaints',     icon: 'support_agent',  href: 'complaints.html' },
-        { id: 'feedback',       label: 'Feedback',       icon: 'star_rate',       href: 'feedback.html' },
-        { id: 'notifications',  label: 'Notifications',  icon: 'notifications',  href: 'notifications.html' }
+      const level = reservations.getLevel();
+      const ALL = ['none','pre-arrival','inhouse','checked-out','cancelled'];
+      const allItems = [
+        { id: 'dashboard',     label: 'Dashboard',       icon: 'home',              href: 'dashboard.html',    levels: ['none','pre-arrival','inhouse','checked-out'] },
+        { id: 'reservations',  label: 'My Reservations', icon: 'hotel',             href: 'reservations.html', levels: ALL },
+        { id: 'pre-arrival',   label: 'Pre-Arrival',     icon: 'flight_land',       href: 'pre-arrival.html',  levels: ['pre-arrival','inhouse'] },
+        { id: 'change-stay',   label: 'Change Stay',     icon: 'edit_calendar',     href: 'change-stay.html',  levels: ['pre-arrival','inhouse'] },
+        { id: 'services',      label: 'Services',        icon: 'room_service',      href: 'services.html',     levels: ['inhouse'] },
+        { id: 'dining',        label: 'Dining & Bars',   icon: 'restaurant',        href: 'dining.html',       levels: ['pre-arrival','inhouse'] },
+        { id: 'wellness',      label: 'Wellness & Spa',  icon: 'spa',               href: 'wellness.html',     levels: ['pre-arrival','inhouse'] },
+        { id: 'housekeeping',  label: 'Housekeeping',    icon: 'cleaning_services', href: 'housekeeping.html', levels: ['pre-arrival','inhouse'] },
+        { id: 'transport',     label: 'Transport',       icon: 'directions_car',    href: 'transport.html',    levels: ['pre-arrival','inhouse'] },
+        { id: 'wake-up',       label: 'Wake-Up Call',    icon: 'alarm',             href: 'wake-up.html',      levels: ['inhouse'] },
+        { id: 'experiences',   label: 'Experiences',     icon: 'hiking',            href: 'experiences.html',  levels: ['pre-arrival','inhouse'] },
+        { id: 'local-explore', label: 'Local Explore',   icon: 'explore',           href: 'local-explore.html',levels: ['pre-arrival','inhouse'] },
+        { id: 'billing',       label: 'Billing',         icon: 'receipt_long',      href: 'billing.html',      levels: ['inhouse','checked-out'] },
+        { id: 'loyalty',       label: 'Rewards',         icon: 'stars',             href: 'loyalty.html',      levels: ALL },
+        { id: 'complaints',    label: 'Complaints',      icon: 'support_agent',     href: 'complaints.html',   levels: ['inhouse','checked-out'] },
+        { id: 'feedback',      label: 'Feedback',        icon: 'star_rate',         href: 'feedback.html',     levels: ['inhouse','checked-out'] },
+        { id: 'notifications', label: 'Notifications',   icon: 'notifications',     href: 'notifications.html',levels: ALL },
       ];
+      const items = allItems.filter(item => item.levels.includes(level));
       el.innerHTML = `
         <aside id="desktop-sidebar" data-active="${active}" class="hidden md:flex flex-col h-full shrink-0 bg-[#003c52] border-r border-[#004f6e] ${isCollapsed ? 'vb-sidebar-collapsed' : ''}">
           <nav class="flex-1 overflow-y-auto p-2 space-y-0.5">
