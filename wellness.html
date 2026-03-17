@@ -27,10 +27,10 @@
   <div id="app-header"></div>
   <div class="flex min-h-[calc(100vh-4rem)]">
     <div id="app-sidebar"></div>
-    <main class="flex-1 pb-24 md:pb-8">
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8">
 
       <!-- Hero -->
-      <div class="relative h-48 md:h-64 overflow-hidden">
+      <div class="relative rounded-2xl overflow-hidden mb-8 h-48 md:h-64">
         <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1200" alt="Wellness & Spa" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-[#003c52]/80 to-[#003c52]/30 flex flex-col justify-end p-6 md:p-8">
           <p class="text-xs font-bold uppercase tracking-widest text-teal-300 mb-1">Browns Hotels & Resorts</p>
@@ -39,7 +39,6 @@
         </div>
       </div>
 
-      <div class="p-4 md:p-8">
         <!-- Tab filters -->
         <div id="tab-bar" class="flex gap-2 mb-8 overflow-x-auto pb-2">
           <button onclick="setTab('treatments')" data-tab="treatments" class="tab-btn flex items-center gap-1.5 shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold transition bg-[#003c52] text-white">
@@ -64,7 +63,6 @@
         <div id="section-treatments" class="hidden"></div>
         <div id="section-classes" class="hidden"></div>
         <div id="section-packages" class="hidden"></div>
-      </div>
 
     </main>
   </div>

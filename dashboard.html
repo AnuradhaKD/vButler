@@ -248,7 +248,7 @@
         if (!chain?.promotions?.length) { el.closest('section').classList.add('hidden'); return; }
 
         el.innerHTML = chain.promotions.map(p => `
-          <div class="relative flex-shrink-0 w-72 md:w-80 rounded-2xl overflow-hidden h-44 group cursor-pointer hover:shadow-lg transition-shadow">
+          <div class="relative flex-shrink-0 w-72 md:flex-1 md:min-w-0 rounded-2xl overflow-hidden h-44 group cursor-pointer hover:shadow-lg transition-shadow">
             <img src="${p.imageUrl}" alt="${p.title}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent"></div>
             <div class="absolute inset-0 p-5 flex flex-col justify-end">
