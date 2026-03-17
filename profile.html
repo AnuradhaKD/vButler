@@ -62,178 +62,515 @@
         </div>
       </div>
 
-      <!-- Edit Fields -->
-      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-5 space-y-4">
-        <h2 class="font-bold text-slate-900 dark:text-white mb-2">Personal Information</h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">First Name <span class="text-red-500">*</span></label>
-            <input id="f-firstName" type="text" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Last Name <span class="text-red-500">*</span></label>
-            <input id="f-lastName" type="text" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Email <span class="text-red-500">*</span></label>
-          <input id="f-email" type="email" disabled class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-500 text-sm cursor-not-allowed">
-          <p class="text-xs text-slate-400 mt-1">Email cannot be changed</p>
-        </div>
-
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Phone Number <span class="text-red-500">*</span></label>
-          <input id="f-phone" type="tel" placeholder="+94 77 000 0000" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
-        </div>
-
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date of Birth <span class="text-red-500">*</span></label>
-          <input id="f-dob" type="date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
-        </div>
-
-        <!-- Document Type + Scan -->
-        <div class="space-y-3">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Document Type <span class="text-red-500">*</span></label>
-            <select id="f-docType" onchange="handleDocTypeChange()" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
-              <option value="">Select document type...</option>
-              <option value="passport">Passport</option>
-              <option value="nic">National Identity Card (NIC)</option>
-              <option value="driving">Driving Licence</option>
-            </select>
-          </div>
-
-          <!-- Upload & Scan Section -->
-          <div id="doc-scan-section" class="hidden space-y-3">
-
-            <!-- Passport: single upload -->
-            <div id="upload-passport-area" class="hidden">
-              <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Photo Page</p>
-              <div onclick="document.getElementById('passport-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-5 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
-                <img id="passport-preview" src="" alt="" class="hidden w-full max-h-40 object-contain rounded-lg mb-2 mx-auto">
-                <div id="passport-placeholder">
-                  <span class="material-symbols-outlined text-3xl text-slate-300 dark:text-slate-600 block mb-1">upload_file</span>
-                  <p class="text-sm text-slate-500 dark:text-slate-400">Tap to upload passport photo page</p>
-                  <p class="text-xs text-slate-400 mt-0.5">Clear photo, no glare or shadows</p>
-                </div>
-                <input id="passport-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('passport-file','passport-preview','passport-placeholder')">
-              </div>
-            </div>
-
-            <!-- NIC: front + back -->
-            <div id="upload-nic-area" class="hidden">
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Front Side</p>
-                  <div onclick="document.getElementById('nic-front-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-4 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
-                    <img id="nic-front-preview" src="" alt="" class="hidden w-full max-h-28 object-contain rounded-lg mb-1 mx-auto">
-                    <div id="nic-front-placeholder">
-                      <span class="material-symbols-outlined text-2xl text-slate-300 dark:text-slate-600 block">id_card</span>
-                      <p class="text-xs text-slate-400 mt-1">Front</p>
-                    </div>
-                    <input id="nic-front-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('nic-front-file','nic-front-preview','nic-front-placeholder')">
-                  </div>
-                </div>
-                <div>
-                  <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Back Side</p>
-                  <div onclick="document.getElementById('nic-back-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-4 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
-                    <img id="nic-back-preview" src="" alt="" class="hidden w-full max-h-28 object-contain rounded-lg mb-1 mx-auto">
-                    <div id="nic-back-placeholder">
-                      <span class="material-symbols-outlined text-2xl text-slate-300 dark:text-slate-600 block">id_card</span>
-                      <p class="text-xs text-slate-400 mt-1">Back</p>
-                    </div>
-                    <input id="nic-back-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('nic-back-file','nic-back-preview','nic-back-placeholder')">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Driving Licence: single upload -->
-            <div id="upload-driving-area" class="hidden">
-              <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Licence (front side)</p>
-              <div onclick="document.getElementById('driving-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-5 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
-                <img id="driving-preview" src="" alt="" class="hidden w-full max-h-40 object-contain rounded-lg mb-2 mx-auto">
-                <div id="driving-placeholder">
-                  <span class="material-symbols-outlined text-3xl text-slate-300 dark:text-slate-600 block mb-1">drive_eta</span>
-                  <p class="text-sm text-slate-500 dark:text-slate-400">Tap to upload driving licence</p>
-                  <p class="text-xs text-slate-400 mt-0.5">Clear photo, no glare or shadows</p>
-                </div>
-                <input id="driving-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('driving-file','driving-preview','driving-placeholder')">
-              </div>
-            </div>
-
-            <!-- Scan button -->
-            <button id="scan-btn" onclick="startScan()" class="hidden w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-base">document_scanner</span>
-              Scan & Extract Details
-            </button>
-
-            <!-- Processing state -->
-            <div id="scan-processing" class="hidden bg-slate-50 dark:bg-slate-800 rounded-xl p-5 text-center">
-              <span class="material-symbols-outlined text-3xl text-[#003c52] dark:text-teal-400 animate-spin block mb-2">refresh</span>
-              <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Reading document...</p>
-              <p id="scan-progress" class="text-xs text-slate-400 mt-1">Initializing OCR engine...</p>
-            </div>
-          </div>
-
-          <!-- Document Number (shown after type is selected) -->
-          <div id="doc-number-field" class="hidden">
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Document Number <span class="text-red-500">*</span></label>
-            <input id="f-passport" type="text" placeholder="Auto-filled from scan, or enter manually" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
-          </div>
-
-          <!-- Scan Result Confirmation -->
-          <div id="scan-result" class="hidden bg-[#003c52]/5 dark:bg-teal-900/20 border border-[#003c52]/20 dark:border-teal-700 rounded-xl p-4 space-y-3">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">fact_check</span>
-              <span class="text-sm font-bold text-slate-800 dark:text-white">Confirm Extracted Details</span>
-            </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Review and correct if needed, then tap Apply to update your profile.</p>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">First Name</label>
-                <input id="scan-firstName" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Last Name</label>
-                <input id="scan-lastName" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
-              </div>
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Document Number</label>
-              <input id="scan-docNumber" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Address</label>
-              <input id="scan-address" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
-            </div>
-            <div class="flex gap-3 pt-1">
-              <button onclick="discardScan()" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">Discard</button>
-              <button onclick="applyScanResult()" class="flex-1 bg-[#003c52] text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">Apply to Profile</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Country <span class="text-red-500">*</span></label>
-            <input id="f-country" type="text" placeholder="e.g. Sri Lanka" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Nationality <span class="text-red-500">*</span></label>
-            <input id="f-nationality" type="text" placeholder="e.g. Sri Lankan" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
-          </div>
-        </div>
-
-        <button onclick="saveProfile()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm mt-2">
-          Save Changes
+      <!-- Tab Bar -->
+      <div class="flex gap-1 mb-5 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-1.5 overflow-x-auto">
+        <button id="tab-btn-profile" onclick="switchTab('profile')" class="tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all flex-1 justify-center bg-[#003c52] text-white shadow-sm">
+          <span class="material-symbols-outlined text-base">person</span>
+          <span>Profile</span>
+        </button>
+        <button id="tab-btn-preferences" onclick="switchTab('preferences')" class="tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all flex-1 justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span class="material-symbols-outlined text-base">tune</span>
+          <span>Preferences</span>
+        </button>
+        <button id="tab-btn-dietary" onclick="switchTab('dietary')" class="tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all flex-1 justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span class="material-symbols-outlined text-base">restaurant</span>
+          <span>Dietary</span>
+        </button>
+        <button id="tab-btn-health" onclick="switchTab('health')" class="tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all flex-1 justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span class="material-symbols-outlined text-base">favorite</span>
+          <span>Health</span>
         </button>
       </div>
 
+      <!-- ── Tab: Profile ─────────────────────────────────────────────────── -->
+      <div id="tab-panel-profile">
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-5 space-y-4">
+          <h2 class="font-bold text-slate-900 dark:text-white mb-2">Personal Information</h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">First Name <span class="text-red-500">*</span></label>
+              <input id="f-firstName" type="text" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Last Name <span class="text-red-500">*</span></label>
+              <input id="f-lastName" type="text" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Email <span class="text-red-500">*</span></label>
+            <input id="f-email" type="email" disabled class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-500 text-sm cursor-not-allowed">
+            <p class="text-xs text-slate-400 mt-1">Email cannot be changed</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Phone Number <span class="text-red-500">*</span></label>
+            <input id="f-phone" type="tel" placeholder="+94 77 000 0000" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Date of Birth <span class="text-red-500">*</span></label>
+            <input id="f-dob" type="date" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+
+          <!-- Document Type + Scan -->
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Document Type <span class="text-red-500">*</span></label>
+              <select id="f-docType" onchange="handleDocTypeChange()" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+                <option value="">Select document type...</option>
+                <option value="passport">Passport</option>
+                <option value="nic">National Identity Card (NIC)</option>
+                <option value="driving">Driving Licence</option>
+              </select>
+            </div>
+
+            <!-- Upload & Scan Section -->
+            <div id="doc-scan-section" class="hidden space-y-3">
+
+              <!-- Passport: single upload -->
+              <div id="upload-passport-area" class="hidden">
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Photo Page</p>
+                <div onclick="document.getElementById('passport-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-5 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
+                  <img id="passport-preview" src="" alt="" class="hidden w-full max-h-40 object-contain rounded-lg mb-2 mx-auto">
+                  <div id="passport-placeholder">
+                    <span class="material-symbols-outlined text-3xl text-slate-300 dark:text-slate-600 block mb-1">upload_file</span>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Tap to upload passport photo page</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Clear photo, no glare or shadows</p>
+                  </div>
+                  <input id="passport-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('passport-file','passport-preview','passport-placeholder')">
+                </div>
+              </div>
+
+              <!-- NIC: front + back -->
+              <div id="upload-nic-area" class="hidden">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Front Side</p>
+                    <div onclick="document.getElementById('nic-front-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-4 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
+                      <img id="nic-front-preview" src="" alt="" class="hidden w-full max-h-28 object-contain rounded-lg mb-1 mx-auto">
+                      <div id="nic-front-placeholder">
+                        <span class="material-symbols-outlined text-2xl text-slate-300 dark:text-slate-600 block">id_card</span>
+                        <p class="text-xs text-slate-400 mt-1">Front</p>
+                      </div>
+                      <input id="nic-front-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('nic-front-file','nic-front-preview','nic-front-placeholder')">
+                    </div>
+                  </div>
+                  <div>
+                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Back Side</p>
+                    <div onclick="document.getElementById('nic-back-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-4 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
+                      <img id="nic-back-preview" src="" alt="" class="hidden w-full max-h-28 object-contain rounded-lg mb-1 mx-auto">
+                      <div id="nic-back-placeholder">
+                        <span class="material-symbols-outlined text-2xl text-slate-300 dark:text-slate-600 block">id_card</span>
+                        <p class="text-xs text-slate-400 mt-1">Back</p>
+                      </div>
+                      <input id="nic-back-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('nic-back-file','nic-back-preview','nic-back-placeholder')">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Driving Licence: single upload -->
+              <div id="upload-driving-area" class="hidden">
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Licence (front side)</p>
+                <div onclick="document.getElementById('driving-file').click()" class="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-5 text-center cursor-pointer hover:border-[#003c52] dark:hover:border-teal-500 transition-colors">
+                  <img id="driving-preview" src="" alt="" class="hidden w-full max-h-40 object-contain rounded-lg mb-2 mx-auto">
+                  <div id="driving-placeholder">
+                    <span class="material-symbols-outlined text-3xl text-slate-300 dark:text-slate-600 block mb-1">drive_eta</span>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Tap to upload driving licence</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Clear photo, no glare or shadows</p>
+                  </div>
+                  <input id="driving-file" type="file" accept="image/*" class="hidden" onchange="handleFileSelect('driving-file','driving-preview','driving-placeholder')">
+                </div>
+              </div>
+
+              <!-- Scan button -->
+              <button id="scan-btn" onclick="startScan()" class="hidden w-full bg-[#003c52] text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-base">document_scanner</span>
+                Scan & Extract Details
+              </button>
+
+              <!-- Processing state -->
+              <div id="scan-processing" class="hidden bg-slate-50 dark:bg-slate-800 rounded-xl p-5 text-center">
+                <span class="material-symbols-outlined text-3xl text-[#003c52] dark:text-teal-400 animate-spin block mb-2">refresh</span>
+                <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Reading document...</p>
+                <p id="scan-progress" class="text-xs text-slate-400 mt-1">Initializing OCR engine...</p>
+              </div>
+            </div>
+
+            <!-- Document Number (shown after type is selected) -->
+            <div id="doc-number-field" class="hidden">
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Document Number <span class="text-red-500">*</span></label>
+              <input id="f-passport" type="text" placeholder="Auto-filled from scan, or enter manually" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+            </div>
+
+            <!-- Scan Result Confirmation -->
+            <div id="scan-result" class="hidden bg-[#003c52]/5 dark:bg-teal-900/20 border border-[#003c52]/20 dark:border-teal-700 rounded-xl p-4 space-y-3">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="material-symbols-outlined text-[#003c52] dark:text-teal-400">fact_check</span>
+                <span class="text-sm font-bold text-slate-800 dark:text-white">Confirm Extracted Details</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Review and correct if needed, then tap Apply to update your profile.</p>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">First Name</label>
+                  <input id="scan-firstName" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Last Name</label>
+                  <input id="scan-lastName" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Document Number</label>
+                <input id="scan-docNumber" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Address</label>
+                <input id="scan-address" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#003c52]">
+              </div>
+              <div class="flex gap-3 pt-1">
+                <button onclick="discardScan()" class="flex-1 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">Discard</button>
+                <button onclick="applyScanResult()" class="flex-1 bg-[#003c52] text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-[#004f6e] transition">Apply to Profile</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Country <span class="text-red-500">*</span></label>
+              <input id="f-country" type="text" placeholder="e.g. Sri Lanka" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Nationality <span class="text-red-500">*</span></label>
+              <input id="f-nationality" type="text" placeholder="e.g. Sri Lankan" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+            </div>
+          </div>
+
+          <button onclick="saveProfile()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm mt-2">
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Tab: Preferences ─────────────────────────────────────────────── -->
+      <div id="tab-panel-preferences" class="hidden space-y-4">
+
+        <!-- Room Preferences -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-5">
+          <h2 class="font-bold text-slate-900 dark:text-white">Room Preferences</h2>
+
+          <!-- Bed Type -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Bed Type</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="pref-bed-group">
+              <button type="button" data-val="single" onclick="selectOption('pref-bed-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Single</button>
+              <button type="button" data-val="double" onclick="selectOption('pref-bed-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Double</button>
+              <button type="button" data-val="twin" onclick="selectOption('pref-bed-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Twin</button>
+              <button type="button" data-val="king" onclick="selectOption('pref-bed-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">King</button>
+            </div>
+          </div>
+
+          <!-- Pillow Preference -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Pillow Firmness</label>
+            <div class="grid grid-cols-3 gap-2" id="pref-pillow-group">
+              <button type="button" data-val="soft" onclick="selectOption('pref-pillow-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Soft</button>
+              <button type="button" data-val="medium" onclick="selectOption('pref-pillow-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Medium</button>
+              <button type="button" data-val="firm" onclick="selectOption('pref-pillow-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Firm</button>
+            </div>
+          </div>
+
+          <!-- Floor Preference -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Floor Preference</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="pref-floor-group">
+              <button type="button" data-val="low" onclick="selectOption('pref-floor-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Low Floor</button>
+              <button type="button" data-val="mid" onclick="selectOption('pref-floor-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Mid Floor</button>
+              <button type="button" data-val="high" onclick="selectOption('pref-floor-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">High Floor</button>
+              <button type="button" data-val="none" onclick="selectOption('pref-floor-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">No Preference</button>
+            </div>
+          </div>
+
+          <!-- Room Temperature -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Room Temperature</label>
+            <div class="grid grid-cols-3 gap-2" id="pref-temp-group">
+              <button type="button" data-val="cool" onclick="selectOption('pref-temp-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Cool</button>
+              <button type="button" data-val="moderate" onclick="selectOption('pref-temp-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Moderate</button>
+              <button type="button" data-val="warm" onclick="selectOption('pref-temp-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Warm</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stay Preferences -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-5">
+          <h2 class="font-bold text-slate-900 dark:text-white">Stay Preferences</h2>
+
+          <!-- Newspaper -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Morning Newspaper</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="pref-newspaper-group">
+              <button type="button" data-val="none" onclick="selectOption('pref-newspaper-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">None</button>
+              <button type="button" data-val="english" onclick="selectOption('pref-newspaper-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">English</button>
+              <button type="button" data-val="sinhala" onclick="selectOption('pref-newspaper-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Sinhala</button>
+              <button type="button" data-val="tamil" onclick="selectOption('pref-newspaper-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Tamil</button>
+            </div>
+          </div>
+
+          <!-- Wake-up Style -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Wake-up Style</label>
+            <div class="grid grid-cols-3 gap-2" id="pref-wakeup-group">
+              <button type="button" data-val="early" onclick="selectOption('pref-wakeup-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Early Bird</button>
+              <button type="button" data-val="normal" onclick="selectOption('pref-wakeup-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Normal</button>
+              <button type="button" data-val="late" onclick="selectOption('pref-wakeup-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Late Riser</button>
+            </div>
+          </div>
+
+          <!-- Amenity Toggles -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Extra Amenities</label>
+            <div class="space-y-3">
+              <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Extra towels in room</span>
+                <div class="relative">
+                  <input id="pref-extra-towels" type="checkbox" class="sr-only peer">
+                  <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-checked:bg-[#003c52] rounded-full transition-colors"></div>
+                  <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+                </div>
+              </label>
+              <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Extra pillows in room</span>
+                <div class="relative">
+                  <input id="pref-extra-pillows" type="checkbox" class="sr-only peer">
+                  <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-checked:bg-[#003c52] rounded-full transition-colors"></div>
+                  <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+                </div>
+              </label>
+              <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Baby cot required</span>
+                <div class="relative">
+                  <input id="pref-baby-cot" type="checkbox" class="sr-only peer">
+                  <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-checked:bg-[#003c52] rounded-full transition-colors"></div>
+                  <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+                </div>
+              </label>
+              <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-sm text-slate-700 dark:text-slate-300">Do not disturb preference</span>
+                <div class="relative">
+                  <input id="pref-dnd" type="checkbox" class="sr-only peer">
+                  <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-checked:bg-[#003c52] rounded-full transition-colors"></div>
+                  <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Special Requests -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Other Preferences / Special Requests</label>
+            <textarea id="pref-notes" rows="3" placeholder="e.g. High floor with ocean view, quiet room away from elevator..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm resize-none"></textarea>
+          </div>
+
+          <button onclick="savePreferences()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm">
+            Save Preferences
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Tab: Dietary & Allergies ────────────────────────────────────── -->
+      <div id="tab-panel-dietary" class="hidden space-y-4">
+
+        <!-- Diet Type -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-5">
+          <h2 class="font-bold text-slate-900 dark:text-white">Dietary Preferences</h2>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Diet Type</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="diet-type-group">
+              <button type="button" data-val="none" onclick="selectOption('diet-type-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">No Restriction</button>
+              <button type="button" data-val="vegetarian" onclick="selectOption('diet-type-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Vegetarian</button>
+              <button type="button" data-val="vegan" onclick="selectOption('diet-type-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Vegan</button>
+              <button type="button" data-val="halal" onclick="selectOption('diet-type-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Halal</button>
+              <button type="button" data-val="kosher" onclick="selectOption('diet-type-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Kosher</button>
+              <button type="button" data-val="glutenfree" onclick="selectOption('diet-type-group', this)" class="option-btn px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-[#003c52] dark:hover:border-teal-500 transition text-center">Gluten-Free</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Food Allergies -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-4">
+          <div>
+            <h2 class="font-bold text-slate-900 dark:text-white">Food Allergies</h2>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Select all that apply. Our kitchen will be notified for every meal.</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-peanuts" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Peanuts</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-treenuts" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Tree Nuts</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-shellfish" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Shellfish</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-fish" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Fish</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-dairy" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Milk / Dairy</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-eggs" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Eggs</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-wheat" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Wheat / Gluten</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-soy" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Soy</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-sesame" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Sesame</span>
+            </label>
+            <label class="allergy-check flex items-center gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-[#003c52] dark:hover:border-teal-600 transition has-[:checked]:border-[#003c52] has-[:checked]:bg-[#003c52]/5 dark:has-[:checked]:border-teal-500 dark:has-[:checked]:bg-teal-900/20">
+              <input type="checkbox" id="allergy-sulfites" class="w-4 h-4 accent-[#003c52] rounded">
+              <span class="text-sm text-slate-700 dark:text-slate-300">Sulfites</span>
+            </label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Other Allergies</label>
+            <input id="allergy-other" type="text" placeholder="e.g. Mustard, Celery..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Notes for Kitchen</label>
+            <textarea id="allergy-notes" rows="3" placeholder="Any additional dietary notes for our kitchen team..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm resize-none"></textarea>
+          </div>
+
+          <button onclick="saveDietary()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm">
+            Save Dietary Info
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Tab: Health & Accessibility ────────────────────────────────── -->
+      <div id="tab-panel-health" class="hidden space-y-4">
+
+        <!-- Medical Allergies -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-4">
+          <div>
+            <h2 class="font-bold text-slate-900 dark:text-white">Medical Information</h2>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">This information is kept strictly confidential and shared only with relevant staff if needed.</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Medical Allergies</label>
+            <input id="health-med-allergies" type="text" placeholder="e.g. Penicillin, Latex, Aspirin..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Medical Notes <span class="text-slate-400 font-normal">(optional)</span></label>
+            <textarea id="health-med-notes" rows="3" placeholder="e.g. Diabetic, requires refrigerator for insulin..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm resize-none"></textarea>
+          </div>
+        </div>
+
+        <!-- Accessibility Needs -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-4">
+          <h2 class="font-bold text-slate-900 dark:text-white">Accessibility Needs</h2>
+
+          <div class="space-y-3">
+            <label class="flex items-center justify-between cursor-pointer">
+              <div>
+                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Wheelchair accessible room</span>
+                <p class="text-xs text-slate-400">Ground floor or lift access required</p>
+              </div>
+              <div class="relative ml-4">
+                <input id="health-wheelchair" type="checkbox" class="sr-only peer">
+                <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-checked:bg-[#003c52] rounded-full transition-colors"></div>
+                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+            <label class="flex items-center justify-between cursor-pointer">
+              <div>
+                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Mobility assistance</span>
+                <p class="text-xs text-slate-400">Staff assistance for movement within property</p>
+              </div>
+              <div class="relative ml-4">
+                <input id="health-mobility" type="checkbox" class="sr-only peer">
+                <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-checked:bg-[#003c52] rounded-full transition-colors"></div>
+                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+            <label class="flex items-center justify-between cursor-pointer">
+              <div>
+                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Visual impairment</span>
+                <p class="text-xs text-slate-400">Braille menus and orientation assistance</p>
+              </div>
+              <div class="relative ml-4">
+                <input id="health-visual" type="checkbox" class="sr-only peer">
+                <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-checked:bg-[#003c52] rounded-full transition-colors"></div>
+                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+            <label class="flex items-center justify-between cursor-pointer">
+              <div>
+                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Hearing impairment</span>
+                <p class="text-xs text-slate-400">Visual alerts and written communication preferred</p>
+              </div>
+              <div class="relative ml-4">
+                <input id="health-hearing" type="checkbox" class="sr-only peer">
+                <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-checked:bg-[#003c52] rounded-full transition-colors"></div>
+                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Other Accessibility Notes</label>
+            <textarea id="health-access-notes" rows="2" placeholder="Any other accessibility requirements..." class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm resize-none"></textarea>
+          </div>
+        </div>
+
+        <!-- Emergency Contact -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-4">
+          <h2 class="font-bold text-slate-900 dark:text-white">Emergency Contact</h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Contact Name</label>
+              <input id="health-ec-name" type="text" placeholder="Full name" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Relationship</label>
+              <input id="health-ec-relation" type="text" placeholder="e.g. Spouse, Parent" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Contact Phone</label>
+            <input id="health-ec-phone" type="tel" placeholder="+94 77 000 0000" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm">
+          </div>
+
+          <button onclick="saveHealth()" class="w-full bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm">
+            Save Health & Accessibility
+          </button>
+        </div>
+      </div>
+
       <!-- Quick Links -->
-      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-5 overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-5 overflow-hidden mt-5">
         <div class="p-4 border-b border-slate-100 dark:border-slate-800">
           <h2 class="font-bold text-slate-900 dark:text-white text-sm">Quick Links</h2>
         </div>
@@ -307,6 +644,45 @@
 
     let profile = App.auth.getGuest() || {};
 
+    // ── Tab switching ──────────────────────────────────────────────────────────
+    const TABS = ['profile', 'preferences', 'dietary', 'health'];
+
+    function switchTab(name) {
+      TABS.forEach(t => {
+        document.getElementById('tab-panel-' + t).classList.toggle('hidden', t !== name);
+        const btn = document.getElementById('tab-btn-' + t);
+        if (t === name) {
+          btn.classList.add('bg-[#003c52]', 'text-white', 'shadow-sm');
+          btn.classList.remove('text-slate-500', 'dark:text-slate-400', 'hover:bg-slate-50', 'dark:hover:bg-slate-800');
+        } else {
+          btn.classList.remove('bg-[#003c52]', 'text-white', 'shadow-sm');
+          btn.classList.add('text-slate-500', 'dark:text-slate-400', 'hover:bg-slate-50', 'dark:hover:bg-slate-800');
+        }
+      });
+    }
+
+    // ── Option button selector (pill groups) ───────────────────────────────────
+    function selectOption(groupId, clicked) {
+      document.querySelectorAll('#' + groupId + ' .option-btn').forEach(btn => {
+        btn.classList.remove('bg-[#003c52]', 'text-white', 'border-[#003c52]', 'dark:bg-teal-700', 'dark:border-teal-500', 'dark:text-white');
+        btn.classList.add('border-slate-200', 'dark:border-slate-600', 'text-slate-600', 'dark:text-slate-300');
+      });
+      clicked.classList.add('bg-[#003c52]', 'text-white', 'border-[#003c52]');
+      clicked.classList.remove('border-slate-200', 'dark:border-slate-600', 'text-slate-600', 'dark:text-slate-300');
+    }
+
+    function getSelectedOption(groupId) {
+      const btn = document.querySelector('#' + groupId + ' .option-btn.bg-\\[\\#003c52\\]');
+      return btn ? btn.dataset.val : '';
+    }
+
+    function setSelectedOption(groupId, val) {
+      if (!val) return;
+      const btn = document.querySelector(`#${groupId} .option-btn[data-val="${val}"]`);
+      if (btn) selectOption(groupId, btn);
+    }
+
+    // ── Avatar ─────────────────────────────────────────────────────────────────
     function renderAvatar() {
       const initials = profile.firstName && profile.lastName
         ? (profile.firstName[0] + profile.lastName[0]).toUpperCase()
@@ -322,6 +698,7 @@
       }
     }
 
+    // ── Load profile tab ───────────────────────────────────────────────────────
     function loadProfile() {
       profile = App.auth.getGuest() || {};
       document.getElementById('profile-name').textContent = profile.fullName || `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Guest';
@@ -334,7 +711,6 @@
       App.datepicker.date('#f-dob');
       document.getElementById('f-country').value = profile.country || '';
       document.getElementById('f-nationality').value = profile.nationality || '';
-      // Document type + number
       const savedDocType = profile.docType || '';
       document.getElementById('f-docType').value = savedDocType;
       if (savedDocType) {
@@ -343,7 +719,7 @@
       }
       renderAvatar();
 
-      // ─── Compact Loyalty Card ─────────────────────────────────────────────
+      // Compact Loyalty Card
       const PROFILE_TIERS = {
         Silver:   { color: 'from-slate-600 to-slate-400',   badge: 'bg-slate-400',  icon: 'workspace_premium' },
         Gold:     { color: 'from-amber-700 to-amber-500',   badge: 'bg-amber-400',  icon: 'stars' },
@@ -384,14 +760,57 @@
       }
     }
 
+    // ── Load preferences tab ───────────────────────────────────────────────────
+    function loadPreferences() {
+      const p = profile.preferences || {};
+      setSelectedOption('pref-bed-group', p.bedType);
+      setSelectedOption('pref-pillow-group', p.pillow);
+      setSelectedOption('pref-floor-group', p.floor);
+      setSelectedOption('pref-temp-group', p.temperature);
+      setSelectedOption('pref-newspaper-group', p.newspaper);
+      setSelectedOption('pref-wakeup-group', p.wakeup);
+      document.getElementById('pref-extra-towels').checked = !!p.extraTowels;
+      document.getElementById('pref-extra-pillows').checked = !!p.extraPillows;
+      document.getElementById('pref-baby-cot').checked = !!p.babyCot;
+      document.getElementById('pref-dnd').checked = !!p.dnd;
+      document.getElementById('pref-notes').value = p.notes || '';
+    }
+
+    // ── Load dietary tab ───────────────────────────────────────────────────────
+    function loadDietary() {
+      const d = profile.dietary || {};
+      setSelectedOption('diet-type-group', d.dietType);
+      const allergies = d.allergies || [];
+      ['peanuts','treenuts','shellfish','fish','dairy','eggs','wheat','soy','sesame','sulfites'].forEach(a => {
+        document.getElementById('allergy-' + a).checked = allergies.includes(a);
+      });
+      document.getElementById('allergy-other').value = d.otherAllergies || '';
+      document.getElementById('allergy-notes').value = d.kitchenNotes || '';
+    }
+
+    // ── Load health tab ────────────────────────────────────────────────────────
+    function loadHealth() {
+      const h = profile.health || {};
+      document.getElementById('health-med-allergies').value = h.medAllergies || '';
+      document.getElementById('health-med-notes').value = h.medNotes || '';
+      document.getElementById('health-wheelchair').checked = !!h.wheelchair;
+      document.getElementById('health-mobility').checked = !!h.mobility;
+      document.getElementById('health-visual').checked = !!h.visual;
+      document.getElementById('health-hearing').checked = !!h.hearing;
+      document.getElementById('health-access-notes').value = h.accessNotes || '';
+      document.getElementById('health-ec-name').value = h.ecName || '';
+      document.getElementById('health-ec-relation').value = h.ecRelation || '';
+      document.getElementById('health-ec-phone').value = h.ecPhone || '';
+    }
+
+    // ── Photo ──────────────────────────────────────────────────────────────────
     function handlePhotoChange(input) {
       const file = input.files[0];
       if (!file) return;
       if (file.size > 2 * 1024 * 1024) { App.toast.show('Image must be under 2MB', 'warning'); return; }
       const reader = new FileReader();
       reader.onload = (e) => {
-        const base64 = e.target.result;
-        profile = { ...profile, photoBase64: base64 };
+        profile = { ...profile, photoBase64: e.target.result };
         App.storage.set('vb:profile', profile);
         renderAvatar();
         App.toast.show('Profile photo updated', 'success');
@@ -399,6 +818,7 @@
       reader.readAsDataURL(file);
     }
 
+    // ── Save profile ───────────────────────────────────────────────────────────
     function saveProfile() {
       const firstName  = document.getElementById('f-firstName').value.trim();
       const lastName   = document.getElementById('f-lastName').value.trim();
@@ -418,38 +838,73 @@
       if (!country)     { App.toast.show('Country is required', 'warning'); document.getElementById('f-country').focus(); return; }
       if (!nationality) { App.toast.show('Nationality is required', 'warning'); document.getElementById('f-nationality').focus(); return; }
 
-      profile = {
-        ...profile,
-        firstName,
-        lastName,
-        fullName: `${firstName} ${lastName}`,
-        phone,
-        dob,
-        docType,
-        passport,
-        country,
-        nationality
-      };
+      profile = { ...profile, firstName, lastName, fullName: `${firstName} ${lastName}`, phone, dob, docType, passport, country, nationality };
       App.storage.set('vb:profile', profile);
       document.getElementById('profile-name').textContent = profile.fullName;
       renderAvatar();
       App.toast.show('Profile updated successfully', 'success');
     }
 
-    function confirmSignOut() {
-      document.getElementById('signout-modal').classList.remove('hidden');
+    // ── Save preferences ───────────────────────────────────────────────────────
+    function savePreferences() {
+      profile.preferences = {
+        bedType:      getSelectedOption('pref-bed-group'),
+        pillow:       getSelectedOption('pref-pillow-group'),
+        floor:        getSelectedOption('pref-floor-group'),
+        temperature:  getSelectedOption('pref-temp-group'),
+        newspaper:    getSelectedOption('pref-newspaper-group'),
+        wakeup:       getSelectedOption('pref-wakeup-group'),
+        extraTowels:  document.getElementById('pref-extra-towels').checked,
+        extraPillows: document.getElementById('pref-extra-pillows').checked,
+        babyCot:      document.getElementById('pref-baby-cot').checked,
+        dnd:          document.getElementById('pref-dnd').checked,
+        notes:        document.getElementById('pref-notes').value.trim()
+      };
+      App.storage.set('vb:profile', profile);
+      App.toast.show('Preferences saved', 'success');
     }
 
-    function showDeleteModal() {
-      document.getElementById('delete-modal').classList.remove('hidden');
+    // ── Save dietary ───────────────────────────────────────────────────────────
+    function saveDietary() {
+      const allergies = ['peanuts','treenuts','shellfish','fish','dairy','eggs','wheat','soy','sesame','sulfites']
+        .filter(a => document.getElementById('allergy-' + a).checked);
+      profile.dietary = {
+        dietType:       getSelectedOption('diet-type-group'),
+        allergies,
+        otherAllergies: document.getElementById('allergy-other').value.trim(),
+        kitchenNotes:   document.getElementById('allergy-notes').value.trim()
+      };
+      App.storage.set('vb:profile', profile);
+      App.toast.show('Dietary info saved', 'success');
     }
 
+    // ── Save health ────────────────────────────────────────────────────────────
+    function saveHealth() {
+      profile.health = {
+        medAllergies: document.getElementById('health-med-allergies').value.trim(),
+        medNotes:     document.getElementById('health-med-notes').value.trim(),
+        wheelchair:   document.getElementById('health-wheelchair').checked,
+        mobility:     document.getElementById('health-mobility').checked,
+        visual:       document.getElementById('health-visual').checked,
+        hearing:      document.getElementById('health-hearing').checked,
+        accessNotes:  document.getElementById('health-access-notes').value.trim(),
+        ecName:       document.getElementById('health-ec-name').value.trim(),
+        ecRelation:   document.getElementById('health-ec-relation').value.trim(),
+        ecPhone:      document.getElementById('health-ec-phone').value.trim()
+      };
+      App.storage.set('vb:profile', profile);
+      App.toast.show('Health & accessibility info saved', 'success');
+    }
+
+    // ── Modals ─────────────────────────────────────────────────────────────────
+    function confirmSignOut() { document.getElementById('signout-modal').classList.remove('hidden'); }
+    function showDeleteModal() { document.getElementById('delete-modal').classList.remove('hidden'); }
     function requestDeletion() {
       document.getElementById('delete-modal').classList.add('hidden');
       App.toast.show('Account deletion request submitted', 'info');
     }
 
-    // ─── Document Scanning ────────────────────────────────────────────────────
+    // ── Document Scanning ──────────────────────────────────────────────────────
     let currentDocType = '';
 
     function handleDocTypeChange() {
@@ -551,7 +1006,6 @@
     function parsePassportText(text) {
       const lines = text.split('\n').map(l => l.trim()).filter(l => l);
       let firstName = '', lastName = '', docNumber = '';
-      // Try MRZ (Machine Readable Zone) — lines of 44 chars with < chars
       const mrzLines = lines.filter(l => /^[A-Z0-9<]{30,}$/.test(l.replace(/\s/g, '')));
       if (mrzLines.length >= 1) {
         const line1 = mrzLines[0].replace(/\s/g, '');
@@ -624,7 +1078,11 @@
       App.toast.show(`${typeLabels[currentDocType] || 'Document'} details applied. Don't forget to save your profile.`, 'success');
     }
 
+    // ── Init ───────────────────────────────────────────────────────────────────
     loadProfile();
+    loadPreferences();
+    loadDietary();
+    loadHealth();
   </script>
 </body>
 </html>
