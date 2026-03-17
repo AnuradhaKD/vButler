@@ -481,25 +481,25 @@ const App = (() => {
       const unread = notifications.getUnreadCount();
 
       el.innerHTML = `
-        <header class="z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
+        <header class="z-40 bg-[#003c52] dark:bg-[#002a3a] border-b border-[#004f6e] dark:border-[#002233]">
           <div class="h-16 flex items-stretch justify-between">
-            <!-- Dark brand block (desktop only): logo + text -->
-            <div class="flex items-center gap-3 md:bg-[#003c52] px-4 shrink-0 overflow-hidden ${storage.get('vb:sidebarCollapsed') ? 'vb-brand-collapsed' : ''}" id="header-brand-block">
+            <!-- Brand block: logo + text -->
+            <div class="flex items-center gap-3 px-4 shrink-0 overflow-hidden ${storage.get('vb:sidebarCollapsed') ? 'vb-brand-collapsed' : ''}" id="header-brand-block">
               <a href="dashboard.html" class="flex items-center gap-2 shrink-0">
-                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-slate-200 md:border-white/20 p-1">
+                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-white/20 p-1">
                   <img src="assets/images/destinity-inspire.svg" alt="Destinity vButler" class="w-full h-full">
                 </div>
               </a>
               <div class="min-w-0 sidebar-brand-text${storage.get('vb:sidebarCollapsed') ? ' sidebar-brand-hidden' : ''}">
-                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 md:text-white/60 uppercase tracking-wider">Destinity vButler</div>
-                <div class="text-xs font-semibold text-[#003c52] dark:text-teal-400 md:text-teal-300 truncate max-w-[160px]">${propertyName}</div>
+                <div class="text-xs font-bold text-white/60 uppercase tracking-wider">Destinity vButler</div>
+                <div class="text-xs font-semibold text-teal-300 truncate max-w-[160px]">${propertyName}</div>
               </div>
             </div>
-            <!-- White header area: hamburger on left, icons on right -->
+            <!-- Header actions: hamburger on left, icons on right -->
             <div class="flex items-center gap-3 px-4 flex-1 justify-between">
               <!-- Hamburger (desktop): icon changes based on collapsed state -->
               <div class="relative group hidden md:block shrink-0">
-                <button onclick="App.sidebar.toggleMenu()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle sidebar">
+                <button onclick="App.sidebar.toggleMenu()" class="w-9 h-9 rounded-full flex items-center justify-center text-white/80 hover:bg-white/10 transition" aria-label="Toggle sidebar">
                   <span id="header-menu-icon" class="material-symbols-outlined text-[22px]">${storage.get('vb:sidebarCollapsed') ? 'chevron_right' : 'menu'}</span>
                 </button>
                 <div class="absolute left-1/2 -translate-x-1/2 top-11 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
@@ -507,22 +507,22 @@ const App = (() => {
                   <div class="w-2 h-2 bg-slate-800 rotate-45 mx-auto -mt-1"></div>
                 </div>
               </div>
-              <button onclick="App.sidebar.toggleMenu()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shrink-0" aria-label="Open menu">
+              <button onclick="App.sidebar.toggleMenu()" class="md:hidden w-9 h-9 rounded-full flex items-center justify-center text-white/80 hover:bg-white/10 transition shrink-0" aria-label="Open menu">
                 <span class="material-symbols-outlined text-[22px]">menu</span>
               </button>
               <!-- Right icons -->
               <div class="flex items-center gap-3 ml-auto">
-              <button onclick="App.theme.toggle()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle theme">
+              <button onclick="App.theme.toggle()" class="w-9 h-9 rounded-full flex items-center justify-center text-white/80 hover:bg-white/10 transition" aria-label="Toggle theme">
                 <span id="theme-toggle-icon" class="material-symbols-outlined text-xl">${theme.get() === 'dark' ? 'light_mode' : 'dark_mode'}</span>
               </button>
-              <a href="notifications.html" class="relative w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Notifications">
+              <a href="notifications.html" class="relative w-9 h-9 rounded-full flex items-center justify-center text-white/80 hover:bg-white/10 transition" aria-label="Notifications">
                 <span class="material-symbols-outlined text-xl">notifications</span>
                 <span id="notif-badge" class="${unread > 0 ? 'flex' : 'hidden'} absolute top-0.5 right-0.5 min-w-[16px] h-4 bg-red-500 text-white text-[10px] font-bold rounded-full items-center justify-center px-1">${unread > 99 ? '99+' : unread}</span>
               </a>
               <a href="profile.html" aria-label="My Profile">
                 ${profile.photoBase64
-                  ? `<img src="${profile.photoBase64}" alt="Profile" class="w-9 h-9 rounded-full object-cover border-2 border-[#003c52]/20">`
-                  : `<div class="w-9 h-9 rounded-full bg-[#003c52] flex items-center justify-center text-white text-sm font-bold">${initials}</div>`
+                  ? `<img src="${profile.photoBase64}" alt="Profile" class="w-9 h-9 rounded-full object-cover border-2 border-white/30">`
+                  : `<div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white text-sm font-bold">${initials}</div>`
                 }
               </a>
               </div><!-- end right icons -->
@@ -582,7 +582,8 @@ const App = (() => {
         { id: 'local-explore',  label: 'Local Explore',  icon: 'explore',        href: 'local-explore.html' },
         { id: 'billing',        label: 'Billing',        icon: 'receipt_long',   href: 'billing.html' },
         { id: 'loyalty',        label: 'Rewards',        icon: 'stars',          href: 'loyalty.html' },
-        { id: 'complaints',     label: 'Feedback',       icon: 'support_agent',  href: 'complaints.html' },
+        { id: 'complaints',     label: 'Complaints',     icon: 'support_agent',  href: 'complaints.html' },
+        { id: 'feedback',       label: 'Feedback',       icon: 'star_rate',       href: 'feedback.html' },
         { id: 'notifications',  label: 'Notifications',  icon: 'notifications',  href: 'notifications.html' }
       ];
       el.innerHTML = `

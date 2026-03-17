@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/images/destinity-inspire.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinity vButler — Feedback | Browns Hotels & Resorts</title>
+  <script>
+    if(localStorage.getItem('vb:theme')==='dark' || (!localStorage.getItem('vb:theme') && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.documentElement.classList.add('dark');
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { primary: '#003c52' }
+        }
+      }
+    }
+  </script>
+  <style>
+    .rating-btn {
+      min-width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border: 2px solid;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .rating-btn.selected-5 { background:#003c52; border-color:#003c52; color:#fff; }
+    .rating-btn.selected-4 { background:#0e7490; border-color:#0e7490; color:#fff; }
+    .rating-btn.selected-3 { background:#d97706; border-color:#d97706; color:#fff; }
+    .rating-btn.selected-2 { background:#ea580c; border-color:#ea580c; color:#fff; }
+    .rating-btn.selected-1 { background:#dc2626; border-color:#dc2626; color:#fff; }
+  </style>
+</head>
+<body class="bg-[#f5f8f8] dark:bg-[#0f1e23] font-sans min-h-screen">
+  <div id="app-header"></div>
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <div id="app-sidebar"></div>
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-3xl mx-auto">
+
+      <!-- Header -->
+      <div class="mb-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1">Guest Experience</p>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Share Your Feedback</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Rate your stay experience across key areas. Your honest feedback helps us serve you better.</p>
+      </div>
+
+      <!-- Already submitted state -->
+      <div id="already-submitted" class="hidden bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-6 text-center mb-6">
+        <span class="material-symbols-outlined text-4xl text-amber-500 block mb-2" style="font-variation-settings:'FILL' 1">info</span>
+        <p class="font-bold text-amber-800 dark:text-amber-300">Feedback Already Submitted</p>
+        <p class="text-sm text-amber-700 dark:text-amber-400 mt-1">You have already shared feedback for this reservation. Thank you!</p>
+      </div>
+
+      <!-- Form -->
+      <div id="feedback-form">
+
+        <!-- Rating legend -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-[#003c52] dark:text-teal-400 bg-[#003c52]/10 dark:bg-teal-900/20 px-2.5 py-1 rounded-full">5 — Excellent</span>
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-cyan-700 dark:text-cyan-300 bg-cyan-100 dark:bg-cyan-900/20 px-2.5 py-1 rounded-full">4 — Good</span>
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/20 px-2.5 py-1 rounded-full">3 — Average</span>
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-orange-700 dark:text-orange-300 bg-orange-100 dark:bg-orange-900/20 px-2.5 py-1 rounded-full">2 — Below Average</span>
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/20 px-2.5 py-1 rounded-full">1 — Poor</span>
+        </div>
+
+        <!-- Section 1: Hotel Services -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 overflow-hidden">
+          <div class="flex items-center gap-3 px-5 py-4 bg-[#003c52] dark:bg-[#002a3a]">
+            <span class="material-symbols-outlined text-white text-xl" style="font-variation-settings:'FILL' 1">hotel</span>
+            <h2 class="font-bold text-white">Hotel Services</h2>
+            <span class="ml-auto text-xs text-teal-300 font-semibold" id="score-hotel">— / 55</span>
+          </div>
+          <div id="section-hotel" class="divide-y divide-slate-100 dark:divide-slate-700/60"></div>
+        </div>
+
+        <!-- Section 2: Room & Facilities -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 overflow-hidden">
+          <div class="flex items-center gap-3 px-5 py-4 bg-[#003c52] dark:bg-[#002a3a]">
+            <span class="material-symbols-outlined text-white text-xl" style="font-variation-settings:'FILL' 1">bed</span>
+            <h2 class="font-bold text-white">Room & Facilities</h2>
+            <span class="ml-auto text-xs text-teal-300 font-semibold" id="score-room">— / 40</span>
+          </div>
+          <div id="section-room" class="divide-y divide-slate-100 dark:divide-slate-700/60"></div>
+        </div>
+
+        <!-- Section 3: Associates -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 overflow-hidden">
+          <div class="flex items-center gap-3 px-5 py-4 bg-[#003c52] dark:bg-[#002a3a]">
+            <span class="material-symbols-outlined text-white text-xl" style="font-variation-settings:'FILL' 1">groups</span>
+            <h2 class="font-bold text-white">Associates</h2>
+            <span class="ml-auto text-xs text-teal-300 font-semibold" id="score-associates">— / 20</span>
+          </div>
+          <div id="section-associates" class="divide-y divide-slate-100 dark:divide-slate-700/60"></div>
+        </div>
+
+        <!-- Section 4: Food & Beverage -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 overflow-hidden">
+          <div class="flex items-center gap-3 px-5 py-4 bg-[#003c52] dark:bg-[#002a3a]">
+            <span class="material-symbols-outlined text-white text-xl" style="font-variation-settings:'FILL' 1">restaurant</span>
+            <h2 class="font-bold text-white">Food & Beverage</h2>
+            <span class="ml-auto text-xs text-teal-300 font-semibold" id="score-fnb">— / 35</span>
+          </div>
+          <div id="section-fnb" class="divide-y divide-slate-100 dark:divide-slate-700/60"></div>
+        </div>
+
+        <!-- Total score bar -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mb-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-slate-700 dark:text-slate-300">Total Score</span>
+            <span id="total-score-label" class="text-sm font-bold text-[#003c52] dark:text-teal-400">0 / 150</span>
+          </div>
+          <div class="h-2.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div id="total-score-bar" class="h-full rounded-full bg-[#003c52] dark:bg-teal-500 transition-all duration-500" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Additional comments -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mb-6">
+          <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Additional Comments <span class="text-slate-400 font-normal">(optional)</span></label>
+          <textarea id="comments" rows="4" maxlength="1000" placeholder="Share any specific comments, suggestions, or compliments about your stay…" class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#003c52] text-sm resize-none"></textarea>
+          <p class="text-xs text-slate-400 mt-1 text-right"><span id="comments-count">0</span> / 1000</p>
+        </div>
+
+        <button onclick="submitFeedback()" class="w-full bg-[#003c52] text-white rounded-xl py-3.5 font-semibold hover:bg-[#004f6e] transition text-sm">
+          Submit Feedback
+        </button>
+
+      </div>
+
+      <!-- Success state -->
+      <div id="success-state" class="hidden">
+        <div class="text-center py-10">
+          <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5" id="success-icon-bg">
+            <span class="material-symbols-outlined text-5xl" id="success-icon" style="font-variation-settings:'FILL' 1">check_circle</span>
+          </div>
+          <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2" id="success-title">Thank You!</h2>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-6" id="success-message">Your feedback has been received.</p>
+          <div id="review-links" class="hidden mb-6 space-y-3">
+            <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">We're thrilled with your experience! Would you share it on:</p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+              <a href="https://www.tripadvisor.com" target="_blank" class="inline-flex items-center justify-center gap-2 bg-[#34e0a1] text-[#00a680] font-bold rounded-xl px-5 py-3 text-sm hover:opacity-90 transition">
+                <span class="material-symbols-outlined text-base">open_in_new</span>TripAdvisor
+              </a>
+              <a href="https://www.google.com/maps" target="_blank" class="inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold rounded-xl px-5 py-3 text-sm hover:bg-blue-700 transition">
+                <span class="material-symbols-outlined text-base">open_in_new</span>Google Reviews
+              </a>
+            </div>
+          </div>
+          <a href="dashboard.html" class="inline-flex items-center gap-2 bg-[#003c52] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#004f6e] transition text-sm">
+            <span class="material-symbols-outlined text-base">home</span>Back to Dashboard
+          </a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    App.auth.requireAuth();
+    App.header.render('app-header');
+    App.sidebar.render('app-sidebar', 'feedback');
+    App.bottomNav.render('feedback');
+
+    const activeRes = App.reservations.getActive();
+    const ratings = {};
+
+    const SECTIONS = {
+      hotel: {
+        id: 'hotel', el: 'section-hotel', scoreEl: 'score-hotel', max: 55,
+        items: [
+          'Greeting',
+          'Helpfulness At the Reception',
+          'Reservations In Order at Arrival',
+          'Check-In Experience',
+          'Check-Out Experience',
+          'Bell Staff / Concierge Services',
+          'Landscape Of the Hotel',
+          'Hotel Entertainment Options',
+          'Hotel Facilities',
+          'Fitness Centre',
+          'Overall Level of Service'
+        ]
+      },
+      room: {
+        id: 'room', el: 'section-room', scoreEl: 'score-room', max: 40,
+        items: [
+          'Overall Room & Facilities',
+          'Room Amenities',
+          'Room Decor',
+          'Room Cleanliness',
+          'In-Room Entertainment',
+          'Housekeeping',
+          'Laundry Facility',
+          'Pool Side Facilities'
+        ]
+      },
+      associates: {
+        id: 'associates', el: 'section-associates', scoreEl: 'score-associates', max: 20,
+        items: [
+          'Courteous And Helpful',
+          'Pleasant And Friendly',
+          'Knowledgeable',
+          'Efficient'
+        ]
+      },
+      fnb: {
+        id: 'fnb', el: 'section-fnb', scoreEl: 'score-fnb', max: 35,
+        items: [
+          'Menu Knowledge and Suggestions by Server',
+          'Presentation Of Food',
+          'Menu Choice',
+          'Quality And Taste of Food',
+          'Quality Of In-Room Dining',
+          'Quality Of Service',
+          'Ambience And Cleanliness of The Restaurant'
+        ]
+      }
+    };
+
+    const RATING_LABELS = ['Poor', 'Below Average', 'Average', 'Good', 'Excellent'];
+    const RATING_COLORS = ['text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/20',
+      'text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-800 hover:bg-orange-50 dark:hover:bg-orange-900/20',
+      'text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800 hover:bg-amber-50 dark:hover:bg-amber-900/20',
+      'text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 hover:bg-cyan-50 dark:hover:bg-cyan-900/20',
+      'text-[#003c52] dark:text-teal-400 border-[#003c52]/30 dark:border-teal-700 hover:bg-[#003c52]/5 dark:hover:bg-teal-900/20'];
+
+    function buildSection(sec) {
+      const el = document.getElementById(sec.el);
+      el.innerHTML = sec.items.map((item, idx) => {
+        const key = `${sec.id}_${idx}`;
+        return `
+          <div class="px-5 py-3">
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <span class="text-sm text-slate-700 dark:text-slate-300 font-medium min-w-0 flex-1">${item}</span>
+              <div class="flex gap-1.5 shrink-0">
+                ${[1,2,3,4,5].map(v => `
+                  <button
+                    id="btn-${key}-${v}"
+                    onclick="rate('${key}', ${v}, '${sec.id}')"
+                    title="${RATING_LABELS[v-1]}"
+                    class="rating-btn ${RATING_COLORS[v-1]}">
+                    ${v}
+                  </button>`).join('')}
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function rate(key, value, secId) {
+      ratings[key] = value;
+      // Update button visuals
+      for (let v = 1; v <= 5; v++) {
+        const btn = document.getElementById(`btn-${key}-${v}`);
+        if (!btn) continue;
+        // Remove selected class
+        btn.classList.remove('selected-1','selected-2','selected-3','selected-4','selected-5');
+        if (v === value) btn.classList.add(`selected-${v}`);
+      }
+      updateScores(secId);
+    }
+
+    function updateScores(changedSecId) {
+      let grandTotal = 0;
+      let grandRated = 0;
+      let grandMax = 0;
+
+      Object.values(SECTIONS).forEach(sec => {
+        const secRatings = sec.items.map((_, idx) => ratings[`${sec.id}_${idx}`]).filter(Boolean);
+        const secScore = secRatings.reduce((s, v) => s + v, 0);
+        const secMax = sec.max;
+        grandTotal += secScore;
+        grandRated += secRatings.length;
+        grandMax += secMax;
+
+        const el = document.getElementById(sec.scoreEl);
+        if (secRatings.length > 0) {
+          el.textContent = `${secScore} / ${secMax}`;
+        } else {
+          el.textContent = `— / ${secMax}`;
+        }
+      });
+
+      const totalEl = document.getElementById('total-score-label');
+      const barEl = document.getElementById('total-score-bar');
+      if (grandRated > 0) {
+        totalEl.textContent = `${grandTotal} / 150`;
+        barEl.style.width = `${Math.round((grandTotal / 150) * 100)}%`;
+        // Color the bar
+        const pct = grandTotal / 150;
+        if (pct >= 0.67) barEl.className = 'h-full rounded-full bg-[#003c52] dark:bg-teal-500 transition-all duration-500';
+        else if (pct >= 0.4) barEl.className = 'h-full rounded-full bg-amber-500 transition-all duration-500';
+        else barEl.className = 'h-full rounded-full bg-red-500 transition-all duration-500';
+      } else {
+        totalEl.textContent = '0 / 150';
+        barEl.style.width = '0%';
+      }
+    }
+
+    document.getElementById('comments').addEventListener('input', function() {
+      document.getElementById('comments-count').textContent = this.value.length;
+    });
+
+    function getTotalScore() {
+      return Object.values(ratings).reduce((s, v) => s + v, 0);
+    }
+
+    function getTotalRated() {
+      return Object.keys(ratings).length;
+    }
+
+    function submitFeedback() {
+      // Count total items
+      const totalItems = Object.values(SECTIONS).reduce((s, sec) => s + sec.items.length, 0);
+      const rated = getTotalRated();
+
+      if (rated < totalItems) {
+        App.toast.show(`Please rate all items (${rated} of ${totalItems} rated)`, 'warning');
+        return;
+      }
+
+      const total = getTotalScore();
+      const comments = document.getElementById('comments').value.trim();
+
+      // Build feedback object by section
+      const sectionScores = {};
+      Object.values(SECTIONS).forEach(sec => {
+        const items = {};
+        sec.items.forEach((item, idx) => {
+          items[item] = ratings[`${sec.id}_${idx}`];
+        });
+        sectionScores[sec.id] = { label: sec.el.replace('section-',''), items, total: Object.values(items).reduce((s,v) => s+v, 0) };
+      });
+
+      const feedback = {
+        id: App.helpers.generateId('FBK'),
+        reservationId: activeRes?.id,
+        type: 'detailed_feedback',
+        sections: sectionScores,
+        totalScore: total,
+        comments,
+        submittedAt: new Date().toISOString()
+      };
+
+      // Store
+      const existing = App.storage.get('vb:feedback') || [];
+      existing.unshift(feedback);
+      App.storage.set('vb:feedback', existing);
+
+      App.toast.show('Feedback submitted! Thank you.', 'success');
+      document.getElementById('feedback-form').classList.add('hidden');
+      document.getElementById('success-state').classList.remove('hidden');
+
+      // Apply scoring logic
+      const successIconBg = document.getElementById('success-icon-bg');
+      const successIcon = document.getElementById('success-icon');
+      const successTitle = document.getElementById('success-title');
+      const successMessage = document.getElementById('success-message');
+
+      if (total > 100) {
+        // Excellent stay — redirect to reviews
+        successIconBg.className = 'w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5 bg-green-100 dark:bg-green-900/30';
+        successIcon.className = 'material-symbols-outlined text-5xl text-green-600 dark:text-green-400';
+        successTitle.textContent = 'We\'re Delighted!';
+        successMessage.textContent = `Your score of ${total}/150 tells us you had a wonderful stay. We'd love for you to share your experience!`;
+        document.getElementById('review-links').classList.remove('hidden');
+      } else if (total < 60) {
+        // Poor stay — MD notified
+        successIconBg.className = 'w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5 bg-amber-100 dark:bg-amber-900/30';
+        successIcon.className = 'material-symbols-outlined text-5xl text-amber-600 dark:text-amber-400';
+        successTitle.textContent = 'We\'re Sorry';
+        successMessage.textContent = `Your feedback (score: ${total}/150) has been escalated to our General Manager. We take your experience seriously and will be in touch.`;
+      } else {
+        // Average
+        successIconBg.className = 'w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5 bg-[#003c52]/10 dark:bg-teal-900/30';
+        successIcon.className = 'material-symbols-outlined text-5xl text-[#003c52] dark:text-teal-400';
+        successTitle.textContent = 'Thank You!';
+        successMessage.textContent = `Your feedback (score: ${total}/150) has been received. We appreciate you taking the time to help us improve.`;
+      }
+    }
+
+    (() => {
+      // Check if already submitted for this reservation
+      if (activeRes) {
+        const existing = App.storage.get('vb:feedback') || [];
+        const alreadyDone = existing.find(f => f.reservationId === activeRes.id && f.type === 'detailed_feedback');
+        if (alreadyDone) {
+          document.getElementById('already-submitted').classList.remove('hidden');
+          document.getElementById('feedback-form').classList.add('hidden');
+          return;
+        }
+      }
+
+      // Build all sections
+      Object.values(SECTIONS).forEach(buildSection);
+    })();
+  </script>
+</body>
+</html>
