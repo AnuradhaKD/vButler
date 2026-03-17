@@ -50,10 +50,18 @@
 | 38 | `1303fa5` | `1303fa514289138e3f0beb10226002278027c400` | 2026-03-17 00:18 | docs: update github-commit.md with full project history — all 37 commits since init |
 | 39 | `e3aea21` | `e3aea210af472628ae279ba5d99c33d779d0dfa9` | 2026-03-17 09:42 | feat: add tabbed profile page — preferences, dietary & allergies, health & accessibility |
 | 40 | `7bb0e54` | `7bb0e54dbe4bfddba6961f4316be43f2921e93c8` | 2026-03-17 10:37 | feat: separate feedback & complaints pages, primary header, thin scrollbars |
+| 41 | `240e3ab` | `240e3ab...` | 2026-03-17 10:38 | docs: update github-commit.md — log push 7bb0e54 |
+| 42 | `549f44e` | `549f44e404e4824d2e4ac4eb0328fb1645c483e5` | 2026-03-17 11:07 | feat: full-width desktop layout on all pages — remove max-w constraints |
 
 ---
 
 ## Push Log (summary by push session)
+
+### Push — 2026-03-17 11:07 +0530
+**Commits pushed:** `549f44e`
+**Summary:** Full-width desktop layout on all pages + scrollbar fix
+- Removed `max-w-* mx-auto` from `<main>` on 27 pages so content fills the full area on desktop, matching dashboard.html and reservations.html
+- Moved scrollbar CSS into `app.js init()` injected `<style>` so 2px primary-colour scrollbars apply on every page (was only in app.css, linked on 3 pages)
 
 ### Push — 2026-03-17 10:37 +0530
 **Commits pushed:** `7bb0e54`
