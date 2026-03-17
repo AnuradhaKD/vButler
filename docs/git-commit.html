@@ -140,10 +140,23 @@ const commits = [
   { n:45, short:'6e4d7ef', full:'6e4d7ef...', date:'2026-03-17 11:33', msg:'docs: update github-commit.md — log push 4411114' },
   { n:46, short:'54e742f', full:'54e742f0952c2091dfdfab833979f2f7c84bd1af', date:'2026-03-17 11:54', msg:'feat: Change Stay page + sidebar nav item, WhatsApp number updated' },
   { n:47, short:'650478e', full:'650478e...', date:'2026-03-17 11:55', msg:'docs: update github-commit.md — log push 54e742f' },
+  { n:48, short:'a2322ed', full:'a2322edd317fc73b3f971eb2ba86b49bcacefa92', date:'2026-03-17 12:52', msg:'docs: replace github-commit.md with git-commit.html, add res-level-menu docs, update push skill' },
 ];
 
 // ─── Push Log Data ───────────────────────────────────────────────────────────
 const pushLog = [
+  {
+    date: '2026-03-17 12:52 +0530',
+    commits: ['a2322ed'],
+    summary: 'Replace github-commit.md with git-commit.html, add res-level-menu docs, update push skill',
+    bullets: [
+      '<code>docs/git-commit.html</code> <em>(new)</em> — styled HTML commit log replacing the old markdown file',
+      '<code>docs/github-commit.md</code> — deleted, replaced by git-commit.html',
+      '<code>docs/res-level-menu.md</code> <em>(new)</em> — reservation-level menu access documentation',
+      '<code>docs/res-level-menu.html</code> <em>(new)</em> — styled HTML version of the menu access matrix',
+      '<code>.claude/skills/push-to-github/SKILL.md</code> — updated to reference git-commit.html instead of github-commit.md',
+    ]
+  },
   {
     date: '2026-03-17 11:54 +0530',
     commits: ['54e742f'],
