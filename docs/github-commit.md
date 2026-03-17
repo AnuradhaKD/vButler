@@ -52,10 +52,20 @@
 | 40 | `7bb0e54` | `7bb0e54dbe4bfddba6961f4316be43f2921e93c8` | 2026-03-17 10:37 | feat: separate feedback & complaints pages, primary header, thin scrollbars |
 | 41 | `240e3ab` | `240e3ab...` | 2026-03-17 10:38 | docs: update github-commit.md — log push 7bb0e54 |
 | 42 | `549f44e` | `549f44e404e4824d2e4ac4eb0328fb1645c483e5` | 2026-03-17 11:07 | feat: full-width desktop layout on all pages — remove max-w constraints |
+| 43 | `14482bb` | `14482bb...` | 2026-03-17 11:08 | docs: update github-commit.md — log push 549f44e |
+| 44 | `4411114` | `44111144c6a2c448fb3455eba3a033bd2acce8e5` | 2026-03-17 11:32 | feat: offers 3-up grid, wellness hero card, change stay modal, emoji feedback ratings |
 
 ---
 
 ## Push Log (summary by push session)
+
+### Push — 2026-03-17 11:32 +0530
+**Commits pushed:** `4411114`
+**Summary:** Offers 3-up grid, wellness hero card, Change Stay modal, emoji feedback ratings
+- `dashboard.html` — Exclusive Offers cards use `md:flex-1` to show 3 side-by-side on desktop
+- `wellness.html` — hero changed to `rounded-2xl` card matching dining.html style
+- `reservation-detail.html` + `reservations.html` — Change Stay modal with 6 request types; sends SRQ-XXXX to `vb:stayRequests`, notifies front office via WhatsApp; reservation dates unchanged
+- `feedback.html` — rating buttons replaced with emojis 😞😕😐🙂😄; legend updated
 
 ### Push — 2026-03-17 11:07 +0530
 **Commits pushed:** `549f44e`
